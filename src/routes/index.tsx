@@ -253,7 +253,7 @@ function Index() {
           style={{ background: "var(--gradient-deep)" }}
         >
           <div className="pointer-events-none absolute inset-0 bg-linear-to-br from-accent/15 to-transparent" />
-          <h2 className="relative z-10 font-display text-5xl text-primary-foreground">
+          <h2 className="relative z-10 font-display text-5xl text-on-deep">
             Don't leave your money behind.
           </h2>
           <div className="relative z-10">
@@ -264,7 +264,7 @@ function Index() {
               Check eligibility now <ArrowRight className="size-4" />
             </Link>
           </div>
-          <p className="relative z-10 text-sm text-primary-foreground/70">
+          <p className="relative z-10 text-sm text-on-deep/70">
             No account, no cost, no SSN required.
           </p>
         </section>
