@@ -88,6 +88,13 @@ const FAQS = [
 ];
 
 function Index() {
+  const [headline, setHeadline] = useState(HEADLINES[0]);
+
+  // Rotate the hero headline on each visit (client-side to avoid SSR mismatch).
+  useEffect(() => {
+    setHeadline(HEADLINES[Math.floor(Math.random() * HEADLINES.length)]);
+  }, []);
+
   return (
     <div className="min-h-screen bg-background font-sans selection:bg-accent selection:text-accent-foreground">
       <SiteHeader />
