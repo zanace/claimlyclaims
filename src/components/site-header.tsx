@@ -36,7 +36,7 @@ export function SiteHeader() {
           <img src={logo} alt="Claimly logo" width={32} height={32} className="size-8 rounded-lg" />
           <span className="font-display text-2xl leading-none tracking-tight">Claimly</span>
         </Link>
-        <nav className="hidden items-center gap-6 text-sm text-muted-foreground lg:flex">
+        <nav className="hidden items-center gap-5 text-sm whitespace-nowrap text-muted-foreground xl:flex">
           {NAV.map((item) => (
             <Link
               key={item.to}
