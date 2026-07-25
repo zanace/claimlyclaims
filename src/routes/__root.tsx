@@ -138,7 +138,9 @@ function RootComponent() {
     <QueryClientProvider client={queryClient}>
       <ThemeProvider>
         {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-        <Outlet />
+        <div className="animate-fade-in">
+          <Outlet />
+        </div>
         <FloatingChat />
       </ThemeProvider>
     </QueryClientProvider>
