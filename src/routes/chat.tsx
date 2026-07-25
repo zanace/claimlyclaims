@@ -82,11 +82,11 @@ function ChatPage() {
   };
 
   return (
-    <div className="flex h-screen flex-col overflow-hidden font-sans">
+    <div className="flex min-h-screen flex-col font-sans">
       <SiteHeader />
-      <main className="mx-auto grid w-full min-h-0 max-w-6xl flex-1 gap-8 overflow-hidden px-5 pb-4 lg:grid-cols-[1fr_20rem]">
-        <div className="flex min-h-0 min-w-0 flex-col">
-        <Conversation className="min-h-0 flex-1">
+      <main className="mx-auto grid w-full max-w-6xl flex-1 gap-8 px-5 pb-4 lg:grid-cols-[1fr_20rem]">
+        <div className="flex min-w-0 flex-col">
+        <Conversation className="flex-1 overflow-visible">
           <ConversationContent className="gap-6 py-6">
             {messages.length === 0 ? (
               <div className="py-12 text-center">
@@ -155,7 +155,7 @@ function ChatPage() {
         </PromptInput>
         </div>
 
-        <div className="min-h-0 overflow-y-auto py-4 lg:self-start">
+        <div className="py-4 lg:self-start">
           <InfoPanel info={info} onChange={setInfo} />
         </div>
       </main>
