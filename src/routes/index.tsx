@@ -64,8 +64,21 @@ const SPANS = [
   "col-span-2 min-h-[10rem]",
 ];
 
+// Hero headline variants — one is picked at random on each visit.
+const HEADLINES = [
+  { pre: "Reclaiming your ", em: "hidden", post: " benefits." },
+  { pre: "Money you're owed, ", em: "found", post: " fast." },
+  { pre: "Uncover the aid you ", em: "already", post: " qualify for." },
+  { pre: "Your ", em: "unclaimed", post: " benefits, claimed." },
+  { pre: "Find what the system ", em: "never", post: " told you about." },
+  { pre: "Benefits hiding in ", em: "plain", post: " sight." },
+  { pre: "Claim what's ", em: "already", post: " yours." },
+  { pre: "Turn overlooked programs into ", em: "real", post: " money." },
+  { pre: "Every credit you ", em: "missed", post: ", in one place." },
+  { pre: "Get back the support you're ", em: "entitled", post: " to." },
+];
+
 const FAQS = [
-*** placeholder
   {
     q: "Does Claimly cost anything?",
     a: "No. There is no fee, no upsell, and no premium tier. Every program we point you toward is free to apply for directly.",
