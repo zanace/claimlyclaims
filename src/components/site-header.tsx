@@ -31,12 +31,12 @@ export function SiteHeader() {
 
   return (
     <header className="sticky top-0 z-40 border-b border-border/70 bg-background/85 backdrop-blur-md">
-      <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-10 px-5">
-        <Link to="/" className="mr-4 flex shrink-0 items-center gap-2.5 xl:mr-10">
+      <div className="mx-auto flex h-16 max-w-[1400px] items-center gap-6 px-5">
+        <Link to="/" className="flex shrink-0 items-center gap-2">
           <img src={logo} alt="Claimly logo" width={32} height={32} className="size-8 rounded-lg" />
-          <span className="font-display text-2xl leading-none tracking-tight">Claimly</span>
+          <span className="font-display text-xl leading-none tracking-tight">Claimly</span>
         </Link>
-        <nav className="hidden items-center gap-7 text-sm whitespace-nowrap text-muted-foreground xl:flex">
+        <nav className="hidden flex-1 items-center justify-center gap-x-5 gap-y-1 text-[13px] whitespace-nowrap text-muted-foreground xl:flex">
           {NAV.map((item) => (
             <Link
               key={item.to}
