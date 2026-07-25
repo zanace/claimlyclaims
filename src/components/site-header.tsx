@@ -18,6 +18,7 @@ const NAV = [
   { to: "/team", label: "Team" },
   { to: "/about", label: "About" },
   { to: "/privacy", label: "Privacy" },
+  { to: "/settings", label: "Settings" },
 ] as const;
 
 export function SiteHeader() {
@@ -74,9 +75,9 @@ export function SiteHeader() {
           {user ? (
             <>
               <Link
-                to="/profile"
+                to="/settings"
                 className="hidden max-w-40 truncate rounded-full border border-border px-3 py-2 text-sm text-muted-foreground transition-colors hover:text-foreground md:inline"
-                title="Edit your profile"
+                title="Manage your saved info"
               >
                 {user.email}
               </Link>

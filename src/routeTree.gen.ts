@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as TeamRouteImport } from './routes/team'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as SavedRouteImport } from './routes/saved'
 import { Route as ProgramsRouteImport } from './routes/programs'
 import { Route as ProfileRouteImport } from './routes/profile'
@@ -41,6 +42,11 @@ const TeamRoute = TeamRouteImport.update({
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
   path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SettingsRoute = SettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SavedRoute = SavedRouteImport.update({
@@ -166,6 +172,7 @@ export interface FileRoutesByFullPath {
   '/profile': typeof ProfileRoute
   '/programs': typeof ProgramsRoute
   '/saved': typeof SavedRoute
+  '/settings': typeof SettingsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/team': typeof TeamRoute
   '/api/apply': typeof ApiApplyRoute
@@ -191,6 +198,7 @@ export interface FileRoutesByTo {
   '/profile': typeof ProfileRoute
   '/programs': typeof ProgramsRoute
   '/saved': typeof SavedRoute
+  '/settings': typeof SettingsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/team': typeof TeamRoute
   '/api/apply': typeof ApiApplyRoute
@@ -217,6 +225,7 @@ export interface FileRoutesById {
   '/profile': typeof ProfileRoute
   '/programs': typeof ProgramsRoute
   '/saved': typeof SavedRoute
+  '/settings': typeof SettingsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/team': typeof TeamRoute
   '/api/apply': typeof ApiApplyRoute
@@ -244,6 +253,7 @@ export interface FileRouteTypes {
     | '/profile'
     | '/programs'
     | '/saved'
+    | '/settings'
     | '/sitemap.xml'
     | '/team'
     | '/api/apply'
@@ -269,6 +279,7 @@ export interface FileRouteTypes {
     | '/profile'
     | '/programs'
     | '/saved'
+    | '/settings'
     | '/sitemap.xml'
     | '/team'
     | '/api/apply'
@@ -294,6 +305,7 @@ export interface FileRouteTypes {
     | '/profile'
     | '/programs'
     | '/saved'
+    | '/settings'
     | '/sitemap.xml'
     | '/team'
     | '/api/apply'
@@ -320,6 +332,7 @@ export interface RootRouteChildren {
   ProfileRoute: typeof ProfileRoute
   ProgramsRoute: typeof ProgramsRoute
   SavedRoute: typeof SavedRoute
+  SettingsRoute: typeof SettingsRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   TeamRoute: typeof TeamRoute
   ApiApplyRoute: typeof ApiApplyRoute
@@ -343,6 +356,13 @@ declare module '@tanstack/react-router' {
       path: '/sitemap.xml'
       fullPath: '/sitemap.xml'
       preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/settings': {
+      id: '/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof SettingsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/saved': {
@@ -512,6 +532,7 @@ const rootRouteChildren: RootRouteChildren = {
   ProfileRoute: ProfileRoute,
   ProgramsRoute: ProgramsRoute,
   SavedRoute: SavedRoute,
+  SettingsRoute: SettingsRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   TeamRoute: TeamRoute,
   ApiApplyRoute: ApiApplyRoute,
