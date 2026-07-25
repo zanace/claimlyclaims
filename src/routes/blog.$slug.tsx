@@ -1,10 +1,10 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
-import { getArticle, relatedArticles } from "@/lib/blog";
+import { getArticle, relatedArticles, type Article } from "@/lib/blog";
 
 export const Route = createFileRoute("/blog/$slug")({
-  loader: ({ params }) => {
+  loader: ({ params }): { article: Article; related: Article[] } => {
     const article = getArticle(params.slug);
     if (!article) throw notFound();
     return { article, related: relatedArticles(params.slug) };
@@ -32,7 +32,7 @@ export const Route = createFileRoute("/blog/$slug")({
 });
 
 function ArticlePage() {
-  const { article, related } = Route.useLoaderData();
+  const { article, related } = Route.useLoaderData() as { article: Article; related: Article[] };
   const mid = Math.ceil(article.body.length / 2);
 
   return (
