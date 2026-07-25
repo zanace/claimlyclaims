@@ -1,3 +1,4 @@
+import { store } from "@/lib/store";
 import { useEffect } from "react";
 import { PencilLine } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -65,7 +66,7 @@ const ALL_FIELDS: { key: keyof UserInfo; label: string }[] = [
 export function loadStoredInfo(): UserInfo {
   if (typeof window === "undefined") return EMPTY_INFO;
   try {
-    const raw = window.localStorage.getItem(STORAGE_KEY);
+    const raw = store.getItem(STORAGE_KEY);
     return raw ? { ...EMPTY_INFO, ...(JSON.parse(raw) as Partial<UserInfo>) } : EMPTY_INFO;
   } catch {
     return EMPTY_INFO;
@@ -107,7 +108,7 @@ export function InfoPanel({
         monthlyIncome: stored.monthlyIncome || (profile.monthly_income?.toString() ?? ""),
       };
       onChange(merged);
-      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(merged));
+      store.setItem(STORAGE_KEY, JSON.stringify(merged));
     })();
     return () => {
       cancelled = true;
@@ -119,7 +120,7 @@ export function InfoPanel({
     const next = { ...info, [key]: value.slice(0, 200) };
     onChange(next);
     try {
-      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
+      store.setItem(STORAGE_KEY, JSON.stringify(next));
     } catch {
       /* storage unavailable - the chat still works, it just won't remember */
     }
@@ -183,7 +184,7 @@ export function InfoPanel({
           size="sm"
           onClick={() => {
             onChange(EMPTY_INFO);
-            window.localStorage.removeItem(STORAGE_KEY);
+            store.removeItem(STORAGE_KEY);
           }}
         >
           Clear

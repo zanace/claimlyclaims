@@ -1,3 +1,4 @@
+import { store } from "@/lib/store";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { ArrowRight, Bookmark, MessageSquare, FileText, ClipboardList } from "lucide-react";
@@ -22,7 +23,7 @@ function Dashboard() {
 
   useEffect(() => {
     try {
-      const raw = localStorage.getItem("claimly.saved");
+      const raw = store.getItem("claimly.saved");
       if (raw) setSavedCount((JSON.parse(raw) as string[]).length);
     } catch {}
   }, []);

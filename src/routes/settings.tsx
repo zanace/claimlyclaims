@@ -1,3 +1,4 @@
+import { store } from "@/lib/store";
 import { useEffect, useMemo, useState } from "react";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { toast } from "sonner";
@@ -58,7 +59,7 @@ function SettingsPage() {
   useEffect(() => {
     setAnswers(loadAnswers());
     try {
-      const raw = localStorage.getItem(SAVED_KEY);
+      const raw = store.getItem(SAVED_KEY);
       if (raw) setSaved(JSON.parse(raw));
     } catch {}
   }, []);
@@ -139,7 +140,7 @@ function SettingsPage() {
   function removeSaved(id: string) {
     const next = saved.filter((s) => s !== id);
     setSaved(next);
-    try { localStorage.setItem(SAVED_KEY, JSON.stringify(next)); } catch {}
+    try { store.setItem(SAVED_KEY, JSON.stringify(next)); } catch {}
   }
 
   async function signOut() {

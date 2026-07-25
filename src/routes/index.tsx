@@ -1,3 +1,4 @@
+import { store } from "@/lib/store";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   ArrowRight, Bookmark, BookmarkCheck, Lock, Search, Sparkles,
@@ -83,7 +84,7 @@ function Index() {
 
   useEffect(() => {
     try {
-      const raw = localStorage.getItem("claimly.saved");
+      const raw = store.getItem("claimly.saved");
       if (raw) setSaved(new Set(JSON.parse(raw) as string[]));
     } catch {}
   }, []);
@@ -122,7 +123,7 @@ function Index() {
       const next = new Set(prev);
       if (next.has(id)) next.delete(id);
       else next.add(id);
-      try { localStorage.setItem("claimly.saved", JSON.stringify([...next])); } catch {}
+      try { store.setItem("claimly.saved", JSON.stringify([...next])); } catch {}
       return next;
     });
   }

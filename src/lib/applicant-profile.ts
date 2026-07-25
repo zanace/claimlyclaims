@@ -1,3 +1,4 @@
+import { store } from "@/lib/store";
 // Shared answer memory. Every question the user answers anywhere in Claimly is
 // stored here by canonical field id, so we never ask the same thing twice.
 export type FieldType = "text" | "number" | "zip" | "money" | "choice" | "yesno";
@@ -38,7 +39,7 @@ export const FIELD_LABELS: Record<string, string> = {
 export function loadAnswers(): Answers {
   if (typeof window === "undefined") return {};
   try {
-    const raw = localStorage.getItem(KEY);
+    const raw = store.getItem(KEY);
     const parsed = raw ? (JSON.parse(raw) as Answers) : {};
     return parsed && typeof parsed === "object" ? parsed : {};
   } catch {
@@ -49,7 +50,7 @@ export function loadAnswers(): Answers {
 export function saveAnswers(next: Answers) {
   if (typeof window === "undefined") return;
   try {
-    localStorage.setItem(KEY, JSON.stringify(next));
+    store.setItem(KEY, JSON.stringify(next));
   } catch {}
 }
 

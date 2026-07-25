@@ -1,3 +1,4 @@
+import { store } from "@/lib/store";
 export type ClaimStatus =
   | "Not started"
   | "Gathering documents"
@@ -27,7 +28,7 @@ const KEY = "claimly.claims.v1";
 export function loadClaims(): Claim[] {
   if (typeof window === "undefined") return [];
   try {
-    const raw = window.localStorage.getItem(KEY);
+    const raw = store.getItem(KEY);
     return raw ? (JSON.parse(raw) as Claim[]) : [];
   } catch {
     return [];
@@ -36,7 +37,7 @@ export function loadClaims(): Claim[] {
 
 export function saveClaims(claims: Claim[]) {
   if (typeof window === "undefined") return;
-  window.localStorage.setItem(KEY, JSON.stringify(claims));
+  store.setItem(KEY, JSON.stringify(claims));
 }
 
 export const STATUS_TONE: Record<ClaimStatus, string> = {

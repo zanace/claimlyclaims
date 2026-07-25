@@ -1,3 +1,4 @@
+import { store } from "@/lib/store";
 import { createContext, useCallback, useContext, useEffect, useState, type ReactNode } from "react";
 
 type Theme = "dark" | "light";
@@ -9,20 +10,20 @@ const ThemeContext = createContext<{ theme: Theme; toggle: () => void }>({
   toggle: () => {},
 });
 
-export const themeInitScript = `(function(){try{var t=localStorage.getItem("${STORAGE_KEY}")||"light";document.documentElement.classList.toggle("dark",t==="dark");document.documentElement.style.colorScheme=t;}catch(e){}})();`;
+export const themeInitScript = `(function(){try{var m=document.cookie.match(/(?:^|; )${STORAGE_KEY.replace(".", "\\\\.")}=([^;]*)/);var t=(m?decodeURIComponent(m[1]):null)||localStorage.getItem("${STORAGE_KEY}")||"light";document.documentElement.classList.toggle("dark",t==="dark");document.documentElement.style.colorScheme=t;}catch(e){}})();`;
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
   const [theme, setTheme] = useState<Theme>("light");
 
   useEffect(() => {
-    const stored = (localStorage.getItem(STORAGE_KEY) as Theme | null) ?? "light";
+    const stored = (store.getItem(STORAGE_KEY) as Theme | null) ?? "light";
     setTheme(stored);
   }, []);
 
   useEffect(() => {
     document.documentElement.classList.toggle("dark", theme === "dark");
     document.documentElement.style.colorScheme = theme;
-    localStorage.setItem(STORAGE_KEY, theme);
+    store.setItem(STORAGE_KEY, theme);
   }, [theme]);
 
   const toggle = useCallback(() => setTheme((t) => (t === "dark" ? "light" : "dark")), []);
