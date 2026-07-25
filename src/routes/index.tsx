@@ -169,7 +169,8 @@ function Index() {
               <div>
                 <h2 className="font-display text-4xl md:text-5xl">What we look for</h2>
                 <p className="mt-3 max-w-lg text-muted-foreground">
-                  {PROGRAMS.length} federal and state programs across four parts of everyday life.
+                  {PROGRAMS.length} federal, state, and local programs across {CATEGORIES.length}{" "}
+                  parts of everyday life.
                 </p>
               </div>
               <Link
@@ -179,7 +180,7 @@ function Index() {
                 Browse every program <ArrowRight className="size-4" />
               </Link>
             </div>
-            <div className="mt-10 grid gap-5 sm:grid-cols-2">
+            <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
               {CATEGORIES.map((cat) => (
                 <Link
                   key={cat.key}
