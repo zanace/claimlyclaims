@@ -1,5 +1,7 @@
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
+import { useState } from "react";
+import { Menu, X } from "lucide-react";
 import logo from "@/assets/logo.png";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { useAuth } from "@/lib/use-auth";
@@ -22,6 +24,8 @@ export function SiteHeader() {
   const { user, isAdmin } = useAuth();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const [open, setOpen] = useState(false);
+  const items = isAdmin ? [...NAV, { to: "/admin", label: "Admin" } as const] : NAV;
 
   async function signOut() {
     await queryClient.cancelQueries();
@@ -37,8 +41,8 @@ export function SiteHeader() {
           <img src={logo} alt="Claimly logo" width={32} height={32} className="size-8 rounded-lg" />
           <span className="font-display text-xl leading-none tracking-tight">Claimly</span>
         </Link>
-        <nav className="hidden flex-1 items-center justify-center gap-x-5 gap-y-1 text-[13px] whitespace-nowrap text-muted-foreground xl:flex">
-          {NAV.map((item) => (
+        <nav className="hidden flex-1 items-center justify-center gap-x-4 gap-y-1 text-[13px] whitespace-nowrap text-muted-foreground lg:flex">
+          {items.map((item) => (
             <Link
               key={item.to}
               to={item.to}
@@ -47,16 +51,17 @@ export function SiteHeader() {
               {item.label}
             </Link>
           ))}
-          {isAdmin && (
-            <Link
-              to="/admin"
-              className="transition-colors hover:text-foreground [&.active]:text-foreground"
-            >
-              Admin
-            </Link>
-          )}
         </nav>
         <div className="ml-auto flex items-center gap-3">
+          <button
+            type="button"
+            aria-label="Toggle navigation"
+            aria-expanded={open}
+            onClick={() => setOpen((v) => !v)}
+            className="rounded-full border border-border p-2 transition-colors hover:bg-secondary lg:hidden"
+          >
+            {open ? <X className="size-4" /> : <Menu className="size-4" />}
+          </button>
           <ThemeToggle />
           {user ? (
             <>
@@ -92,6 +97,23 @@ export function SiteHeader() {
           )}
         </div>
       </div>
+      {open && (
+        <nav className="border-t border-border/70 bg-background/95 px-5 py-3 lg:hidden">
+          <ul className="grid grid-cols-2 gap-x-4 gap-y-2 text-sm text-muted-foreground sm:grid-cols-3">
+            {items.map((item) => (
+              <li key={item.to}>
+                <Link
+                  to={item.to}
+                  onClick={() => setOpen(false)}
+                  className="block py-1 transition-colors hover:text-foreground [&.active]:text-foreground"
+                >
+                  {item.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      )}
     </header>
   );
 }
