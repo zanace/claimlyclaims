@@ -9,7 +9,6 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as UnlockRouteImport } from './routes/unlock'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as ProgramsRouteImport } from './routes/programs'
 import { Route as MoneyYouCouldGetRouteImport } from './routes/money-you-could-get'
@@ -26,11 +25,6 @@ import { Route as BlogIndexRouteImport } from './routes/blog.index'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 import { Route as ApiChatRouteImport } from './routes/api/chat'
 
-const UnlockRoute = UnlockRouteImport.update({
-  id: '/unlock',
-  path: '/unlock',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
   path: '/sitemap.xml',
@@ -120,7 +114,6 @@ export interface FileRoutesByFullPath {
   '/money-you-could-get': typeof MoneyYouCouldGetRoute
   '/programs': typeof ProgramsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
-  '/unlock': typeof UnlockRoute
   '/api/chat': typeof ApiChatRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/blog/': typeof BlogIndexRoute
@@ -138,7 +131,6 @@ export interface FileRoutesByTo {
   '/money-you-could-get': typeof MoneyYouCouldGetRoute
   '/programs': typeof ProgramsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
-  '/unlock': typeof UnlockRoute
   '/api/chat': typeof ApiChatRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/blog': typeof BlogIndexRoute
@@ -157,7 +149,6 @@ export interface FileRoutesById {
   '/money-you-could-get': typeof MoneyYouCouldGetRoute
   '/programs': typeof ProgramsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
-  '/unlock': typeof UnlockRoute
   '/api/chat': typeof ApiChatRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/blog/': typeof BlogIndexRoute
@@ -177,7 +168,6 @@ export interface FileRouteTypes {
     | '/money-you-could-get'
     | '/programs'
     | '/sitemap.xml'
-    | '/unlock'
     | '/api/chat'
     | '/blog/$slug'
     | '/blog/'
@@ -195,7 +185,6 @@ export interface FileRouteTypes {
     | '/money-you-could-get'
     | '/programs'
     | '/sitemap.xml'
-    | '/unlock'
     | '/api/chat'
     | '/blog/$slug'
     | '/blog'
@@ -213,7 +202,6 @@ export interface FileRouteTypes {
     | '/money-you-could-get'
     | '/programs'
     | '/sitemap.xml'
-    | '/unlock'
     | '/api/chat'
     | '/blog/$slug'
     | '/blog/'
@@ -232,7 +220,6 @@ export interface RootRouteChildren {
   MoneyYouCouldGetRoute: typeof MoneyYouCouldGetRoute
   ProgramsRoute: typeof ProgramsRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
-  UnlockRoute: typeof UnlockRoute
   ApiChatRoute: typeof ApiChatRoute
   BlogSlugRoute: typeof BlogSlugRoute
   BlogIndexRoute: typeof BlogIndexRoute
@@ -240,13 +227,6 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/unlock': {
-      id: '/unlock'
-      path: '/unlock'
-      fullPath: '/unlock'
-      preLoaderRoute: typeof UnlockRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/sitemap.xml': {
       id: '/sitemap.xml'
       path: '/sitemap.xml'
@@ -368,7 +348,6 @@ const rootRouteChildren: RootRouteChildren = {
   MoneyYouCouldGetRoute: MoneyYouCouldGetRoute,
   ProgramsRoute: ProgramsRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
-  UnlockRoute: UnlockRoute,
   ApiChatRoute: ApiChatRoute,
   BlogSlugRoute: BlogSlugRoute,
   BlogIndexRoute: BlogIndexRoute,
