@@ -741,15 +741,6 @@ export const PROGRAMS: Program[] = [
     who: "Buyers who can't qualify for conventional financing.",
   },
   {
-    id: "va-home-loan",
-    name: "VA home loan guaranty",
-    agency: "VA",
-    category: "Housing & utilities",
-    estimate: "0% down, no PMI",
-    summary: "Guaranteed mortgages with no down payment and limited closing costs.",
-    who: "Veterans, service members, and eligible surviving spouses.",
-  },
-  {
     id: "dpa-programs",
     name: "Down payment & closing cost assistance",
     agency: "State & local housing finance agencies",
