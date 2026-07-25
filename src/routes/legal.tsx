@@ -53,7 +53,7 @@ const SECTIONS = [
 
 function Legal() {
   return (
-    <div className="min-h-screen bg-background font-sans">
+    <div className="min-h-screen font-sans">
       <SiteHeader />
       <main className="mx-auto max-w-3xl px-5 py-16">
         <h1 className="font-display text-5xl tracking-tight md:text-6xl">Privacy &amp; terms</h1>

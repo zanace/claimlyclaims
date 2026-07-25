@@ -27,7 +27,7 @@ function BlogIndex() {
   const shown = filter === "All" ? ARTICLES : ARTICLES.filter((a) => a.category === filter);
 
   return (
-    <div className="min-h-screen bg-background font-sans">
+    <div className="min-h-screen font-sans">
       <SiteHeader />
       <main className="mx-auto max-w-6xl px-5 py-16">
         <h1 className="font-display text-5xl tracking-tight md:text-6xl">Money guides</h1>

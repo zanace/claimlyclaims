@@ -85,7 +85,7 @@ function AuthPage() {
   }
 
   return (
-    <div className="min-h-screen bg-background font-sans">
+    <div className="min-h-screen font-sans">
       <SiteHeader />
       <main className="mx-auto flex max-w-md flex-col px-5 py-20">
         <h1 className="font-display text-4xl tracking-tight">

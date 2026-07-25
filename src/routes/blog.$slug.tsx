@@ -36,7 +36,7 @@ function ArticlePage() {
   const mid = Math.ceil(article.body.length / 2);
 
   return (
-    <div className="min-h-screen bg-background font-sans">
+    <div className="min-h-screen font-sans">
       <SiteHeader />
       <main className="mx-auto max-w-3xl px-5 py-16">
         <Link to="/blog" className="text-sm text-muted-foreground hover:text-foreground">

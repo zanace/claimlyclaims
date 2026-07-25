@@ -82,7 +82,7 @@ function ChatPage() {
   };
 
   return (
-    <div className="flex min-h-screen flex-col bg-background font-sans">
+    <div className="flex min-h-screen flex-col font-sans">
       <SiteHeader />
       <main className="mx-auto grid w-full max-w-6xl flex-1 gap-8 px-5 pb-6 lg:grid-cols-[1fr_20rem]">
         <div className="flex min-w-0 flex-col">
