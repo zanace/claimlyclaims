@@ -32,7 +32,7 @@ export const Route = createFileRoute("/chat")({
       { property: "og:description", content: description },
     ],
   }),
-  component: ChatPage;
+  component: ChatPage,
 });
 
 const SUGGESTIONS = [
