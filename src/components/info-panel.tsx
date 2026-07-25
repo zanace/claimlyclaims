@@ -55,6 +55,13 @@ const FIELDS: { key: keyof UserInfo; label: string; placeholder: string }[] = [
   { key: "notes", label: "Anything else", placeholder: "Veteran, recently laid off..." },
 ];
 
+const GENDER_OPTIONS = ["Male", "Female", "Other"] as const;
+
+const ALL_FIELDS: { key: keyof UserInfo; label: string }[] = [
+  { key: "gender", label: "Gender" },
+  ...FIELDS.map((f) => ({ key: f.key, label: f.label })),
+];
+
 export function loadStoredInfo(): UserInfo {
   if (typeof window === "undefined") return EMPTY_INFO;
   try {
@@ -118,7 +125,7 @@ export function InfoPanel({
     }
   };
 
-  const filled = FIELDS.filter((f) => info[f.key].trim()).length;
+  const filled = ALL_FIELDS.filter((f) => info[f.key].trim()).length;
 
   return (
     <aside className="rounded-2xl border border-border bg-card/60 p-5">
@@ -132,6 +139,26 @@ export function InfoPanel({
       </p>
 
       <div className="mt-5 space-y-3">
+        <div className="space-y-1.5">
+          <Label className="text-xs text-muted-foreground">Gender (optional)</Label>
+          <div className="flex flex-wrap gap-2">
+            {GENDER_OPTIONS.map((g) => (
+              <button
+                key={g}
+                type="button"
+                aria-pressed={info.gender === g}
+                onClick={() => set("gender", info.gender === g ? "" : g)}
+                className={`rounded-full border px-3 py-1.5 text-xs transition-colors ${
+                  info.gender === g
+                    ? "border-accent bg-accent text-accent-foreground"
+                    : "border-border text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                {g}
+              </button>
+            ))}
+          </div>
+        </div>
         {FIELDS.map((field) => (
           <div key={field.key} className="space-y-1.5">
             <Label htmlFor={`info-${field.key}`} className="text-xs text-muted-foreground">
@@ -149,7 +176,7 @@ export function InfoPanel({
       </div>
 
       <div className="mt-5 flex items-center justify-between gap-3">
-        <span className="text-xs text-muted-foreground">{filled}/{FIELDS.length} filled</span>
+        <span className="text-xs text-muted-foreground">{filled}/{ALL_FIELDS.length} filled</span>
         <Button
           type="button"
           variant="secondary"
