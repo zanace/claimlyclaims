@@ -139,7 +139,7 @@
   --on-deep: oklch(0.99 0.01 140);
   --shadow-soft: 0 1px 2px oklch(0 0 0 / 0.6), 0 14px 36px -18px oklch(0 0 0 / 0.8);
   --shadow-lift: 0 28px 70px -30px oklch(0 0 0 / 0.9);
-  --gradient-page: linear-gradient(160deg, oklch(1 0 0) 0%, oklch(0.28 0.12 150) 100%);
+  --gradient-page: linear-gradient(160deg, oklch(0.16 0.015 130) 0%, oklch(0.09 0.01 140) 100%);
   --chart-1: oklch(0.7 0.14 160);
   --chart-2: oklch(0.696 0.17 162.48);
   --chart-3: oklch(0.769 0.188 70.08);
