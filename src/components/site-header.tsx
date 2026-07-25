@@ -36,7 +36,7 @@ export function SiteHeader() {
           <img src={logo} alt="Claimly logo" width={32} height={32} className="size-8 rounded-lg" />
           <span className="font-display text-2xl leading-none tracking-tight">Claimly</span>
         </Link>
-        <nav className="hidden items-center gap-6 text-sm text-muted-foreground lg:flex">
+        <nav className="hidden items-center gap-5 text-sm whitespace-nowrap text-muted-foreground xl:flex">
           {NAV.map((item) => (
             <Link
               key={item.to}
@@ -68,7 +68,7 @@ export function SiteHeader() {
               </Link>
               <button
                 onClick={signOut}
-                className="rounded-full border border-border px-4 py-2 text-sm transition-colors hover:bg-secondary"
+                className="rounded-full border border-border px-4 py-2 text-sm whitespace-nowrap transition-colors hover:bg-secondary"
               >
                 Log out
               </button>
@@ -77,13 +77,13 @@ export function SiteHeader() {
             <>
               <Link
                 to="/auth"
-                className="hidden rounded-full px-3 py-2 text-sm text-muted-foreground transition-colors hover:text-foreground sm:inline"
+                className="hidden rounded-full px-3 py-2 text-sm whitespace-nowrap text-muted-foreground transition-colors hover:text-foreground sm:inline"
               >
                 Log in
               </Link>
               <Link
                 to="/auth"
-                className="rounded-full bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow-[var(--shadow-soft)] transition-transform hover:-translate-y-0.5"
+                className="rounded-full bg-accent px-4 py-2 text-sm font-semibold whitespace-nowrap text-accent-foreground shadow-[var(--shadow-soft)] transition-transform hover:-translate-y-0.5"
               >
                 Sign up
               </Link>
