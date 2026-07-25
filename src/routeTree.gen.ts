@@ -13,6 +13,7 @@ import { Route as UnlockRouteImport } from './routes/unlock'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as ProgramsRouteImport } from './routes/programs'
 import { Route as LegalRouteImport } from './routes/legal'
+import { Route as HowItWorksRouteImport } from './routes/how-it-works'
 import { Route as EligibilityRouteImport } from './routes/eligibility'
 import { Route as DocumentsRouteImport } from './routes/documents'
 import { Route as ClaimsRouteImport } from './routes/claims'
@@ -40,6 +41,11 @@ const ProgramsRoute = ProgramsRouteImport.update({
 const LegalRoute = LegalRouteImport.update({
   id: '/legal',
   path: '/legal',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HowItWorksRoute = HowItWorksRouteImport.update({
+  id: '/how-it-works',
+  path: '/how-it-works',
   getParentRoute: () => rootRouteImport,
 } as any)
 const EligibilityRoute = EligibilityRouteImport.update({
@@ -91,6 +97,7 @@ export interface FileRoutesByFullPath {
   '/claims': typeof ClaimsRoute
   '/documents': typeof DocumentsRoute
   '/eligibility': typeof EligibilityRoute
+  '/how-it-works': typeof HowItWorksRoute
   '/legal': typeof LegalRoute
   '/programs': typeof ProgramsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
@@ -105,6 +112,7 @@ export interface FileRoutesByTo {
   '/claims': typeof ClaimsRoute
   '/documents': typeof DocumentsRoute
   '/eligibility': typeof EligibilityRoute
+  '/how-it-works': typeof HowItWorksRoute
   '/legal': typeof LegalRoute
   '/programs': typeof ProgramsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
@@ -120,6 +128,7 @@ export interface FileRoutesById {
   '/claims': typeof ClaimsRoute
   '/documents': typeof DocumentsRoute
   '/eligibility': typeof EligibilityRoute
+  '/how-it-works': typeof HowItWorksRoute
   '/legal': typeof LegalRoute
   '/programs': typeof ProgramsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
@@ -136,6 +145,7 @@ export interface FileRouteTypes {
     | '/claims'
     | '/documents'
     | '/eligibility'
+    | '/how-it-works'
     | '/legal'
     | '/programs'
     | '/sitemap.xml'
@@ -150,6 +160,7 @@ export interface FileRouteTypes {
     | '/claims'
     | '/documents'
     | '/eligibility'
+    | '/how-it-works'
     | '/legal'
     | '/programs'
     | '/sitemap.xml'
@@ -164,6 +175,7 @@ export interface FileRouteTypes {
     | '/claims'
     | '/documents'
     | '/eligibility'
+    | '/how-it-works'
     | '/legal'
     | '/programs'
     | '/sitemap.xml'
@@ -179,6 +191,7 @@ export interface RootRouteChildren {
   ClaimsRoute: typeof ClaimsRoute
   DocumentsRoute: typeof DocumentsRoute
   EligibilityRoute: typeof EligibilityRoute
+  HowItWorksRoute: typeof HowItWorksRoute
   LegalRoute: typeof LegalRoute
   ProgramsRoute: typeof ProgramsRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
@@ -214,6 +227,13 @@ declare module '@tanstack/react-router' {
       path: '/legal'
       fullPath: '/legal'
       preLoaderRoute: typeof LegalRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/how-it-works': {
+      id: '/how-it-works'
+      path: '/how-it-works'
+      fullPath: '/how-it-works'
+      preLoaderRoute: typeof HowItWorksRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/eligibility': {
@@ -283,6 +303,7 @@ const rootRouteChildren: RootRouteChildren = {
   ClaimsRoute: ClaimsRoute,
   DocumentsRoute: DocumentsRoute,
   EligibilityRoute: EligibilityRoute,
+  HowItWorksRoute: HowItWorksRoute,
   LegalRoute: LegalRoute,
   ProgramsRoute: ProgramsRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
