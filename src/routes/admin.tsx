@@ -6,6 +6,7 @@ import { SiteHeader } from "@/components/site-header";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/use-auth";
+import { isUnlocked, unlockSite } from "@/lib/gate.functions";
 
 const REVIEW_STATUSES = ["Submitted", "In review", "Needs info", "Approved", "Denied"] as const;
 
@@ -43,6 +44,17 @@ export const Route = createFileRoute("/admin")({
 
 function Admin() {
   const { user, loading, isAdmin } = useAuth();
+  const [gate, setGate] = useState<"checking" | "locked" | "open">("checking");
+  const [passcode, setPasscode] = useState("");
+  const [gateError, setGateError] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+
+  useEffect(() => {
+    isUnlocked()
+      .then(({ unlocked }) => setGate(unlocked ? "open" : "locked"))
+      .catch(() => setGate("locked"));
+  }, []);
+
   const [apps, setApps] = useState<Application[]>([]);
   const [emails, setEmails] = useState<Record<string, string>>({});
   const [filter, setFilter] = useState<string>("All");
