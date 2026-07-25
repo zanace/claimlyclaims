@@ -77,11 +77,6 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
 }
 
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
-  beforeLoad: async ({ location }) => {
-    if (location.pathname.startsWith("/unlock") || location.pathname.startsWith("/api")) return;
-    const { unlocked } = await isUnlocked();
-    if (!unlocked) throw redirect({ to: "/unlock" });
-  },
   head: () => ({
     meta: [
       { charSet: "utf-8" },
