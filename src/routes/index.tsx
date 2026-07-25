@@ -296,7 +296,7 @@ function Index() {
           <section className="mt-20 grid gap-5 md:grid-cols-3">
             {[
               { title: "Instant matches", body: "AI reads your situation and returns the exact programs you likely qualify for." },
-              { title: "Real .gov links", body: "Every result points to the official government page - never a paid middleman." },
+              { title: "Apply right here", body: "Finish your whole application inside Claimly - no confusing government websites." },
               { title: "Save & come back", body: "Bookmark programs and pick up where you left off. Nothing shared, ever." },
             ].map((f, i) => (
               <div
