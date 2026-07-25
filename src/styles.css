@@ -204,4 +204,53 @@
   .animate-fade-in {
     animation: fade-in-up 0.6s ease-out both;
   }
+
+  @keyframes blur-in {
+    from { opacity: 0; filter: blur(12px); transform: translateY(16px); }
+    to   { opacity: 1; filter: blur(0);    transform: translateY(0); }
+  }
+  .animate-blur-in {
+    animation: blur-in 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  @keyframes float-soft {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(-6px); }
+  }
+  .animate-float { animation: float-soft 6s ease-in-out infinite; }
+
+  @keyframes shimmer {
+    0%   { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+  }
+  .animate-shimmer {
+    background-size: 200% 100%;
+    animation: shimmer 3s linear infinite;
+  }
+
+  /* Smooth hover lift for cards & buttons */
+  .hover-lift {
+    transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+                box-shadow 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+                border-color 0.3s ease;
+    will-change: transform;
+  }
+  .hover-lift:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lift);
+  }
+
+  /* Scroll-reveal via view timeline (progressively enhanced) */
+  @supports (animation-timeline: view()) {
+    .reveal-on-scroll {
+      animation: fade-in-up linear both;
+      animation-timeline: view();
+      animation-range: entry 0% cover 30%;
+    }
+  }
+}
+
+@layer base {
+  html { scroll-behavior: smooth; }
+  a, button { transition: color 0.25s ease, background-color 0.25s ease, opacity 0.25s ease, transform 0.25s ease; }
 }

@@ -59,7 +59,7 @@ function Index() {
             Billions go unclaimed every year
           </span>
         <h1
-          className="mx-auto max-w-4xl font-display text-5xl leading-[1.02] tracking-tight md:text-7xl animate-fade-in-up"
+          className="mx-auto max-w-4xl font-display text-5xl leading-[1.02] tracking-tight md:text-7xl animate-blur-in"
           style={{ animationDelay: "120ms" }}
         >
             {headline.pre}
@@ -76,10 +76,10 @@ function Index() {
         <div className="space-y-5 animate-fade-in-up" style={{ animationDelay: "360ms" }}>
             <Link
               to="/chat"
-            className="group inline-flex items-center gap-2 rounded-full bg-accent px-9 py-4 font-semibold text-accent-foreground shadow-[var(--shadow-lift)] transition-transform duration-300 hover:scale-105 active:scale-95"
+            className="group inline-flex items-center gap-2 rounded-full bg-accent px-9 py-4 font-semibold text-accent-foreground shadow-[var(--shadow-lift)] transition-all duration-300 hover:scale-105 hover:shadow-2xl active:scale-95"
             >
               Start your free chat
-              <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" />
+              <ArrowRight className="size-4 transition-transform duration-300 group-hover:translate-x-1.5" />
             </Link>
             <div className="flex flex-wrap justify-center gap-x-6 gap-y-2 text-xs text-muted-foreground">
               <span className="inline-flex items-center gap-1.5">
@@ -103,26 +103,26 @@ function Index() {
           ].map(({ icon: Icon, title: t, body }, i) => (
             <div
               key={t}
-              className="rounded-2xl border border-border bg-card/40 p-6 text-foreground backdrop-blur animate-fade-in-up"
+              className="group rounded-2xl border border-border bg-card/40 p-6 text-foreground backdrop-blur hover-lift reveal-on-scroll animate-fade-in-up"
               style={{ animationDelay: `${i * 120}ms` }}
             >
-              <Icon className="mb-4 size-6 text-accent" />
+              <Icon className="mb-4 size-6 text-accent transition-transform duration-500 group-hover:scale-110 group-hover:rotate-3" />
               <h3 className="font-display text-2xl text-foreground">{t}</h3>
               <p className="mt-2 text-sm text-foreground/80">{body}</p>
             </div>
           ))}
         </section>
 
-        <section className="mb-24 rounded-3xl border border-border bg-card/40 p-10 text-center text-foreground backdrop-blur animate-fade-in-up">
+        <section className="mb-24 rounded-3xl border border-border bg-card/40 p-10 text-center text-foreground backdrop-blur reveal-on-scroll animate-fade-in-up">
           <h2 className="font-display text-4xl text-foreground md:text-5xl">Ready to see what's yours?</h2>
           <p className="mx-auto mt-3 max-w-lg text-foreground/80">
             Free, private, and takes under 3 minutes.
           </p>
           <Link
             to="/chat"
-            className="mt-6 inline-flex items-center gap-2 rounded-full bg-accent px-8 py-3 font-semibold text-accent-foreground shadow-[var(--shadow-lift)] transition-transform hover:scale-105"
+            className="group mt-6 inline-flex items-center gap-2 rounded-full bg-accent px-8 py-3 font-semibold text-accent-foreground shadow-[var(--shadow-lift)] transition-all duration-300 hover:scale-105 hover:shadow-2xl"
           >
-            Start your free chat <ArrowRight className="size-4" />
+            Start your free chat <ArrowRight className="size-4 transition-transform duration-300 group-hover:translate-x-1.5" />
           </Link>
         </section>
       </main>
