@@ -219,16 +219,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
-## Roadmap
-
-- [ ] Phase 1 (Hackathon): MVP with basic claim verification, source checker, and AI chatbot
-- [ ] Phase 2: Deepfake detection & Islamic scholarship database integration
-- [ ] Phase 3: Browser extension release
-- [ ] Phase 4: Mobile app (iOS & Android)
-- [ ] Phase 5: Community verification network scaling
-- [ ] Phase 6: Partnership with Islamic organizations and news outlets
-- [ ] Phase 7: Government source API integrations for real-time official information
-
 ## Support & Feedback
 
 For issues, feature requests, or questions:
