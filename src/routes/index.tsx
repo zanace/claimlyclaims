@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import {
-  ArrowRight, ArrowUpRight, Bookmark, BookmarkCheck, Lock, Sparkles, Search,
+  ArrowRight, ArrowUpRight, Bookmark, BookmarkCheck, Lock, Search,
   Utensils, Baby, HeartPulse, Stethoscope, HandHeart, Home as HomeIcon,
 } from "lucide-react";
 import { useEffect, useMemo, useState, type ComponentType } from "react";
@@ -121,11 +121,8 @@ function Index() {
         {/* Hero + search */}
         <section className="pt-16 md:pt-24">
           <div className="mx-auto max-w-3xl text-center">
-            <span className="inline-flex items-center gap-2 rounded-full border border-border/70 bg-white/70 px-3 py-1 text-xs font-medium text-muted-foreground shadow-sm backdrop-blur animate-fade-in-up">
-              <Sparkles className="size-3.5 text-primary" /> AI-powered benefits finder
-            </span>
             <h1
-              className="mt-6 text-5xl font-semibold tracking-tight text-foreground md:text-7xl animate-blur-in"
+              className="text-5xl font-semibold tracking-tight text-foreground md:text-7xl animate-blur-in"
               style={{ letterSpacing: "-0.03em" }}
             >
               Find the help you're <span className="bg-gradient-to-r from-primary to-indigo-500 bg-clip-text text-transparent">entitled</span> to.
