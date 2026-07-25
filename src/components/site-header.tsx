@@ -74,7 +74,7 @@ export function SiteHeader() {
               </Link>
               <button
                 onClick={signOut}
-                className="rounded-full border border-border px-4 py-2 text-sm whitespace-nowrap transition-colors hover:bg-secondary"
+                className="rounded-full border border-border px-4 py-2 text-sm whitespace-nowrap text-black transition-colors hover:bg-secondary dark:text-white"
               >
                 Log out
               </button>
