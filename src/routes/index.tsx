@@ -6,6 +6,7 @@ import {
 import { useEffect, useMemo, useState, type ComponentType } from "react";
 import { toast } from "sonner";
 import { SiteHeader } from "@/components/site-header";
+import { ApplyModal } from "@/components/apply-modal";
 
 const title = "Claimly - Find the help you're entitled to";
 const description =
@@ -29,17 +30,18 @@ type ProgramCard = {
   tagline: string;
   description: string;
   learnMore: string;
+  estimate: string;
   Icon: ComponentType<{ className?: string }>;
   color: string;
 };
 
 const CARDS: ProgramCard[] = [
-  { id: "snap", name: "SNAP", tagline: "Food benefits", description: "Monthly grocery benefits (avg $190/person) loaded onto an EBT card.", learnMore: "https://www.fns.usda.gov/snap/recipient/eligibility", Icon: Utensils, color: "from-blue-500/10 to-blue-600/5" },
-  { id: "wic", name: "WIC", tagline: "Moms & young kids", description: "Nutrition support, formula, and healthy food for pregnant women, new moms, and kids under 5.", learnMore: "https://www.fns.usda.gov/wic", Icon: Baby, color: "from-indigo-500/10 to-indigo-600/5" },
-  { id: "medicaid", name: "Medicaid", tagline: "Free/low-cost health coverage", description: "Comprehensive health coverage for low-income adults, kids, pregnant women, and people with disabilities.", learnMore: "https://www.medicaid.gov/medicaid/eligibility-policy/index.html", Icon: HeartPulse, color: "from-sky-500/10 to-sky-600/5" },
-  { id: "chc", name: "Community Health Centers", tagline: "Sliding-scale care", description: "See a doctor or dentist near you on a sliding fee scale, even without insurance.", learnMore: "https://findahealthcenter.hrsa.gov/", Icon: Stethoscope, color: "from-cyan-500/10 to-cyan-600/5" },
-  { id: "food_pantries", name: "Food Pantries", tagline: "Free groceries this week", description: "Local pantries and food banks provide free groceries and hot meals - no application needed.", learnMore: "https://www.feedingamerica.org/find-your-local-foodbank", Icon: HandHeart, color: "from-blue-500/10 to-indigo-500/5" },
-  { id: "rental_assistance", name: "Rental Assistance", tagline: "Rent & utility help", description: "Emergency rental help, HUD housing choice vouchers, and utility bill assistance in your area.", learnMore: "https://www.consumerfinance.gov/coronavirus/mortgage-and-housing-assistance/renter-protections/find-help-with-rent-and-utilities/", Icon: HomeIcon, color: "from-indigo-500/10 to-sky-500/5" },
+  { id: "snap", name: "SNAP", tagline: "Food benefits", description: "Monthly grocery benefits (avg $190/person) loaded onto an EBT card.", learnMore: "https://www.fns.usda.gov/snap/recipient/eligibility", estimate: "4 minutes", Icon: Utensils, color: "from-primary/10 to-primary/5" },
+  { id: "wic", name: "WIC", tagline: "Moms & young kids", description: "Nutrition support, formula, and healthy food for pregnant women, new moms, and kids under 5.", learnMore: "https://www.fns.usda.gov/wic", estimate: "3 minutes", Icon: Baby, color: "from-primary/10 to-primary/5" },
+  { id: "medicaid", name: "Medicaid", tagline: "Free/low-cost health coverage", description: "Comprehensive health coverage for low-income adults, kids, pregnant women, and people with disabilities.", learnMore: "https://www.medicaid.gov/medicaid/eligibility-policy/index.html", estimate: "5 minutes", Icon: HeartPulse, color: "from-primary/10 to-primary/5" },
+  { id: "chc", name: "Community Health Centers", tagline: "Sliding-scale care", description: "See a doctor or dentist near you on a sliding fee scale, even without insurance.", learnMore: "https://findahealthcenter.hrsa.gov/", estimate: "2 minutes", Icon: Stethoscope, color: "from-primary/10 to-primary/5" },
+  { id: "food_pantries", name: "Food Pantries", tagline: "Free groceries this week", description: "Local pantries and food banks provide free groceries and hot meals - no application needed.", learnMore: "https://www.feedingamerica.org/find-your-local-foodbank", estimate: "1 minute", Icon: HandHeart, color: "from-primary/10 to-primary/5" },
+  { id: "rental_assistance", name: "Rental Assistance", tagline: "Rent & utility help", description: "Emergency rental help, HUD housing choice vouchers, and utility bill assistance in your area.", learnMore: "https://www.consumerfinance.gov/coronavirus/mortgage-and-housing-assistance/renter-protections/find-help-with-rent-and-utilities/", estimate: "5 minutes", Icon: HomeIcon, color: "from-primary/10 to-primary/5" },
 ];
 
 const SEARCH_STEPS = [
@@ -58,6 +60,7 @@ function Index() {
   const [stepIdx, setStepIdx] = useState(0);
   const [results, setResults] = useState<Result[] | null>(null);
   const [saved, setSaved] = useState<Set<string>>(new Set());
+  const [applyFor, setApplyFor] = useState<ProgramCard | null>(null);
 
   useEffect(() => {
     try {
@@ -241,13 +244,16 @@ function Index() {
                       href={c.learnMore}
                       target="_blank"
                       rel="noreferrer"
-                      className="inline-flex items-center gap-1.5 rounded-full bg-foreground px-4 py-2 text-sm font-medium text-background transition hover:opacity-90"
+                      className="inline-flex items-center gap-1.5 rounded-full border border-border bg-background px-4 py-2 text-sm font-medium text-foreground transition hover:bg-secondary"
                     >
                       Learn more <ArrowUpRight className="size-3.5" />
                     </a>
-                    <Link to="/chat" className="text-sm font-medium text-muted-foreground hover:text-foreground">
-                      Ask AI →
-                    </Link>
+                    <button
+                      onClick={() => setApplyFor(c as ProgramCard)}
+                      className="inline-flex items-center gap-1.5 rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground shadow-sm transition hover:brightness-110"
+                    >
+                      Apply
+                    </button>
                   </div>
                 </article>
               ))}
@@ -275,6 +281,12 @@ function Index() {
           </section>
         )}
       </main>
+
+      <ApplyModal
+        open={!!applyFor}
+        program={applyFor}
+        onClose={() => setApplyFor(null)}
+      />
     </div>
   );
 }
