@@ -121,7 +121,9 @@ function Index() {
             Billions go unclaimed every year
           </span>
           <h1 className="mx-auto max-w-4xl font-display text-6xl leading-[1.02] tracking-tight md:text-8xl">
-            Reclaiming your <em className="text-accent">hidden</em> benefits.
+            {headline.pre}
+            <em className="text-accent">{headline.em}</em>
+            {headline.post}
           </h1>
           <p className="mx-auto max-w-xl text-xl leading-relaxed font-light text-muted-foreground">
             We track over {PROGRAMS.length} government programs to find refunds, credits, and
