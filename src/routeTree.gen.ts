@@ -11,6 +11,10 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as ProgramsRouteImport } from './routes/programs'
+import { Route as LegalRouteImport } from './routes/legal'
+import { Route as EligibilityRouteImport } from './routes/eligibility'
+import { Route as DocumentsRouteImport } from './routes/documents'
+import { Route as ClaimsRouteImport } from './routes/claims'
 import { Route as ChatRouteImport } from './routes/chat'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ApiChatRouteImport } from './routes/api/chat'
@@ -23,6 +27,26 @@ const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
 const ProgramsRoute = ProgramsRouteImport.update({
   id: '/programs',
   path: '/programs',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LegalRoute = LegalRouteImport.update({
+  id: '/legal',
+  path: '/legal',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EligibilityRoute = EligibilityRouteImport.update({
+  id: '/eligibility',
+  path: '/eligibility',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DocumentsRoute = DocumentsRouteImport.update({
+  id: '/documents',
+  path: '/documents',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ClaimsRoute = ClaimsRouteImport.update({
+  id: '/claims',
+  path: '/claims',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ChatRoute = ChatRouteImport.update({
@@ -44,6 +68,10 @@ const ApiChatRoute = ApiChatRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/chat': typeof ChatRoute
+  '/claims': typeof ClaimsRoute
+  '/documents': typeof DocumentsRoute
+  '/eligibility': typeof EligibilityRoute
+  '/legal': typeof LegalRoute
   '/programs': typeof ProgramsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/api/chat': typeof ApiChatRoute
@@ -51,6 +79,10 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/chat': typeof ChatRoute
+  '/claims': typeof ClaimsRoute
+  '/documents': typeof DocumentsRoute
+  '/eligibility': typeof EligibilityRoute
+  '/legal': typeof LegalRoute
   '/programs': typeof ProgramsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/api/chat': typeof ApiChatRoute
@@ -59,21 +91,57 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/chat': typeof ChatRoute
+  '/claims': typeof ClaimsRoute
+  '/documents': typeof DocumentsRoute
+  '/eligibility': typeof EligibilityRoute
+  '/legal': typeof LegalRoute
   '/programs': typeof ProgramsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/api/chat': typeof ApiChatRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/chat' | '/programs' | '/sitemap.xml' | '/api/chat'
+  fullPaths:
+    | '/'
+    | '/chat'
+    | '/claims'
+    | '/documents'
+    | '/eligibility'
+    | '/legal'
+    | '/programs'
+    | '/sitemap.xml'
+    | '/api/chat'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/chat' | '/programs' | '/sitemap.xml' | '/api/chat'
-  id: '__root__' | '/' | '/chat' | '/programs' | '/sitemap.xml' | '/api/chat'
+  to:
+    | '/'
+    | '/chat'
+    | '/claims'
+    | '/documents'
+    | '/eligibility'
+    | '/legal'
+    | '/programs'
+    | '/sitemap.xml'
+    | '/api/chat'
+  id:
+    | '__root__'
+    | '/'
+    | '/chat'
+    | '/claims'
+    | '/documents'
+    | '/eligibility'
+    | '/legal'
+    | '/programs'
+    | '/sitemap.xml'
+    | '/api/chat'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ChatRoute: typeof ChatRoute
+  ClaimsRoute: typeof ClaimsRoute
+  DocumentsRoute: typeof DocumentsRoute
+  EligibilityRoute: typeof EligibilityRoute
+  LegalRoute: typeof LegalRoute
   ProgramsRoute: typeof ProgramsRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   ApiChatRoute: typeof ApiChatRoute
@@ -93,6 +161,34 @@ declare module '@tanstack/react-router' {
       path: '/programs'
       fullPath: '/programs'
       preLoaderRoute: typeof ProgramsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/legal': {
+      id: '/legal'
+      path: '/legal'
+      fullPath: '/legal'
+      preLoaderRoute: typeof LegalRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/eligibility': {
+      id: '/eligibility'
+      path: '/eligibility'
+      fullPath: '/eligibility'
+      preLoaderRoute: typeof EligibilityRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/documents': {
+      id: '/documents'
+      path: '/documents'
+      fullPath: '/documents'
+      preLoaderRoute: typeof DocumentsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/claims': {
+      id: '/claims'
+      path: '/claims'
+      fullPath: '/claims'
+      preLoaderRoute: typeof ClaimsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/chat': {
@@ -122,6 +218,10 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ChatRoute: ChatRoute,
+  ClaimsRoute: ClaimsRoute,
+  DocumentsRoute: DocumentsRoute,
+  EligibilityRoute: EligibilityRoute,
+  LegalRoute: LegalRoute,
   ProgramsRoute: ProgramsRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   ApiChatRoute: ApiChatRoute,
