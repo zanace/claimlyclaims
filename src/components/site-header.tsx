@@ -46,7 +46,8 @@ export function SiteHeader() {
             <Link
               key={item.to}
               to={item.to}
-              className="transition-colors hover:text-foreground [&.active]:text-foreground"
+              activeOptions={{ exact: item.to === "/" }}
+              className="transition-colors hover:text-foreground [&.active]:font-semibold [&.active]:text-primary dark:[&.active]:text-primary"
             >
               {item.label}
             </Link>
@@ -116,7 +117,8 @@ export function SiteHeader() {
                 <Link
                   to={item.to}
                   onClick={() => setOpen(false)}
-                  className="block py-1 transition-colors hover:text-foreground [&.active]:text-foreground"
+                  activeOptions={{ exact: item.to === "/" }}
+                  className="block py-1 transition-colors hover:text-foreground [&.active]:font-semibold [&.active]:text-primary dark:[&.active]:text-primary"
                 >
                   {item.label}
                 </Link>
