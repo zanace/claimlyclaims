@@ -12,8 +12,17 @@ export function SiteFooter() {
           <Link to="/" className="hover:text-foreground">
             Home
           </Link>
+          <Link to="/how-it-works" className="hover:text-foreground">
+            How it works
+          </Link>
           <Link to="/programs" className="hover:text-foreground">
             Programs
+          </Link>
+          <Link to="/money-you-could-get" className="hover:text-foreground">
+            How much you could get
+          </Link>
+          <Link to="/blog" className="hover:text-foreground">
+            Resources
           </Link>
           <Link to="/eligibility" className="hover:text-foreground">
             Eligibility
