@@ -26,6 +26,7 @@ const PUBLIC_PATHS = new Set([
   "/about",
   "/privacy",
   "/legal",
+  "/chat",
 ]);
 const PUBLIC_PREFIXES = ["/blog", "/api", "/sitemap"];
 
