@@ -41,15 +41,17 @@ function Eligibility() {
     const ratio = monthlyIncome / fpl;
     const ids: string[] = [];
     if (monthlyIncome > 0 && ratio < 2.6) ids.push("eitc");
-    if (children > 0) ids.push("ctc");
-    if (ratio < 1.3) ids.push("snap");
+    if (children > 0) ids.push("ctc", "actc", "cdcc");
+    if (children > 0 && ratio < 1.85) ids.push("school-meals", "summer-ebt", "ccdf");
+    if (ratio < 1.3) ids.push("snap", "tanf", "acp-lifeline");
     if (children > 0 && ratio < 1.85) ids.push("wic");
     if (!insured && ratio < 1.38) ids.push("medicaid");
     if (children > 0 && !insured && ratio < 2.5) ids.push("chip");
-    if (rent / Math.max(monthlyIncome, 1) > 0.3) ids.push("section8");
-    if (ratio < 1.5) ids.push("liheap");
-    if (student) ids.push("aotc");
-    ids.push("back-refunds");
+    if (!insured && ratio >= 1.38) ids.push("marketplace", "ptc");
+    if (rent / Math.max(monthlyIncome, 1) > 0.3) ids.push("section8", "era");
+    if (ratio < 1.5) ids.push("liheap", "wap", "lihwap");
+    if (student) ids.push("aotc", "pell", "llc");
+    ids.push("back-refunds", "state-unclaimed");
     return PROGRAMS.filter((p) => ids.includes(p.id));
   }, [household, children, monthlyIncome, rent, insured, student]);
 
