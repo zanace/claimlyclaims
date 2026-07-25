@@ -30,7 +30,7 @@ export const OFFICIAL_LINKS: OfficialLink[] = [
 
   // ---- Benefits: food, cash, health, housing ----
   { label: "Benefits.gov eligibility finder", url: "https://www.benefits.gov/benefit-finder", note: "Official cross-agency screener for federal programs." },
-  { label: "SNAP state application directory", url: "https://www.fns.usda.gov/snap/state-directory", note: "SNAP is applied for through your state agency — this page links each one." },
+  { label: "SNAP state application directory", url: "https://www.fns.usda.gov/snap/state-directory", note: "SNAP is applied for through your state agency - this page links each one." },
   { label: "WIC state agency directory", url: "https://www.fns.usda.gov/wic/contacts", note: "For pregnant people and kids under 5." },
   { label: "HealthCare.gov (marketplace + Medicaid/CHIP referral)", url: "https://www.healthcare.gov/", note: "One application covers marketplace subsidies, Medicaid, and CHIP." },
   { label: "Medicaid state contacts", url: "https://www.medicaid.gov/about-us/where-can-people-get-help-medicaid-chip/index.html", note: "State-by-state Medicaid/CHIP offices." },
@@ -49,5 +49,5 @@ export const OFFICIAL_LINKS: OfficialLink[] = [
 ];
 
 export const OFFICIAL_LINKS_PROMPT = OFFICIAL_LINKS.map(
-  (l) => `- ${l.label}: ${l.url} — ${l.note}`,
+  (l) => `- ${l.label}: ${l.url} - ${l.note}`,
 ).join("\n");

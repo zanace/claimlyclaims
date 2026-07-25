@@ -101,7 +101,7 @@ function Claims() {
       <main className="mx-auto max-w-6xl px-5 py-16">
         <h1 className="font-display text-5xl tracking-tight md:text-6xl">Your claims</h1>
         <p className="mt-4 max-w-xl text-muted-foreground">
-          Everything you are filing, in one place. Tracked on this device — and you can send any
+          Everything you are filing, in one place. Tracked on this device - and you can send any
           claim to our review team once you{"'"}re logged in.
         </p>
         {!user && (

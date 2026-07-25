@@ -4,9 +4,9 @@ import { SiteHeader } from "@/components/site-header";
 export const Route = createFileRoute("/team")({
   head: () => ({
     meta: [
-      { title: "Our Team — Claimly" },
+      { title: "Our Team - Claimly" },
       { name: "description", content: "Meet the founders and team behind Claimly." },
-      { property: "og:title", content: "Our Team — Claimly" },
+      { property: "og:title", content: "Our Team - Claimly" },
       { property: "og:description", content: "Meet the founders and team behind Claimly." },
     ],
   }),

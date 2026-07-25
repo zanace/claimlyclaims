@@ -4,9 +4,9 @@ import { useEffect, useState } from "react";
 import { SiteHeader } from "@/components/site-header";
 import { PROGRAMS } from "@/lib/programs";
 
-const title = "Claimly — Find the benefits and refunds you already qualify for";
+const title = "Claimly - Find the benefits and refunds you already qualify for";
 const description =
-  "Answer a few plain-English questions and Claimly's AI guide maps your household to tax credits, food, healthcare, and housing programs — free, private, no SSN.";
+  "Answer a few plain-English questions and Claimly's AI guide maps your household to tax credits, food, healthcare, and housing programs - free, private, no SSN.";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -20,7 +20,7 @@ export const Route = createFileRoute("/")({
   component: Index,
 });
 
-// Hero headline variants — one is picked at random on each visit.
+// Hero headline variants - one is picked at random on each visit.
 const HEADLINES = [
   { pre: "Reclaiming your ", em: "hidden", post: " benefits." },
   { pre: "Money you're owed, ", em: "found", post: " fast." },

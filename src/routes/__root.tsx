@@ -80,14 +80,14 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Claimly — Claim the benefits you already qualify for" },
+      { title: "Claimly - Claim the benefits you already qualify for" },
       {
         name: "description",
         content:
           "Claimly's AI guide matches your household to tax credits, food, healthcare, and housing programs. Free, private, no SSN required.",
       },
       { name: "author", content: "Claimly" },
-      { property: "og:title", content: "Claimly — Claim the benefits you already qualify for" },
+      { property: "og:title", content: "Claimly - Claim the benefits you already qualify for" },
       {
         property: "og:description",
         content: "Find the refunds and programs you qualify for in about four minutes.",

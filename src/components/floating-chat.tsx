@@ -46,7 +46,7 @@ export function FloatingChat() {
           <div className="flex items-center justify-between border-b border-border bg-primary px-4 py-3 text-primary-foreground">
             <div>
               <p className="text-sm font-semibold">Ask Claimly</p>
-              <p className="text-xs opacity-80">Anything financial — refunds, benefits, taxes.</p>
+              <p className="text-xs opacity-80">Anything financial - refunds, benefits, taxes.</p>
             </div>
             <button
               type="button"

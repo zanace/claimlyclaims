@@ -8,7 +8,7 @@ import { CATEGORIES, PROGRAMS } from "@/lib/programs";
 
 const title = "130+ benefit programs we track | Claimly";
 const description =
-  "Search every federal, state, and local program Claimly checks you against — tax credits, cash assistance, food, healthcare, housing, veterans, and unclaimed money, with rough dollar values.";
+  "Search every federal, state, and local program Claimly checks you against - tax credits, cash assistance, food, healthcare, housing, veterans, and unclaimed money, with rough dollar values.";
 
 export const Route = createFileRoute("/programs")({
   head: () => ({
@@ -55,7 +55,7 @@ function Programs() {
           </h1>
           <p className="mt-4 text-muted-foreground">
             {PROGRAMS.length} programs across {CATEGORIES.length} categories. Estimates are typical
-            ranges, not promises — eligibility depends on your state, household, and income.
+            ranges, not promises - eligibility depends on your state, household, and income.
           </p>
         </header>
 
@@ -109,7 +109,7 @@ function Programs() {
           <div className="mt-16 rounded-3xl border border-dashed border-border p-14 text-center">
             <h2 className="font-display text-2xl">Nothing matched that</h2>
             <p className="mx-auto mt-2 max-w-sm text-sm text-muted-foreground">
-              Try a broader word like "rent", "kids", or "medical" — or just describe your situation
+              Try a broader word like "rent", "kids", or "medical" - or just describe your situation
               to the assistant and let it search for you.
             </p>
             <Link

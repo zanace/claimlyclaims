@@ -28,7 +28,7 @@ export const ARTICLES: Article[] = [
     slug: "earned-income-tax-credit-explained",
     title: "The Earned Income Tax Credit, Explained (And Why So Many People Miss It)",
     summary:
-      "The EITC is one of the largest refunds working people can get — and one of the most commonly skipped.",
+      "The EITC is one of the largest refunds working people can get - and one of the most commonly skipped.",
     category: "Taxes",
     readTime: "6 min read",
     date: "2026-01-12",
@@ -36,7 +36,7 @@ export const ARTICLES: Article[] = [
       {
         paragraphs: [
           "The Earned Income Tax Credit is a refundable tax credit for people who work but don't earn a lot. Refundable is the important word: if the credit is bigger than the tax you owe, the difference comes back to you as a refund. You can owe nothing all year and still get money.",
-          "Every year the IRS estimates that roughly one in five eligible people don't claim it [VERIFY CURRENT FIGURE]. Not because they don't qualify — because they never filed, or they filed and skipped the form.",
+          "Every year the IRS estimates that roughly one in five eligible people don't claim it [VERIFY CURRENT FIGURE]. Not because they don't qualify - because they never filed, or they filed and skipped the form.",
         ],
       },
       {
@@ -50,7 +50,7 @@ export const ARTICLES: Article[] = [
         heading: "Why people miss it",
         paragraphs: [
           "The most common reason is simple: their income was low enough that they weren't required to file a return, so they didn't. But filing is how you claim a refund. No return, no credit.",
-          "The second reason is life changes. A new baby, a move, a year with less work, a separation — any of these can make you newly eligible when you weren't the year before. People check once, get a no, and never check again.",
+          "The second reason is life changes. A new baby, a move, a year with less work, a separation - any of these can make you newly eligible when you weren't the year before. People check once, get a no, and never check again.",
           "The third is fear of the process. Filing feels like something that can go wrong. In practice, claiming the EITC is a schedule attached to a normal return, and free filing help exists nationwide through IRS-sponsored volunteer programs.",
         ],
       },
@@ -63,7 +63,7 @@ export const ARTICLES: Article[] = [
       {
         heading: "What to have ready",
         paragraphs: [
-          "Social Security numbers for you and any children you're claiming, your W-2s or 1099s, records of self-employment income and expenses, and last year's return if you have it. If you're claiming a child, you'll want something that shows they lived with you for more than half the year — school records, medical records, or a letter from a landlord all work.",
+          "Social Security numbers for you and any children you're claiming, your W-2s or 1099s, records of self-employment income and expenses, and last year's return if you have it. If you're claiming a child, you'll want something that shows they lived with you for more than half the year - school records, medical records, or a letter from a landlord all work.",
         ],
       },
       {
@@ -85,7 +85,7 @@ export const ARTICLES: Article[] = [
     body: [
       {
         paragraphs: [
-          "When a company can't reach you, it doesn't keep your money forever. After a dormancy period — often one to five years, depending on the state and the type of account — it has to hand the money to the state, which holds it for you indefinitely. That handoff is called escheatment, and the pile is enormous.",
+          "When a company can't reach you, it doesn't keep your money forever. After a dormancy period - often one to five years, depending on the state and the type of account - it has to hand the money to the state, which holds it for you indefinitely. That handoff is called escheatment, and the pile is enormous.",
         ],
       },
       {
@@ -111,7 +111,7 @@ export const ARTICLES: Article[] = [
       {
         heading: "What the claim looks like",
         paragraphs: [
-          "You'll fill out a claim form, then prove two things: that you are you, and that you're connected to the address or account on file. Typically that means a photo ID, your Social Security number, and something linking you to the old address — an old bill, a lease, a tax return.",
+          "You'll fill out a claim form, then prove two things: that you are you, and that you're connected to the address or account on file. Typically that means a photo ID, your Social Security number, and something linking you to the old address - an old bill, a lease, a tax return.",
           "Processing usually takes a few weeks to a few months. Small amounts sometimes pay out automatically with no documentation at all.",
         ],
       },
@@ -134,7 +134,7 @@ export const ARTICLES: Article[] = [
     body: [
       {
         paragraphs: [
-          "SNAP — the program most people still call food stamps — is decided mostly on household size and income. The confusing part is that 'income' in the SNAP rules is not the same number as the one on your pay stub, and deductions can move a household from 'over the limit' to eligible.",
+          "SNAP - the program most people still call food stamps - is decided mostly on household size and income. The confusing part is that 'income' in the SNAP rules is not the same number as the one on your pay stub, and deductions can move a household from 'over the limit' to eligible.",
         ],
       },
       {
@@ -166,13 +166,13 @@ export const ARTICLES: Article[] = [
       {
         heading: "Who counts as a household",
         paragraphs: [
-          "A SNAP household is people who buy and prepare food together — not just people on the lease. Roommates who shop and cook separately are usually separate households, which changes both the income counted and the size limit applied.",
+          "A SNAP household is people who buy and prepare food together - not just people on the lease. Roommates who shop and cook separately are usually separate households, which changes both the income counted and the size limit applied.",
         ],
       },
       {
         heading: "When in doubt, apply",
         paragraphs: [
-          "States run their own versions with their own limits, and several use broad-based categorical eligibility that raises or removes the asset test [VERIFY]. The application is free, a denial costs you nothing, and the worst realistic outcome is a letter. Estimates like ours are a starting point — the agency makes the decision.",
+          "States run their own versions with their own limits, and several use broad-based categorical eligibility that raises or removes the asset test [VERIFY]. The application is free, a denial costs you nothing, and the worst realistic outcome is a letter. Estimates like ours are a starting point - the agency makes the decision.",
         ],
       },
     ],
@@ -181,7 +181,7 @@ export const ARTICLES: Article[] = [
     slug: "tax-credits-parents-forget",
     title: "5 Tax Credits Parents Often Forget to Claim",
     summary:
-      "Raising kids is expensive and the tax code partly accounts for that — if you claim the right lines.",
+      "Raising kids is expensive and the tax code partly accounts for that - if you claim the right lines.",
     category: "Family benefits",
     readTime: "6 min read",
     date: "2026-02-15",
@@ -194,7 +194,7 @@ export const ARTICLES: Article[] = [
       {
         heading: "1. The Child Tax Credit",
         paragraphs: [
-          "A per-child credit for qualifying children under the age limit, with a portion refundable for families whose tax bill is already low [VERIFY CURRENT FIGURE]. You have to file to get it, even if your income is below the filing requirement — which is exactly the group that most often skips filing.",
+          "A per-child credit for qualifying children under the age limit, with a portion refundable for families whose tax bill is already low [VERIFY CURRENT FIGURE]. You have to file to get it, even if your income is below the filing requirement - which is exactly the group that most often skips filing.",
         ],
       },
       {
@@ -206,7 +206,7 @@ export const ARTICLES: Article[] = [
       {
         heading: "3. The Child and Dependent Care Credit",
         paragraphs: [
-          "If you paid for care so you could work or look for work, part of that cost can come back as a credit. Daycare, after-school programs, and summer day camp generally count; overnight camp doesn't. You need the provider's name, address, and tax ID — get it before they close for the year.",
+          "If you paid for care so you could work or look for work, part of that cost can come back as a credit. Daycare, after-school programs, and summer day camp generally count; overnight camp doesn't. You need the provider's name, address, and tax ID - get it before they close for the year.",
         ],
       },
       {
@@ -224,7 +224,7 @@ export const ARTICLES: Article[] = [
       {
         heading: "A note on split households",
         paragraphs: [
-          "When parents live apart, only one can claim a given child for most of these credits, and the rules turn on where the child physically lived for more than half the year — not on who pays more support. Sort it out before filing; duplicate claims freeze both refunds.",
+          "When parents live apart, only one can claim a given child for most of these credits, and the rules turn on where the child physically lived for more than half the year - not on who pays more support. Sort it out before filing; duplicate claims freeze both refunds.",
         ],
       },
     ],
@@ -233,21 +233,21 @@ export const ARTICLES: Article[] = [
     slug: "never-filed-owed-a-refund",
     title: "What to Do If You Never Filed a Tax Return You Were Owed a Refund On",
     summary:
-      "Skipping a filing year when you were owed money is fixable — but there's a deadline on getting the refund.",
+      "Skipping a filing year when you were owed money is fixable - but there's a deadline on getting the refund.",
     category: "Taxes",
     readTime: "6 min read",
     date: "2026-03-01",
     body: [
       {
         paragraphs: [
-          "A lot of people have a year they never filed. Income was low, life was chaotic, the paperwork was somewhere in a box. If you were owed a refund that year, that money is still sitting there — but not forever.",
+          "A lot of people have a year they never filed. Income was low, life was chaotic, the paperwork was somewhere in a box. If you were owed a refund that year, that money is still sitting there - but not forever.",
         ],
       },
       {
         heading: "The three-year window",
         paragraphs: [
           "You generally have three years from the original due date to file and still receive a refund [VERIFY]. After that the claim expires and the money stays with the Treasury. Two things follow from this: check your oldest unfiled year first, and don't wait for a quiet weekend.",
-          "If you owed tax rather than being owed a refund, there's no deadline to file — and filing late is still much better than not filing, because penalties and interest keep running.",
+          "If you owed tax rather than being owed a refund, there's no deadline to file - and filing late is still much better than not filing, because penalties and interest keep running.",
         ],
       },
       {
@@ -265,7 +265,7 @@ export const ARTICLES: Article[] = [
       {
         heading: "Step three: check for credits you skipped",
         paragraphs: [
-          "This is where late returns often turn into real money. The EITC, Child Tax Credit, and education credits are claimed on the return, so an unfiled year is an unclaimed year. Run the numbers with that year's rules — they change annually.",
+          "This is where late returns often turn into real money. The EITC, Child Tax Credit, and education credits are claimed on the return, so an unfiled year is an unclaimed year. Run the numbers with that year's rules - they change annually.",
         ],
       },
       {

@@ -6,7 +6,7 @@ import { ARTICLES, BLOG_CATEGORIES } from "@/lib/blog";
 
 const title = "Money guides & resources | Claimly";
 const description =
-  "Plain-English guides to the refunds and benefits you might be missing — taxes, food assistance, housing, family benefits, and unclaimed property.";
+  "Plain-English guides to the refunds and benefits you might be missing - taxes, food assistance, housing, family benefits, and unclaimed property.";
 
 export const Route = createFileRoute("/blog/")({
   head: () => ({
