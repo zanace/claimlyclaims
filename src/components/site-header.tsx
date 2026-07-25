@@ -96,10 +96,14 @@ export function SiteHeader() {
         </div>
       </div>
       {open && (
-        <nav className="border-t border-border/70 bg-background/95 px-5 py-3 lg:hidden">
+        <nav className="origin-top overflow-hidden border-t border-border/70 bg-background/95 px-5 py-3 animate-mobile-nav lg:hidden">
           <ul className="grid grid-cols-2 gap-x-4 gap-y-2 text-sm text-muted-foreground dark:text-white sm:grid-cols-3">
-            {items.map((item) => (
-              <li key={item.to}>
+            {items.map((item, i) => (
+              <li
+                key={item.to}
+                className="animate-mobile-nav-item opacity-0"
+                style={{ animationDelay: `${60 + i * 35}ms` }}
+              >
                 <Link
                   to={item.to}
                   onClick={() => setOpen(false)}
