@@ -65,35 +65,35 @@
 :root {
   --radius: 1.5rem;
   --background: oklch(1 0 0);
-  --foreground: oklch(0.22 0.06 155);
+  --foreground: oklch(0.22 0.08 250);
   --card: oklch(1 0 0);
-  --card-foreground: oklch(0.22 0.06 155);
+  --card-foreground: oklch(0.22 0.08 250);
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.22 0.06 155);
-  --primary: oklch(0.42 0.14 152);
-  --primary-foreground: oklch(0.99 0.01 140);
-  --secondary: oklch(0.95 0.06 140);
-  --secondary-foreground: oklch(0.24 0.08 152);
-  --muted: oklch(0.96 0.03 145);
-  --muted-foreground: oklch(0.44 0.05 152);
-  --accent: oklch(0.52 0.09 55);
-  --accent-foreground: oklch(0.99 0.02 80);
+  --popover-foreground: oklch(0.22 0.08 250);
+  --primary: oklch(0.38 0.14 245);
+  --primary-foreground: oklch(0.99 0.01 240);
+  --secondary: oklch(0.95 0.05 230);
+  --secondary-foreground: oklch(0.24 0.1 245);
+  --muted: oklch(0.96 0.03 230);
+  --muted-foreground: oklch(0.46 0.06 245);
+  --accent: oklch(0.78 0.13 230);
+  --accent-foreground: oklch(0.18 0.1 245);
   --destructive: oklch(0.55 0.19 27);
   --destructive-foreground: oklch(0.985 0.012 95);
-  --border: oklch(0.9 0.04 145);
-  --input: oklch(0.9 0.04 145);
-  --ring: oklch(0.52 0.09 55);
+  --border: oklch(0.9 0.04 235);
+  --input: oklch(0.9 0.04 235);
+  --ring: oklch(0.6 0.15 235);
   --font-display: "Instrument Serif", Georgia, serif;
   --font-sans: "Work Sans", system-ui, sans-serif;
-  --on-deep: oklch(0.99 0.01 140);
+  --on-deep: oklch(0.99 0.01 240);
   --gradient-hero: radial-gradient(
     120% 90% at 50% 0%,
-    oklch(0.52 0.09 55 / 0.28) 0%,
+    oklch(0.78 0.13 230 / 0.38) 0%,
     oklch(1 0 0) 64%
   );
-  --gradient-deep: linear-gradient(135deg, oklch(0.42 0.14 152), oklch(0.52 0.09 55));
-  --shadow-soft: 0 1px 2px oklch(0.3 0.1 150 / 0.08), 0 14px 36px -18px oklch(0.3 0.12 150 / 0.24);
-  --shadow-lift: 0 28px 70px -30px oklch(0.3 0.12 150 / 0.35);
+  --gradient-deep: linear-gradient(135deg, oklch(0.38 0.14 245), oklch(0.78 0.13 230));
+  --shadow-soft: 0 1px 2px oklch(0.3 0.12 245 / 0.08), 0 14px 36px -18px oklch(0.3 0.14 245 / 0.24);
+  --shadow-lift: 0 28px 70px -30px oklch(0.3 0.14 245 / 0.35);
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
   --chart-3: oklch(0.398 0.07 227.392);
