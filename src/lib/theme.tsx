@@ -10,7 +10,7 @@ const ThemeContext = createContext<{ theme: Theme; toggle: () => void }>({
   toggle: () => {},
 });
 
-export const themeInitScript = `(function(){try{var t=store.getItem("${STORAGE_KEY}")||"light";document.documentElement.classList.toggle("dark",t==="dark");document.documentElement.style.colorScheme=t;}catch(e){}})();`;
+export const themeInitScript = `(function(){try{var m=document.cookie.match(/(?:^|; )${STORAGE_KEY.replace(".", "\\\\.")}=([^;]*)/);var t=(m?decodeURIComponent(m[1]):null)||localStorage.getItem("${STORAGE_KEY}")||"light";document.documentElement.classList.toggle("dark",t==="dark");document.documentElement.style.colorScheme=t;}catch(e){}})();`;
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
   const [theme, setTheme] = useState<Theme>("light");
