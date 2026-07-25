@@ -55,7 +55,7 @@ export function SiteHeader() {
             </Link>
           )}
         </nav>
-        <div className="flex items-center gap-3.5">
+        <div className="ml-auto flex items-center gap-3">
           <ThemeToggle />
           {user ? (
             <>
