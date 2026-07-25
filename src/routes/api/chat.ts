@@ -1,7 +1,9 @@
 import { createOpenAI } from "@ai-sdk/openai";
 import { createFileRoute } from "@tanstack/react-router";
+import { createClient } from "@supabase/supabase-js";
 import { convertToModelMessages, streamText, type UIMessage } from "ai";
 import { PROGRAMS } from "@/lib/programs";
+import type { Database } from "@/integrations/supabase/types";
 
 const CATALOG = PROGRAMS.map(
   (p) => `- ${p.name} (${p.agency}) — ${p.category}; ${p.estimate}; ${p.summary} Who: ${p.who}`,
@@ -19,6 +21,59 @@ How you work:
 Program catalog (${PROGRAMS.length} programs Claimly tracks):
 ${CATALOG}`;
 
+// Pulls the signed-in user's saved profile + claims so the assistant can reason
+// about their real situation instead of re-asking for everything.
+async function loadUserContext(request: Request): Promise<string> {
+  const auth = request.headers.get("authorization");
+  const token = auth?.toLowerCase().startsWith("bearer ") ? auth.slice(7) : null;
+  const url = process.env.SUPABASE_URL;
+  const key = process.env.SUPABASE_PUBLISHABLE_KEY;
+  if (!token || !url || !key) return "";
+
+  try {
+    const supabase = createClient<Database>(url, key, {
+      auth: { persistSession: false, autoRefreshToken: false },
+      global: { headers: { Authorization: `Bearer ${token}` } },
+    });
+
+    const { data: userData } = await supabase.auth.getUser(token);
+    const user = userData?.user;
+    if (!user) return "";
+
+    const [{ data: profile }, { data: apps }] = await Promise.all([
+      supabase
+        .from("profiles")
+        .select("full_name, state, household_size, monthly_income")
+        .eq("id", user.id)
+        .maybeSingle(),
+      supabase
+        .from("applications")
+        .select("program_name, status, estimated_amount, created_at")
+        .eq("user_id", user.id)
+        .order("created_at", { ascending: false })
+        .limit(25),
+    ]);
+
+    const lines: string[] = [];
+    if (profile) {
+      lines.push(
+        `Saved profile — name: ${profile.full_name ?? "unknown"}; state: ${profile.state ?? "unknown"}; household size: ${profile.household_size ?? "unknown"}; monthly income: ${profile.monthly_income ?? "unknown"}.`,
+      );
+    }
+    if (apps?.length) {
+      lines.push("Claims already tracked in their account:");
+      for (const a of apps) {
+        lines.push(`- ${a.program_name} — status: ${a.status}${a.estimated_amount ? `, est. ${a.estimated_amount}` : ""}`);
+      }
+    }
+    if (!lines.length) return "";
+
+    return `\n\nThis person is signed in. Here is their saved account data — use it instead of re-asking, confirm it briefly, and do not suggest programs they already have an active claim for (instead report that claim's status):\n${lines.join("\n")}`;
+  } catch {
+    return "";
+  }
+}
+
 export const Route = createFileRoute("/api/chat")({
   server: {
     handlers: {
@@ -34,10 +89,11 @@ export const Route = createFileRoute("/api/chat")({
         }
 
         const openai = createOpenAI({ apiKey });
+        const userContext = await loadUserContext(request);
 
         const result = streamText({
           model: openai("gpt-4o-mini"),
-          system: SYSTEM_PROMPT,
+          system: SYSTEM_PROMPT + userContext,
           messages: await convertToModelMessages(messages),
         });
 

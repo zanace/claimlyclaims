@@ -18,6 +18,7 @@ import {
 } from "@/components/ai-elements/prompt-input";
 import { Shimmer } from "@/components/ai-elements/shimmer";
 import { SiteHeader } from "@/components/site-header";
+import { supabase } from "@/integrations/supabase/client";
 
 const title = "Benefits assistant | Claimly";
 const description =
@@ -44,10 +45,19 @@ const SUGGESTIONS = [
 
 function ChatPage() {
   const [input, setInput] = useState("");
+  const [token, setToken] = useState<string | null>(null);
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
 
+  // Pass the session token so the assistant can read the user's saved profile and claims.
+  useEffect(() => {
+    void supabase.auth.getSession().then(({ data }) => setToken(data.session?.access_token ?? null));
+  }, []);
+
   const { messages, sendMessage, status } = useChat({
-    transport: new DefaultChatTransport({ api: "/api/chat" }),
+    transport: new DefaultChatTransport({
+      api: "/api/chat",
+      headers: token ? { Authorization: `Bearer ${token}` } : undefined,
+    }),
     onError: (error) => toast.error(error.message || "The assistant is unavailable right now."),
   });
 
