@@ -77,7 +77,7 @@ function Index() {
   const [headlineIdx, setHeadlineIdx] = useState(0);
 
   useEffect(() => {
-    const t = setInterval(() => setHeadlineIdx((i) => (i + 1) % HEADLINES.length), 3500);
+    const t = setInterval(() => setHeadlineIdx((i) => (i + 1) % HEADLINES.length), 8400);
     return () => clearInterval(t);
   }, []);
 
