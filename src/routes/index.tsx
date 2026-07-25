@@ -51,6 +51,19 @@ const SEARCH_STEPS = [
   "Ranking your best matches...",
 ];
 
+const HEADLINES: Array<{ pre: string; accent: string; post: string }> = [
+  { pre: "Find the help you're ", accent: "entitled", post: " to." },
+  { pre: "Claim the benefits you've ", accent: "already earned", post: "." },
+  { pre: "Unlock support that's ", accent: "waiting", post: " for you." },
+  { pre: "Discover programs ", accent: "built", post: " for your situation." },
+  { pre: "Get the assistance you ", accent: "qualify", post: " for." },
+  { pre: "Turn eligibility into ", accent: "real support", post: "." },
+  { pre: "Reclaim your ", accent: "hidden", post: " benefits." },
+  { pre: "Match with programs ", accent: "made", post: " for you." },
+  { pre: "Access the help ", accent: "designed", post: " for you." },
+  { pre: "Find what you're ", accent: "owed", post: "." },
+];
+
 type Result = { id: string; why: string; fit: "strong" | "possible" | "worth_checking" };
 
 function Index() {
@@ -61,6 +74,12 @@ function Index() {
   const [results, setResults] = useState<Result[] | null>(null);
   const [saved, setSaved] = useState<Set<string>>(new Set());
   const [applyFor, setApplyFor] = useState<ProgramCard | null>(null);
+  const [headlineIdx, setHeadlineIdx] = useState(0);
+
+  useEffect(() => {
+    const t = setInterval(() => setHeadlineIdx((i) => (i + 1) % HEADLINES.length), 3500);
+    return () => clearInterval(t);
+  }, []);
 
   useEffect(() => {
     try {
@@ -125,7 +144,13 @@ function Index() {
               className="text-5xl font-semibold tracking-tight text-foreground md:text-7xl animate-blur-in"
               style={{ letterSpacing: "-0.03em" }}
             >
-              Find the help you're <span className="bg-gradient-to-r from-primary to-indigo-500 bg-clip-text text-transparent">entitled</span> to.
+              <span key={headlineIdx} className="inline-block animate-fade-in">
+                {HEADLINES[headlineIdx].pre}
+                <span className="bg-gradient-to-r from-primary to-indigo-500 bg-clip-text text-transparent">
+                  {HEADLINES[headlineIdx].accent}
+                </span>
+                {HEADLINES[headlineIdx].post}
+              </span>
             </h1>
             <p className="mx-auto mt-5 max-w-xl text-lg text-muted-foreground animate-fade-in-up" style={{ animationDelay: "300ms" }}>
               Describe your situation in one sentence. Claimly instantly matches you with food, healthcare, and housing programs in your area.
