@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { Check, PencilLine } from "lucide-react";
+import { useEffect } from "react";
+import { PencilLine } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -70,8 +70,6 @@ export function InfoPanel({
   info: UserInfo;
   onChange: (info: UserInfo) => void;
 }) {
-  const [saved, setSaved] = useState(false);
-
   // Prefill anything blank from the signed-in profile, once.
   useEffect(() => {
     let cancelled = false;
@@ -104,7 +102,6 @@ export function InfoPanel({
   const set = (key: keyof UserInfo, value: string) => {
     const next = { ...info, [key]: value.slice(0, 200) };
     onChange(next);
-    setSaved(false);
     try {
       window.localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
     } catch {
@@ -151,17 +148,11 @@ export function InfoPanel({
           onClick={() => {
             onChange(EMPTY_INFO);
             window.localStorage.removeItem(STORAGE_KEY);
-            setSaved(false);
           }}
         >
           Clear
         </Button>
       </div>
-      {saved && (
-        <p className="mt-2 flex items-center gap-1 text-xs text-accent">
-          <Check className="size-3" /> Saved
-        </p>
-      )}
     </aside>
   );
 }
