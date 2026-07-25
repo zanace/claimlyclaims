@@ -3,7 +3,10 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
 import { PROGRAMS } from "@/lib/programs";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/lib/use-auth";
 import {
   CLAIM_STATUSES,
   STATUS_TONE,
@@ -34,6 +37,27 @@ export const Route = createFileRoute("/claims")({
 function Claims() {
   const [claims, setClaims] = useState<Claim[]>([]);
   const [programId, setProgramId] = useState(PROGRAMS[0]?.id ?? "");
+  const { user } = useAuth();
+  const [submitting, setSubmitting] = useState<string | null>(null);
+
+  async function submitForReview(claim: Claim) {
+    if (!user) return;
+    setSubmitting(claim.id);
+    const { error } = await supabase.from("applications").insert({
+      user_id: user.id,
+      program_id: claim.programId,
+      program_name: claim.programName,
+      estimated_amount: claim.amount,
+      status: "Submitted",
+    });
+    setSubmitting(null);
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
+    setStatus(claim.id, "Submitted");
+    toast.success("Sent to the Claimly review team.");
+  }
 
   useEffect(() => {
     setClaims(loadClaims());
@@ -77,9 +101,17 @@ function Claims() {
       <main className="mx-auto max-w-6xl px-5 py-16">
         <h1 className="font-display text-5xl tracking-tight md:text-6xl">Your claims</h1>
         <p className="mt-4 max-w-xl text-muted-foreground">
-          Everything you are filing, in one place. Saved only on this device — no account, no
-          server copy.
+          Everything you are filing, in one place. Tracked on this device — and you can send any
+          claim to our review team once you{"'"}re logged in.
         </p>
+        {!user && (
+          <p className="mt-3 text-sm text-muted-foreground">
+            <Link to="/auth" className="text-primary underline underline-offset-4">
+              Log in
+            </Link>{" "}
+            to submit a claim for review.
+          </p>
+        )}
 
         <div className="mt-10 grid gap-4 sm:grid-cols-3">
           {[
@@ -152,6 +184,16 @@ function Claims() {
                       </option>
                     ))}
                   </select>
+                  {user && (
+                    <Button
+                      variant="outline"
+                      className="rounded-full"
+                      disabled={submitting === c.id}
+                      onClick={() => void submitForReview(c)}
+                    >
+                      Submit for review
+                    </Button>
+                  )}
                   <Button
                     variant="ghost"
                     className="rounded-full text-muted-foreground"
