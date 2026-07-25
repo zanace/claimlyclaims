@@ -1,7 +1,7 @@
 # Seek-Truth-Claimly-Claims-2026
 
 ## Project Overview
-ClaimlyClaims is an intelligent web platform that empowers Muslim youth to navigate the digital information landscape responsibly. In an era of misinformation, manipulated media, false religious claims, and emotionally charged social-media content, ClaimlyClaims provides real-time verification tools, source evaluation, and guided learning to help users recognize unreliable information before sharing it. By combining AI-powered fact-checking with Islamic principles of seeking truth (talab al-ilm), this platform strengthens community resilience against disinformation.
+ClaimlyClaims is an intelligent web platform that empowers Muslim youth to navigate the digital information landscape responsibly. In an era of misinformation, manipulated media, false religious claims, and emotionally charged social-media content, ClaimlyClaims provides real-time verification tools, source evaluation, AI-powered guidance, and an intelligent chatbot to help users recognize unreliable information before sharing it. By combining AI-powered fact-checking with Islamic principles of seeking truth (talab al-ilm), this platform strengthens community resilience against disinformation.
 
 ## Team Members
 - **Faiz** - CEO & Visionary Leader
@@ -29,6 +29,8 @@ ClaimlyClaims leverages AI and natural language processing to:
 3. **Detect Manipulated Content** - Identify deepfakes, out-of-context quotes, and altered images
 4. **Guide Learning** - Teach users to critically evaluate sources and distinguish reliable Islamic scholarship from propaganda
 5. **Community Verification** - Enable trusted community members to mark verified sources and flag suspicious content
+6. **AI-Powered Recommendations** - AI Assistant recommends official government websites and credible articles for verified information
+7. **Intelligent Chatbot** - Conversational AI that applies official source verification and provides trustworthy guidance on topics discussed
 
 ## Technology Stack
 - **Frontend:** React, TanStack Start, TypeScript, Tailwind CSS
@@ -38,6 +40,7 @@ ClaimlyClaims leverages AI and natural language processing to:
 - **Authentication:** Firebase Auth with email and social login
 - **Hosting Platform:** Claimly.Claims (Custom domain deployment)
 - **Analytics:** Firebase Analytics for user behavior tracking
+- **Chatbot Engine:** Conversational AI with source verification integration
 
 ### Open-Source Tools & Libraries Used
 - TanStack Router (routing)
@@ -120,7 +123,7 @@ npm run deploy
 ### 4. Islamic Scholarship Verification
 - Access verified Islamic scholars and knowledge sources
 - Cross-reference Quranic and Hadith interpretations
-- Distinguish between authentic scholarship and propaganda
+- Distinguish between authentic scholarship from propaganda
 
 ### 5. Critical Thinking Learning Center
 - Interactive tutorials on identifying misinformation
@@ -132,7 +135,20 @@ npm run deploy
 - Collective knowledge database of verified resources
 - Report and alert system for emerging scams
 
-### 7. Browser Extension
+### 7. AI Assistant with Official Source Recommendations
+- Get intelligent recommendations for official government websites
+- Receive credible article suggestions on any topic being discussed
+- Verify information against authoritative government sources
+- Ensures users always have access to official documentation
+
+### 8. Intelligent Chatbot
+- Conversational AI that understands complex topics
+- Applies official source verification to all responses
+- Recommends government websites and credible articles
+- Provides trustworthy guidance based on verified information
+- Context-aware responses for Islamic and community topics
+
+### 9. Browser Extension
 - One-click verification while browsing social media
 - Real-time misinformation alerts
 - Save verified claims for reference
@@ -147,35 +163,38 @@ ClaimlyClaims directly addresses the Islamic principle of *talab al-ilm* (seekin
 - **Empowers Youth:** Builds critical thinking aligned with Islamic values
 - **Defends Against Disinformation:** Protects against Islamophobic narratives and false claims about Islam
 - **Strengthens Community Trust:** Enables verification of community leaders and organizations
+- **Recommends Trusted Sources:** AI recommends official sources on Islamic topics and community matters
 
 By promoting truth-seeking in Islamic contexts, ClaimlyClaims helps young Muslims navigate digital spaces with integrity and wisdom.
 
 ## AI Usage & Impact
 
 ### AI Integration:
-- **OpenAI GPT-4:** Analyzes claims for logical consistency, identifies false premises, generates detailed fact-check explanations
+- **OpenAI GPT-4:** Analyzes claims for logical consistency, identifies false premises, generates detailed fact-check explanations, powers conversational chatbot
 - **Google Gemini API:** Performs multi-modal analysis (text, images, video) to detect manipulated content
 - **MCP (Multi-Context Prompting):** Chains multiple verification steps for complex claims requiring nuanced analysis
 - **n8n Automation:** Orchestrates fact-checking workflows, connects to multiple data sources, and triggers alerts
+- **Official Source Integration:** AI cross-references with government databases and official websites for verified information
 
 ### Impact:
 - **Reduces Processing Time:** AI-powered verification takes seconds instead of manual research hours
 - **Scales Verification:** Single platform can verify thousands of claims simultaneously
 - **Lowers Cost:** Automated fact-checking reduces need for large teams of fact-checkers
-- **Improves Accuracy:** LLM reasoning combined with multiple data sources increases verification accuracy
-- **Enhances User Experience:** AI-generated explanations are clear, cite sources, and explain reasoning
+- **Improves Accuracy:** LLM reasoning combined with government sources increases verification accuracy
+- **Enhances User Experience:** AI chatbot provides instant, trustworthy guidance on any topic
+- **Ensures Official Sourcing:** Recommendations prioritize official government websites and credible articles over unreliable sources
 
 ## Judging Criteria Alignment
 
 | Criterion | Our Solution |
 |-----------|--------------|
 | **Impact** | Reaches Muslim youth (millions globally) who struggle with misinformation. Serves mosques, youth groups, Islamic schools, and community organizations. Directly reduces spread of false claims affecting community trust. |
-| **Innovation** | First platform combining AI fact-checking with Islamic scholarship verification. Unique approach integrating community trust networks with LLM reasoning. |
+| **Innovation** | First platform combining AI fact-checking with Islamic scholarship verification AND AI chatbot with official source recommendations. Unique approach integrating government databases with LLM reasoning. |
 | **Feasibility** | Core MVP achievable within 36 hours. Scalable architecture supports rapid expansion. Uses established APIs and open-source tools. Production-ready within 3 months. |
-| **Technical Execution** | Clean TypeScript codebase with proper error handling. Modular architecture. Real-time Firebase integration. API rate-limiting and caching for performance. Ready for user testing. |
-| **Presentation** | Intuitive UI with clear verification results. Visual trust indicators. Step-by-step user flows. Mobile-responsive design. Accessible for all literacy levels. |
-| **AI Usage** | Meaningful AI application: reduces misinformation at scale, improves user decision-making, cuts fact-checking costs by 80%. Ethical AI: transparent reasoning, no hidden algorithms, respects privacy. |
-| **Islamic Relevance** | Directly protects Muslim community from coordinated disinformation. Promotes Islamic principles of truth-seeking. Empowers youth to defend Islamic scholarship. Strengthens Ummah resilience. |
+| **Technical Execution** | Clean TypeScript codebase with proper error handling. Modular architecture. Real-time Firebase integration. API rate-limiting and caching for performance. Chatbot integration seamless. |
+| **Presentation** | Intuitive UI with clear verification results. Visual trust indicators. Conversational chatbot interface. Step-by-step user flows. Mobile-responsive design. Accessible for all literacy levels. |
+| **AI Usage** | Meaningful AI applications: fact-checking at scale, intelligent chatbot with source verification, official website recommendations. Reduces misinformation, improves decision-making, cuts fact-checking costs by 80%. Ethical AI: transparent reasoning, no hidden algorithms, respects privacy. |
+| **Islamic Relevance** | Directly protects Muslim community from coordinated disinformation. Promotes Islamic principles of truth-seeking. Empowers youth to defend Islamic scholarship. Strengthens Ummah resilience. Recommends trusted sources on Islamic topics. |
 
 ## License
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
@@ -202,12 +221,13 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Roadmap
 
-- [ ] Phase 1 (Hackathon): MVP with basic claim verification & source checker
+- [ ] Phase 1 (Hackathon): MVP with basic claim verification, source checker, and AI chatbot
 - [ ] Phase 2: Deepfake detection & Islamic scholarship database integration
 - [ ] Phase 3: Browser extension release
 - [ ] Phase 4: Mobile app (iOS & Android)
 - [ ] Phase 5: Community verification network scaling
 - [ ] Phase 6: Partnership with Islamic organizations and news outlets
+- [ ] Phase 7: Government source API integrations for real-time official information
 
 ## Support & Feedback
 
