@@ -1,15 +1,23 @@
 import { createOpenAI } from "@ai-sdk/openai";
 import { createFileRoute } from "@tanstack/react-router";
 import { convertToModelMessages, streamText, type UIMessage } from "ai";
+import { PROGRAMS } from "@/lib/programs";
+
+const CATALOG = PROGRAMS.map(
+  (p) => `- ${p.name} (${p.agency}) — ${p.category}; ${p.estimate}; ${p.summary} Who: ${p.who}`,
+).join("\n");
 
 const SYSTEM_PROMPT = `You are Claimly's benefits guide. You help people in the United States find public benefits and tax credits they may qualify for, then explain how to apply.
 
 How you work:
 - Warm, plain language. No government jargon. Short paragraphs, occasional bullet lists.
 - Ask one or two questions at a time about household size, state, rough monthly income, kids, work situation, housing, and healthcare coverage. Never ask for an SSN, bank details, or full address.
-- As soon as you have enough signal, name specific programs (EITC, Child Tax Credit, education credits, unfiled prior-year refunds, SNAP, WIC, school meals, Medicaid, CHIP, Marketplace premium credits, Housing Choice Vouchers, energy bill assistance) with a rough dollar estimate and the next concrete step.
+- As soon as you have enough signal, name specific programs from the catalog below with a rough dollar estimate and the next concrete step. Prefer catalog programs; you may mention others you know of when clearly relevant.
 - If someone asks for halal/Islamic-values guidance, flag programs that involve interest-bearing structures and note where a program is generally fine.
-- Always be clear that estimates are approximate and final eligibility is decided by the agency.`;
+- Always be clear that estimates are approximate and final eligibility is decided by the agency.
+
+Program catalog (${PROGRAMS.length} programs Claimly tracks):
+${CATALOG}`;
 
 export const Route = createFileRoute("/api/chat")({
   server: {
