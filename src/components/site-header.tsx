@@ -58,7 +58,14 @@ export function SiteHeader() {
             onClick={() => setOpen((v) => !v)}
             className="rounded-full border border-border p-2 transition-colors hover:bg-secondary lg:hidden"
           >
-            {open ? <X className="size-4" /> : <Menu className="size-4" />}
+            <span className="relative block size-4">
+              <Menu
+                className={`absolute inset-0 size-4 transition-all duration-300 ${open ? "rotate-90 scale-75 opacity-0" : "rotate-0 scale-100 opacity-100"}`}
+              />
+              <X
+                className={`absolute inset-0 size-4 transition-all duration-300 ${open ? "rotate-0 scale-100 opacity-100" : "-rotate-90 scale-75 opacity-0"}`}
+              />
+            </span>
           </button>
           <ThemeToggle />
           {user ? (
