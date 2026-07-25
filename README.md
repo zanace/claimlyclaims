@@ -224,7 +224,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 For issues, feature requests, or questions:
 - Open an issue on GitHub
 - Email: contact@claimly.claims
-- Join our community Discord: [Link to be added]
 
 ---
 
