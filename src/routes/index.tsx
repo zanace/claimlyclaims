@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import {
-  ArrowRight, ArrowUpRight, Bookmark, BookmarkCheck, Lock, Search,
+  ArrowRight, ArrowUpRight, Bookmark, BookmarkCheck, Lock, Search, Sparkles,
   Utensils, Baby, HeartPulse, Stethoscope, HandHeart, Home as HomeIcon,
 } from "lucide-react";
 import { useEffect, useMemo, useState, type ComponentType } from "react";
@@ -170,6 +170,16 @@ function Index() {
             <p className="mt-3 text-center text-xs text-muted-foreground">
               <Lock className="mr-1 inline size-3" /> Private by default. No SSN. Always free.
             </p>
+            <div className="mt-4 flex justify-center">
+              <Link
+                to="/chat"
+                className="inline-flex items-center gap-2 rounded-full border border-border bg-card/70 px-4 py-2 text-sm font-medium text-foreground shadow-sm backdrop-blur transition-all hover:border-primary/40 hover:shadow-md"
+              >
+                <Sparkles className="size-4 text-primary" />
+                Ask the AI assistant for more verified information
+                <ArrowRight className="size-4" />
+              </Link>
+            </div>
           </form>
         </section>
 
