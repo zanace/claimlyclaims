@@ -59,9 +59,13 @@ export function SiteHeader() {
           <ThemeToggle />
           {user ? (
             <>
-              <span className="hidden max-w-40 truncate text-sm text-muted-foreground md:inline">
+              <Link
+                to="/profile"
+                className="hidden max-w-40 truncate rounded-full border border-border px-3 py-2 text-sm text-muted-foreground transition-colors hover:text-foreground md:inline"
+                title="Edit your profile"
+              >
                 {user.email}
-              </span>
+              </Link>
               <button
                 onClick={signOut}
                 className="rounded-full border border-border px-4 py-2 text-sm transition-colors hover:bg-secondary"
