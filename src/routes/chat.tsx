@@ -84,12 +84,12 @@ function ChatPage() {
   return (
     <div className="flex min-h-screen flex-col font-sans">
       <SiteHeader />
-      <main className="mx-auto grid w-full max-w-6xl flex-1 gap-8 px-5 pb-4 lg:grid-cols-[1fr_20rem]">
+      <main className="mx-auto grid w-full max-w-6xl gap-8 px-5 pb-8 lg:grid-cols-[1fr_20rem]">
         <div className="flex min-w-0 flex-col">
-        <Conversation className="flex-1 overflow-visible">
-          <ConversationContent className="gap-6 py-6">
+        <Conversation className="flex-none overflow-visible">
+          <ConversationContent className="gap-6 py-4">
             {messages.length === 0 ? (
-              <div className="py-12 text-center">
+              <div className="py-6 text-center">
                 <img
                   src={logo}
                   alt="Claimly"
