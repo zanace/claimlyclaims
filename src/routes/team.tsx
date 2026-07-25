@@ -67,7 +67,8 @@ function TeamPage() {
             </p>
           </li>
         ))}
-      </ul>
-    </div>
+        </ul>
+      </div>
+    </>
   );
 }
