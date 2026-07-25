@@ -76,8 +76,8 @@ function Admin() {
   }, []);
 
   useEffect(() => {
-    if (isAdmin) void load();
-  }, [isAdmin, load]);
+    if (isAdmin && gate === "open") void load();
+  }, [isAdmin, gate, load]);
 
   const visible = useMemo(
     () => (filter === "All" ? apps : apps.filter((a) => a.status === filter)),
@@ -91,8 +91,51 @@ function Admin() {
     toast.success("Application updated");
   }
 
-  if (loading) {
+  if (loading || gate === "checking") {
     return <Shell><p className="text-muted-foreground">Loading…</p></Shell>;
+  }
+
+  if (gate === "locked") {
+    return (
+      <Shell>
+        <h1 className="font-display text-4xl">Admin passcode</h1>
+        <p className="mt-3 max-w-md text-muted-foreground">
+          Enter the admin passcode to open the review console.
+        </p>
+        <form
+          className="mt-6 flex max-w-sm flex-col gap-3"
+          onSubmit={async (e) => {
+            e.preventDefault();
+            setSubmitting(true);
+            setGateError(false);
+            try {
+              const { ok } = await unlockSite({ data: { passcode } });
+              if (ok) setGate("open");
+              else setGateError(true);
+            } catch {
+              setGateError(true);
+            } finally {
+              setSubmitting(false);
+            }
+          }}
+        >
+          <input
+            type="password"
+            inputMode="numeric"
+            autoFocus
+            value={passcode}
+            onChange={(e) => setPasscode(e.target.value)}
+            placeholder="Passcode"
+            aria-label="Admin passcode"
+            className="h-11 rounded-full border border-border bg-background px-5 text-sm"
+          />
+          {gateError && <p className="text-sm text-destructive">Incorrect passcode.</p>}
+          <Button type="submit" disabled={submitting || !passcode} className="rounded-full">
+            {submitting ? "Checking…" : "Unlock admin"}
+          </Button>
+        </form>
+      </Shell>
+    );
   }
 
   if (!user) {
