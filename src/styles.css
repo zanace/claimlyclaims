@@ -199,10 +199,10 @@
     }
   }
   .animate-fade-in-up {
-    animation: fade-in-up 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
+    animation: fade-in-up 1.4s cubic-bezier(0.22, 1, 0.36, 1) both;
   }
   .animate-fade-in {
-    animation: fade-in-up 0.6s ease-out both;
+    animation: fade-in-up 1.2s cubic-bezier(0.22, 1, 0.36, 1) both;
   }
 
   @keyframes blur-in {
@@ -210,7 +210,7 @@
     to   { opacity: 1; filter: blur(0);    transform: translateY(0); }
   }
   .animate-blur-in {
-    animation: blur-in 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+    animation: blur-in 1.6s cubic-bezier(0.22, 1, 0.36, 1) both;
   }
 
   @keyframes float-soft {
