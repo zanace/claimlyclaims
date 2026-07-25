@@ -13,6 +13,7 @@ import appCss from "../styles.css?url";
 import { Toaster } from "@/components/ui/sonner";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { ThemeProvider, themeInitScript } from "@/lib/theme";
+import { FloatingChat } from "@/components/floating-chat";
 
 function NotFoundComponent() {
   return (
@@ -138,6 +139,7 @@ function RootComponent() {
       <ThemeProvider>
         {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
         <Outlet />
+        <FloatingChat />
       </ThemeProvider>
     </QueryClientProvider>
   );
