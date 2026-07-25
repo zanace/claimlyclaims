@@ -20,43 +20,6 @@ export const Route = createFileRoute("/")({
   component: Index,
 });
 
-const STEPS = [
-  {
-    title: "Brief chat",
-    body: "Answer plain-English questions about your household, work, and state. No forms, no jargon, no account needed.",
-  },
-  {
-    title: "Deep scan",
-    body: `Our engine cross-references your answers against ${PROGRAMS.length}+ federal, state, and local programs in seconds.`,
-  },
-  {
-    title: "Claim funds",
-    body: "Get a tailored report: what you qualify for, roughly what it's worth, and exactly where to file it.",
-  },
-];
-
-const STATS = [
-  { value: `${PROGRAMS.length}+`, label: "Programs tracked" },
-  { value: "4 mins", label: "Average check time" },
-  { value: "$0 cost", label: "Risk-free search" },
-];
-
-// Bento spans keyed by position so the category grid reads as a varied mosaic.
-const SPANS = [
-  "col-span-2 row-span-2 min-h-[19rem]",
-  "min-h-[10rem]",
-  "min-h-[10rem]",
-  "col-span-2 min-h-[10rem]",
-  "min-h-[10rem]",
-  "min-h-[10rem]",
-  "col-span-2 min-h-[10rem]",
-  "min-h-[10rem]",
-  "min-h-[10rem]",
-  "min-h-[10rem]",
-  "min-h-[10rem]",
-  "col-span-2 min-h-[10rem]",
-];
-
 // Hero headline variants — one is picked at random on each visit.
 const HEADLINES = [
   { pre: "Reclaiming your ", em: "hidden", post: " benefits." },
@@ -69,29 +32,6 @@ const HEADLINES = [
   { pre: "Turn overlooked programs into ", em: "real", post: " money." },
   { pre: "Every credit you ", em: "missed", post: ", in one place." },
   { pre: "Get back the support you're ", em: "entitled", post: " to." },
-];
-
-const FAQS = [
-  {
-    q: "Does Claimly cost anything?",
-    a: "No. There is no fee, no upsell, and no premium tier. Every program we point you toward is free to apply for directly.",
-  },
-  {
-    q: "Do you need my Social Security number?",
-    a: "Never. The assistant only asks the broad details it needs — household size, state, rough income — to narrow down programs.",
-  },
-  {
-    q: "Is this a government site?",
-    a: "No. Claimly is independent. We explain public programs and hand you off to the official agency that runs each one.",
-  },
-  {
-    q: "What if I'm not a citizen?",
-    a: "Some programs are open to lawful permanent residents and certain visa holders, and children may qualify even when parents don't. The assistant will tell you which of your matches have status requirements.",
-  },
-  {
-    q: "What is the Islamic values guidance?",
-    a: "An optional lens. Ask for it and the assistant flags anything that leans on interest-bearing structures, and notes where a program is generally uncontroversial.",
-  },
 ];
 
 function Index() {
