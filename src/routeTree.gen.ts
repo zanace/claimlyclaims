@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as ProgramsRouteImport } from './routes/programs'
+import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as MoneyYouCouldGetRouteImport } from './routes/money-you-could-get'
 import { Route as LegalRouteImport } from './routes/legal'
 import { Route as HowItWorksRouteImport } from './routes/how-it-works'
@@ -33,6 +34,11 @@ const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
 const ProgramsRoute = ProgramsRouteImport.update({
   id: '/programs',
   path: '/programs',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProfileRoute = ProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MoneyYouCouldGetRoute = MoneyYouCouldGetRouteImport.update({
@@ -112,6 +118,7 @@ export interface FileRoutesByFullPath {
   '/how-it-works': typeof HowItWorksRoute
   '/legal': typeof LegalRoute
   '/money-you-could-get': typeof MoneyYouCouldGetRoute
+  '/profile': typeof ProfileRoute
   '/programs': typeof ProgramsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/api/chat': typeof ApiChatRoute
@@ -129,6 +136,7 @@ export interface FileRoutesByTo {
   '/how-it-works': typeof HowItWorksRoute
   '/legal': typeof LegalRoute
   '/money-you-could-get': typeof MoneyYouCouldGetRoute
+  '/profile': typeof ProfileRoute
   '/programs': typeof ProgramsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/api/chat': typeof ApiChatRoute
@@ -147,6 +155,7 @@ export interface FileRoutesById {
   '/how-it-works': typeof HowItWorksRoute
   '/legal': typeof LegalRoute
   '/money-you-could-get': typeof MoneyYouCouldGetRoute
+  '/profile': typeof ProfileRoute
   '/programs': typeof ProgramsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/api/chat': typeof ApiChatRoute
@@ -166,6 +175,7 @@ export interface FileRouteTypes {
     | '/how-it-works'
     | '/legal'
     | '/money-you-could-get'
+    | '/profile'
     | '/programs'
     | '/sitemap.xml'
     | '/api/chat'
@@ -183,6 +193,7 @@ export interface FileRouteTypes {
     | '/how-it-works'
     | '/legal'
     | '/money-you-could-get'
+    | '/profile'
     | '/programs'
     | '/sitemap.xml'
     | '/api/chat'
@@ -200,6 +211,7 @@ export interface FileRouteTypes {
     | '/how-it-works'
     | '/legal'
     | '/money-you-could-get'
+    | '/profile'
     | '/programs'
     | '/sitemap.xml'
     | '/api/chat'
@@ -218,6 +230,7 @@ export interface RootRouteChildren {
   HowItWorksRoute: typeof HowItWorksRoute
   LegalRoute: typeof LegalRoute
   MoneyYouCouldGetRoute: typeof MoneyYouCouldGetRoute
+  ProfileRoute: typeof ProfileRoute
   ProgramsRoute: typeof ProgramsRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   ApiChatRoute: typeof ApiChatRoute
@@ -239,6 +252,13 @@ declare module '@tanstack/react-router' {
       path: '/programs'
       fullPath: '/programs'
       preLoaderRoute: typeof ProgramsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/profile': {
+      id: '/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof ProfileRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/money-you-could-get': {
@@ -346,6 +366,7 @@ const rootRouteChildren: RootRouteChildren = {
   HowItWorksRoute: HowItWorksRoute,
   LegalRoute: LegalRoute,
   MoneyYouCouldGetRoute: MoneyYouCouldGetRoute,
+  ProfileRoute: ProfileRoute,
   ProgramsRoute: ProgramsRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   ApiChatRoute: ApiChatRoute,
