@@ -46,7 +46,7 @@ function Eligibility() {
     if (children > 0 && ratio < 1.85) ids.push("wic");
     if (!insured && ratio < 1.38) ids.push("medicaid");
     if (children > 0 && !insured && ratio < 2.5) ids.push("chip");
-    if (rent / Math.max(monthlyIncome, 1) > 0.3) ids.push("rental");
+    if (rent / Math.max(monthlyIncome, 1) > 0.3) ids.push("section8");
     if (ratio < 1.5) ids.push("liheap");
     if (student) ids.push("aotc");
     ids.push("back-refunds");
