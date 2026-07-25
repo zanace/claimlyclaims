@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, BadgeCheck, Lock, ShieldCheck } from "lucide-react";
+import { useEffect, useState } from "react";
 import {
   Accordion,
   AccordionContent,
@@ -63,6 +64,20 @@ const SPANS = [
   "col-span-2 min-h-[10rem]",
 ];
 
+// Hero headline variants — one is picked at random on each visit.
+const HEADLINES = [
+  { pre: "Reclaiming your ", em: "hidden", post: " benefits." },
+  { pre: "Money you're owed, ", em: "found", post: " fast." },
+  { pre: "Uncover the aid you ", em: "already", post: " qualify for." },
+  { pre: "Your ", em: "unclaimed", post: " benefits, claimed." },
+  { pre: "Find what the system ", em: "never", post: " told you about." },
+  { pre: "Benefits hiding in ", em: "plain", post: " sight." },
+  { pre: "Claim what's ", em: "already", post: " yours." },
+  { pre: "Turn overlooked programs into ", em: "real", post: " money." },
+  { pre: "Every credit you ", em: "missed", post: ", in one place." },
+  { pre: "Get back the support you're ", em: "entitled", post: " to." },
+];
+
 const FAQS = [
   {
     q: "Does Claimly cost anything?",
@@ -87,6 +102,13 @@ const FAQS = [
 ];
 
 function Index() {
+  const [headline, setHeadline] = useState(HEADLINES[0]);
+
+  // Rotate the hero headline on each visit (client-side to avoid SSR mismatch).
+  useEffect(() => {
+    setHeadline(HEADLINES[Math.floor(Math.random() * HEADLINES.length)]);
+  }, []);
+
   return (
     <div className="min-h-screen bg-background font-sans selection:bg-accent selection:text-accent-foreground">
       <SiteHeader />
@@ -99,7 +121,9 @@ function Index() {
             Billions go unclaimed every year
           </span>
           <h1 className="mx-auto max-w-4xl font-display text-6xl leading-[1.02] tracking-tight md:text-8xl">
-            Reclaiming your <em className="text-accent">hidden</em> benefits.
+            {headline.pre}
+            <em className="text-accent">{headline.em}</em>
+            {headline.post}
           </h1>
           <p className="mx-auto max-w-xl text-xl leading-relaxed font-light text-muted-foreground">
             We track over {PROGRAMS.length} government programs to find refunds, credits, and
