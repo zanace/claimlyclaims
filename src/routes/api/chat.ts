@@ -91,7 +91,10 @@ export const Route = createFileRoute("/api/chat")({
   server: {
     handlers: {
       POST: async ({ request }) => {
-        const { messages } = (await request.json()) as { messages?: UIMessage[] };
+        const { messages, userInfo } = (await request.json()) as {
+          messages?: UIMessage[];
+          userInfo?: string;
+        };
         if (!Array.isArray(messages)) {
           return new Response("Messages are required", { status: 400 });
         }
@@ -103,10 +106,14 @@ export const Route = createFileRoute("/api/chat")({
 
         const openai = createOpenAI({ apiKey });
         const userContext = await loadUserContext(request);
+        const panelContext =
+          typeof userInfo === "string" && userInfo.trim()
+            ? `\n\nThe person filled in this info panel next to the chat. Treat it as current, don't re-ask for anything listed, and use it to narrow programs:\n${userInfo.slice(0, 3000)}`
+            : "";
 
         const result = streamText({
           model: openai("gpt-4o-mini"),
-          system: SYSTEM_PROMPT + userContext,
+          system: SYSTEM_PROMPT + userContext + panelContext,
           messages: await convertToModelMessages(messages),
         });
 
