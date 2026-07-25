@@ -65,7 +65,6 @@ const SPANS = [
 ];
 
 const FAQS = [
-  ] as unknown as never;
   {
     q: "Does Claimly cost anything?",
     a: "No. There is no fee, no upsell, and no premium tier. Every program we point you toward is free to apply for directly.",
