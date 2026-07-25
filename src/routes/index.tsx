@@ -6,7 +6,7 @@ import {
 import { useEffect, useMemo, useState, type ComponentType } from "react";
 import { toast } from "sonner";
 import { SiteHeader } from "@/components/site-header";
-import { ApplyModal } from "@/components/apply-modal";
+import { ApplyWizard } from "@/components/apply-wizard";
 
 const title = "Claimly - Find the help you're entitled to";
 const description =
@@ -272,20 +272,18 @@ function Index() {
                     </div>
                   )}
                   <div className="mt-5 flex items-center gap-3">
-                    <a
-                      href={c.learnMore}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="inline-flex items-center gap-1.5 rounded-full border border-border bg-background px-4 py-2 text-sm font-medium text-foreground transition hover:bg-secondary"
-                    >
-                      Learn more <ArrowUpRight className="size-3.5" />
-                    </a>
                     <button
                       onClick={() => setApplyFor(c as ProgramCard)}
-                      className="inline-flex items-center gap-1.5 rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground shadow-sm transition hover:brightness-110"
+                      className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-full bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm transition hover:brightness-110"
                     >
-                      Apply
+                      Apply here <ArrowRight className="size-3.5" />
                     </button>
+                    <Link
+                      to="/chat"
+                      className="inline-flex items-center gap-1.5 rounded-full border border-border bg-background px-4 py-2.5 text-sm font-medium text-foreground transition hover:bg-secondary"
+                    >
+                      Ask AI
+                    </Link>
                   </div>
                 </article>
               ))}
@@ -314,7 +312,7 @@ function Index() {
         )}
       </main>
 
-      <ApplyModal
+      <ApplyWizard
         open={!!applyFor}
         program={applyFor}
         onClose={() => setApplyFor(null)}
