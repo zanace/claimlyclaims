@@ -25,7 +25,7 @@ const CATEGORIES = [
   {
     icon: Receipt,
     name: "Tax refunds & credits",
-    body: "EITC, the Child Tax Credit, education credits, and recovery-rebate-type credits — including years you never filed. Often the largest single amount we find. [VERIFY CURRENT FIGURE]",
+    body: "EITC, the Child Tax Credit, education credits, and recovery-rebate-type credits - including years you never filed. Often the largest single amount we find. [VERIFY CURRENT FIGURE]",
   },
   {
     icon: Carrot,
@@ -64,7 +64,7 @@ function MoneyPage() {
             Here's the kind of money people are missing
           </h1>
           <p className="mt-5 text-lg text-muted-foreground">
-            Every situation is different — this is what Claimly checks for.
+            Every situation is different - this is what Claimly checks for.
           </p>
         </section>
 

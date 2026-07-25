@@ -217,10 +217,10 @@ function Admin() {
               </div>
 
               <dl className="mt-4 grid gap-3 text-sm sm:grid-cols-4">
-                <Field label="Estimated" value={a.estimated_amount ?? "—"} />
-                <Field label="Household" value={a.household_size ? String(a.household_size) : "—"} />
-                <Field label="Monthly income" value={a.monthly_income != null ? `$${a.monthly_income}` : "—"} />
-                <Field label="State" value={a.state ?? "—"} />
+                <Field label="Estimated" value={a.estimated_amount ?? "-"} />
+                <Field label="Household" value={a.household_size ? String(a.household_size) : "-"} />
+                <Field label="Monthly income" value={a.monthly_income != null ? `$${a.monthly_income}` : "-"} />
+                <Field label="State" value={a.state ?? "-"} />
               </dl>
 
               {a.notes && <p className="mt-4 rounded-xl bg-secondary/50 p-4 text-sm">{a.notes}</p>}

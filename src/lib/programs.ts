@@ -944,7 +944,7 @@ export const PROGRAMS: Program[] = [
     agency: "Dept. of Education",
     category: "Education & training",
     estimate: "Up to ~$7,395/year",
-    summary: "A grant for undergraduates with high financial need — no repayment.",
+    summary: "A grant for undergraduates with high financial need - no repayment.",
     who: "Undergraduates who file the FAFSA.",
   },
   {

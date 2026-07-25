@@ -35,7 +35,7 @@ const SECTIONS = [
   },
   {
     heading: "Your data",
-    body: "Your eligibility answers, document checklist, and claim tracker are stored in your own browser's local storage — not on our servers. Clearing site data deletes them permanently. Chat messages are sent to our AI provider to generate a response and are not used to build a profile of you.",
+    body: "Your eligibility answers, document checklist, and claim tracker are stored in your own browser's local storage - not on our servers. Clearing site data deletes them permanently. Chat messages are sent to our AI provider to generate a response and are not used to build a profile of you.",
   },
   {
     heading: "Sensitive information",

@@ -121,7 +121,7 @@ export function InfoPanel({
     try {
       window.localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
     } catch {
-      /* storage unavailable — the chat still works, it just won't remember */
+      /* storage unavailable - the chat still works, it just won't remember */
     }
   };
 
@@ -134,7 +134,7 @@ export function InfoPanel({
         <h2 className="font-display text-xl">Your info</h2>
       </div>
       <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
-        Fill in what you're comfortable sharing — the assistant reads this on every message so you
+        Fill in what you're comfortable sharing - the assistant reads this on every message so you
         don't have to repeat yourself. Stays in this browser. Never enter your SSN or bank details.
       </p>
 

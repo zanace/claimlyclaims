@@ -35,7 +35,7 @@ const STEPS = [
   {
     n: "02",
     title: "We check what you qualify for",
-    body: "Your answers are cross-referenced against federal and state programs — tax credits, SNAP, EITC, unclaimed property, utility and housing assistance — in one pass.",
+    body: "Your answers are cross-referenced against federal and state programs - tax credits, SNAP, EITC, unclaimed property, utility and housing assistance - in one pass.",
   },
   {
     n: "03",
@@ -62,7 +62,7 @@ const TRUST = [
 const FAQ = [
   {
     q: "Is this legit, or is this a scam?",
-    a: "Claimly is an independent tool that points you at real federal and state programs. We never ask for a share of what you receive, and we never ask for your bank login. Everything we describe can be verified on the agency's own site — and we tell you which agency runs each program.",
+    a: "Claimly is an independent tool that points you at real federal and state programs. We never ask for a share of what you receive, and we never ask for your bank login. Everything we describe can be verified on the agency's own site - and we tell you which agency runs each program.",
   },
   {
     q: "How long does it take to get my money?",
@@ -70,11 +70,11 @@ const FAQ = [
   },
   {
     q: "What if I don't qualify for anything?",
-    a: "Then you know, in about four minutes, and you have not lost anything. Most households match at least one program, and eligibility changes with income, household size, and life events — so it's worth re-checking after a big change.",
+    a: "Then you know, in about four minutes, and you have not lost anything. Most households match at least one program, and eligibility changes with income, household size, and life events - so it's worth re-checking after a big change.",
   },
   {
     q: "Does this cost anything?",
-    a: "[INSERT PRICING MODEL] — the founder should confirm the exact model here before launch. What is fixed: Claimly never takes a percentage of a benefit or refund you receive.",
+    a: "[INSERT PRICING MODEL] - the founder should confirm the exact model here before launch. What is fixed: Claimly never takes a percentage of a benefit or refund you receive.",
   },
 ];
 

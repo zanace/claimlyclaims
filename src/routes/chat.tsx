@@ -39,7 +39,7 @@ export const Route = createFileRoute("/chat")({
 
 const SUGGESTIONS = [
   "I work part-time and have two kids in Texas",
-  "I'm self-employed — what refunds do I miss?",
+  "I'm self-employed - what refunds do I miss?",
   "Help with rent and utility bills",
   "Show me matches with Islamic values guidance",
 ];
@@ -148,7 +148,7 @@ function ChatPage() {
           />
           <PromptInputFooter className="justify-between">
             <span className="pl-1 text-xs text-muted-foreground">
-              Estimates only — agencies make the final call.
+              Estimates only - agencies make the final call.
             </span>
             <PromptInputSubmit status={status} disabled={!input.trim() && !busy} />
           </PromptInputFooter>
