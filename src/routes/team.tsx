@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { SiteHeader } from "@/components/site-header";
 
 export const Route = createFileRoute("/team")({
   head: () => ({
@@ -26,7 +27,9 @@ function initials(name: string) {
 
 function TeamPage() {
   return (
-    <div className="mx-auto max-w-5xl px-5 py-16 sm:py-24">
+    <>
+      <SiteHeader />
+      <div className="mx-auto max-w-5xl px-5 py-16 sm:py-24">
       <header className="max-w-2xl">
         <p className="text-xs font-medium tracking-[0.2em] text-muted-foreground uppercase">
           The foundation
