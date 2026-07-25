@@ -20,6 +20,24 @@ export function SiteHeader() {
             Programs
           </Link>
           <Link
+            to="/eligibility"
+            className="transition-colors hover:text-foreground [&.active]:text-foreground"
+          >
+            Eligibility
+          </Link>
+          <Link
+            to="/claims"
+            className="transition-colors hover:text-foreground [&.active]:text-foreground"
+          >
+            My claims
+          </Link>
+          <Link
+            to="/documents"
+            className="transition-colors hover:text-foreground [&.active]:text-foreground"
+          >
+            Documents
+          </Link>
+          <Link
             to="/chat"
             className="transition-colors hover:text-foreground [&.active]:text-foreground"
           >

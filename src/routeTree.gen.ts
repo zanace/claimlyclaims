@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as ProgramsRouteImport } from './routes/programs'
+import { Route as LegalRouteImport } from './routes/legal'
 import { Route as EligibilityRouteImport } from './routes/eligibility'
 import { Route as DocumentsRouteImport } from './routes/documents'
 import { Route as ClaimsRouteImport } from './routes/claims'
@@ -26,6 +27,11 @@ const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
 const ProgramsRoute = ProgramsRouteImport.update({
   id: '/programs',
   path: '/programs',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LegalRoute = LegalRouteImport.update({
+  id: '/legal',
+  path: '/legal',
   getParentRoute: () => rootRouteImport,
 } as any)
 const EligibilityRoute = EligibilityRouteImport.update({
@@ -65,6 +71,7 @@ export interface FileRoutesByFullPath {
   '/claims': typeof ClaimsRoute
   '/documents': typeof DocumentsRoute
   '/eligibility': typeof EligibilityRoute
+  '/legal': typeof LegalRoute
   '/programs': typeof ProgramsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/api/chat': typeof ApiChatRoute
@@ -75,6 +82,7 @@ export interface FileRoutesByTo {
   '/claims': typeof ClaimsRoute
   '/documents': typeof DocumentsRoute
   '/eligibility': typeof EligibilityRoute
+  '/legal': typeof LegalRoute
   '/programs': typeof ProgramsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/api/chat': typeof ApiChatRoute
@@ -86,6 +94,7 @@ export interface FileRoutesById {
   '/claims': typeof ClaimsRoute
   '/documents': typeof DocumentsRoute
   '/eligibility': typeof EligibilityRoute
+  '/legal': typeof LegalRoute
   '/programs': typeof ProgramsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/api/chat': typeof ApiChatRoute
@@ -98,6 +107,7 @@ export interface FileRouteTypes {
     | '/claims'
     | '/documents'
     | '/eligibility'
+    | '/legal'
     | '/programs'
     | '/sitemap.xml'
     | '/api/chat'
@@ -108,6 +118,7 @@ export interface FileRouteTypes {
     | '/claims'
     | '/documents'
     | '/eligibility'
+    | '/legal'
     | '/programs'
     | '/sitemap.xml'
     | '/api/chat'
@@ -118,6 +129,7 @@ export interface FileRouteTypes {
     | '/claims'
     | '/documents'
     | '/eligibility'
+    | '/legal'
     | '/programs'
     | '/sitemap.xml'
     | '/api/chat'
@@ -129,6 +141,7 @@ export interface RootRouteChildren {
   ClaimsRoute: typeof ClaimsRoute
   DocumentsRoute: typeof DocumentsRoute
   EligibilityRoute: typeof EligibilityRoute
+  LegalRoute: typeof LegalRoute
   ProgramsRoute: typeof ProgramsRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   ApiChatRoute: typeof ApiChatRoute
@@ -148,6 +161,13 @@ declare module '@tanstack/react-router' {
       path: '/programs'
       fullPath: '/programs'
       preLoaderRoute: typeof ProgramsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/legal': {
+      id: '/legal'
+      path: '/legal'
+      fullPath: '/legal'
+      preLoaderRoute: typeof LegalRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/eligibility': {
@@ -201,6 +221,7 @@ const rootRouteChildren: RootRouteChildren = {
   ClaimsRoute: ClaimsRoute,
   DocumentsRoute: DocumentsRoute,
   EligibilityRoute: EligibilityRoute,
+  LegalRoute: LegalRoute,
   ProgramsRoute: ProgramsRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   ApiChatRoute: ApiChatRoute,
