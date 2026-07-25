@@ -17,6 +17,7 @@ import {
   PromptInputTextarea,
 } from "@/components/ai-elements/prompt-input";
 import { Shimmer } from "@/components/ai-elements/shimmer";
+import { EMPTY_INFO, InfoPanel, infoToPrompt, loadStoredInfo, type UserInfo } from "@/components/info-panel";
 import { SiteHeader } from "@/components/site-header";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -46,7 +47,12 @@ const SUGGESTIONS = [
 function ChatPage() {
   const [input, setInput] = useState("");
   const [token, setToken] = useState<string | null>(null);
+  const [info, setInfo] = useState<UserInfo>(EMPTY_INFO);
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
+
+  useEffect(() => {
+    setInfo(loadStoredInfo());
+  }, []);
 
   // Pass the session token so the assistant can read the user's saved profile and claims.
   useEffect(() => {
@@ -70,14 +76,16 @@ function ChatPage() {
   const send = (text: string) => {
     const value = text.trim();
     if (!value || busy) return;
-    void sendMessage({ text: value });
+    const details = infoToPrompt(info);
+    void sendMessage({ text: value }, details ? { body: { userInfo: details } } : undefined);
     setInput("");
   };
 
   return (
     <div className="flex min-h-screen flex-col bg-background font-sans">
       <SiteHeader />
-      <main className="mx-auto flex w-full max-w-3xl flex-1 flex-col px-5 pb-6">
+      <main className="mx-auto grid w-full max-w-6xl flex-1 gap-8 px-5 pb-6 lg:grid-cols-[1fr_20rem]">
+        <div className="flex min-w-0 flex-col">
         <Conversation className="flex-1">
           <ConversationContent className="gap-6 py-8">
             {messages.length === 0 ? (
@@ -145,6 +153,11 @@ function ChatPage() {
             <PromptInputSubmit status={status} disabled={!input.trim() && !busy} />
           </PromptInputFooter>
         </PromptInput>
+        </div>
+
+        <div className="lg:sticky lg:top-6 lg:self-start lg:py-8">
+          <InfoPanel info={info} onChange={setInfo} />
+        </div>
       </main>
     </div>
   );
