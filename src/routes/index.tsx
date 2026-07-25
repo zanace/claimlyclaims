@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, BadgeCheck, Lock, ShieldCheck } from "lucide-react";
+import { useEffect, useState } from "react";
 import {
   Accordion,
   AccordionContent,
