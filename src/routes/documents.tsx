@@ -1,8 +1,11 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
+import { DocEvidence, type DocUpload } from "@/components/doc-upload";
 import { DOC_GROUPS } from "@/lib/claims";
+import { useAuth } from "@/lib/use-auth";
+import { supabase } from "@/integrations/supabase/client";
 
 const title = "Document checklist for benefit claims | Claimly";
 const description =
@@ -26,6 +29,26 @@ export const Route = createFileRoute("/documents")({
 
 function Documents() {
   const [done, setDone] = useState<string[]>([]);
+  const { user } = useAuth();
+  const userId = user?.id;
+  const [uploads, setUploads] = useState<DocUpload[]>([]);
+
+  const loadUploads = useCallback(async () => {
+    if (!userId) {
+      setUploads([]);
+      return;
+    }
+    const { data } = await supabase
+      .from("document_uploads")
+      .select("id, item, path, file_name, mime_type")
+      .eq("user_id", userId)
+      .order("created_at", { ascending: false });
+    setUploads((data as DocUpload[]) ?? []);
+  }, [userId]);
+
+  useEffect(() => {
+    void loadUploads();
+  }, [loadUploads]);
 
   useEffect(() => {
     try {
@@ -83,6 +106,22 @@ function Documents() {
                         {item}
                       </span>
                     </label>
+                    {done.includes(item) &&
+                      (userId ? (
+                        <DocEvidence
+                          item={item}
+                          userId={userId}
+                          uploads={uploads.filter((u) => u.item === item)}
+                          onChange={loadUploads}
+                        />
+                      ) : (
+                        <p className="mt-2 ml-7 text-xs text-muted-foreground">
+                          <Link to="/auth" className="underline underline-offset-4">
+                            Sign in
+                          </Link>{" "}
+                          to attach a photo of this document as proof.
+                        </p>
+                      ))}
                   </li>
                 ))}
               </ul>
