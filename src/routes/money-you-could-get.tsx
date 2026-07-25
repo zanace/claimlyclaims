@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
+import { Receipt, Carrot, Home, Search, Baby, Stethoscope } from "lucide-react";
 
 const title = "How much you could get | Claimly";
 const description =
@@ -22,32 +23,32 @@ export const Route = createFileRoute("/money-you-could-get")({
 
 const CATEGORIES = [
   {
-    icon: "🧾",
+    icon: Receipt,
     name: "Tax refunds & credits",
     body: "EITC, the Child Tax Credit, education credits, and recovery-rebate-type credits — including years you never filed. Often the largest single amount we find. [VERIFY CURRENT FIGURE]",
   },
   {
-    icon: "🥕",
+    icon: Carrot,
     name: "Food assistance",
     body: "SNAP for households and WIC for pregnant people and young children. Monthly, ongoing support rather than a one-time payment. [VERIFY CURRENT FIGURE]",
   },
   {
-    icon: "🏠",
+    icon: Home,
     name: "Utility & housing assistance",
     body: "LIHEAP for heating and cooling bills, emergency rental assistance, weatherization, and state-run crisis funds. [VERIFY CURRENT FIGURE]",
   },
   {
-    icon: "🔎",
+    icon: Search,
     name: "Unclaimed property",
     body: "Old bank accounts, uncashed paychecks, security deposits, and insurance payouts sitting with your state. Free to search, free to claim.",
   },
   {
-    icon: "👶",
+    icon: Baby,
     name: "Family & child benefits",
     body: "Child care subsidies, school meal programs, diaper and formula assistance, and state-specific family credits. [VERIFY CURRENT FIGURE]",
   },
   {
-    icon: "🩺",
+    icon: Stethoscope,
     name: "Healthcare assistance",
     body: "Medicaid, CHIP for kids, and marketplace premium subsidies that many households assume they earn too much for. [VERIFY CURRENT FIGURE]",
   },
@@ -71,9 +72,7 @@ function MoneyPage() {
           <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
             {CATEGORIES.map((cat) => (
               <div key={cat.name} className="rounded-2xl border border-border bg-card p-7">
-                <span className="text-2xl" aria-hidden>
-                  {cat.icon}
-                </span>
+                <cat.icon className="size-6 text-primary" aria-hidden />
                 <h2 className="mt-3 text-lg font-semibold">{cat.name}</h2>
                 <p className="mt-2 text-sm text-muted-foreground">{cat.body}</p>
               </div>
