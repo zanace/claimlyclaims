@@ -39,7 +39,7 @@ export function SiteHeader() {
       <div className="mx-auto flex h-16 max-w-[1400px] items-center gap-6 px-5">
         <Link to="/" className="flex shrink-0 items-center gap-2">
           <img src={logo} alt="Claimly logo" width={32} height={32} className="size-8 rounded-lg" />
-          <span className="font-display text-xl leading-none tracking-tight">Claimly</span>
+          <span className="font-display text-xl leading-none tracking-tight text-black dark:text-white">Claimly</span>
         </Link>
         <nav className="hidden flex-1 items-center justify-center gap-x-4 gap-y-1 text-[13px] whitespace-nowrap text-muted-foreground dark:text-white lg:flex">
           {items.map((item) => (
