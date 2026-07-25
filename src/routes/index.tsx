@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, BadgeCheck, Lock, ShieldCheck } from "lucide-react";
+import { ArrowRight, BadgeCheck, Lock, ShieldCheck, FileText, MessageSquare, Sparkles } from "lucide-react";
 import { useEffect, useState } from "react";
 import { SiteHeader } from "@/components/site-header";
 import { PROGRAMS } from "@/lib/programs";
@@ -44,12 +44,13 @@ function Index() {
 
   return (
     <div
-      className="flex h-screen flex-col overflow-hidden font-sans selection:bg-accent selection:text-accent-foreground"
+      className="flex min-h-screen flex-col font-sans selection:bg-accent selection:text-accent-foreground"
       style={{ backgroundImage: "var(--gradient-page)" }}
     >
       <SiteHeader />
 
-      <main className="mx-auto flex w-full max-w-5xl flex-1 flex-col items-center justify-center gap-6 px-5 text-center">
+      <main className="mx-auto w-full max-w-5xl px-5">
+        <section className="flex min-h-[calc(100vh-4rem)] flex-col items-center justify-center gap-6 text-center">
         <span className="inline-flex items-center gap-2 rounded-full border border-border px-4 py-1.5 text-xs font-medium tracking-widest text-muted-foreground uppercase">
           <BadgeCheck className="size-3.5 text-accent" />
             Billions go unclaimed every year
@@ -83,6 +84,34 @@ function Index() {
               </span>
             </div>
           </div>
+        </section>
+
+        <section className="grid gap-6 py-24 md:grid-cols-3">
+          {[
+            { icon: MessageSquare, title: "Chat in plain English", body: "No jargon, no forms. Just answer a few questions about your household." },
+            { icon: Sparkles, title: "AI maps your matches", body: `We compare your situation against ${PROGRAMS.length}+ federal and state programs.` },
+            { icon: FileText, title: "File with confidence", body: "Get direct .gov links, checklists, and step-by-step guidance." },
+          ].map(({ icon: Icon, title: t, body }) => (
+            <div key={t} className="rounded-2xl border border-border bg-card/40 p-6 backdrop-blur">
+              <Icon className="mb-4 size-6 text-accent" />
+              <h3 className="font-display text-2xl">{t}</h3>
+              <p className="mt-2 text-sm text-muted-foreground">{body}</p>
+            </div>
+          ))}
+        </section>
+
+        <section className="mb-24 rounded-3xl border border-border bg-card/40 p-10 text-center backdrop-blur">
+          <h2 className="font-display text-4xl md:text-5xl">Ready to see what's yours?</h2>
+          <p className="mx-auto mt-3 max-w-lg text-muted-foreground">
+            Free, private, and takes under 3 minutes.
+          </p>
+          <Link
+            to="/chat"
+            className="mt-6 inline-flex items-center gap-2 rounded-full bg-accent px-8 py-3 font-semibold text-accent-foreground shadow-[var(--shadow-lift)] transition-transform hover:scale-105"
+          >
+            Start your free chat <ArrowRight className="size-4" />
+          </Link>
+        </section>
       </main>
     </div>
   );
