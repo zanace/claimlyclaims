@@ -4,6 +4,8 @@ import {
   Link,
   createRootRouteWithContext,
   useRouter,
+  useRouterState,
+  useNavigate,
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
@@ -14,6 +16,35 @@ import { Toaster } from "@/components/ui/sonner";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { ThemeProvider, themeInitScript } from "@/lib/theme";
 import { FloatingChat } from "@/components/floating-chat";
+import { useAuth } from "@/lib/use-auth";
+
+const PUBLIC_PATHS = new Set([
+  "/",
+  "/auth",
+  "/how-it-works",
+  "/team",
+  "/about",
+  "/privacy",
+  "/legal",
+]);
+const PUBLIC_PREFIXES = ["/blog", "/api", "/sitemap"];
+
+function isPublicPath(pathname: string) {
+  if (PUBLIC_PATHS.has(pathname)) return true;
+  return PUBLIC_PREFIXES.some((p) => pathname === p || pathname.startsWith(p + "/") || pathname.startsWith(p + "."));
+}
+
+function AuthGate() {
+  const { user, loading } = useAuth();
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (loading || user) return;
+    if (isPublicPath(pathname)) return;
+    navigate({ to: "/auth", replace: true });
+  }, [user, loading, pathname, navigate]);
+  return null;
+}
 
 function NotFoundComponent() {
   return (
@@ -139,6 +170,7 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider>
+        <AuthGate />
         {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
         <div className="animate-fade-in">
           <Outlet />
