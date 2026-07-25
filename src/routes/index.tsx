@@ -1,13 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import {
-  ArrowRight,
-  BadgeCheck,
-  FileText,
-  Lock,
-  MessagesSquare,
-  Search,
-  ShieldCheck,
-} from "lucide-react";
+import { ArrowRight, BadgeCheck, Lock, ShieldCheck } from "lucide-react";
 import {
   Accordion,
   AccordionContent,
@@ -36,27 +28,39 @@ export const Route = createFileRoute("/")({
 
 const STEPS = [
   {
-    icon: MessagesSquare,
-    title: "Talk it through",
-    body: "A short chat about your household, work, and where you live. No forms, no jargon, no account needed.",
+    title: "Brief chat",
+    body: "Answer plain-English questions about your household, work, and state. No forms, no jargon, no account needed.",
   },
   {
-    icon: Search,
-    title: "See your matches",
-    body: "We line your answers up against federal and state programs and show what each one is roughly worth.",
+    title: "Deep scan",
+    body: `Our engine cross-references your answers against ${PROGRAMS.length}+ federal, state, and local programs in seconds.`,
   },
   {
-    icon: FileText,
-    title: "Get the next step",
-    body: "Exactly what to file, where to file it, and what documents to have ready before you start.",
+    title: "Claim funds",
+    body: "Get a tailored report: what you qualify for, roughly what it's worth, and exactly where to file it.",
   },
 ];
 
 const STATS = [
-  { value: `${PROGRAMS.length}+`, label: "programs tracked" },
-  { value: "4 min", label: "typical check" },
-  { value: "$0", label: "cost, always" },
-  { value: "Halal", label: "guidance optional" },
+  { value: `${PROGRAMS.length}+`, label: "Programs tracked" },
+  { value: "4 mins", label: "Average check time" },
+  { value: "$0 cost", label: "Risk-free search" },
+];
+
+// Bento spans keyed by position so the category grid reads as a varied mosaic.
+const SPANS = [
+  "col-span-2 row-span-2 min-h-[19rem]",
+  "min-h-[10rem]",
+  "min-h-[10rem]",
+  "col-span-2 min-h-[10rem]",
+  "min-h-[10rem]",
+  "min-h-[10rem]",
+  "col-span-2 min-h-[10rem]",
+  "min-h-[10rem]",
+  "min-h-[10rem]",
+  "min-h-[10rem]",
+  "min-h-[10rem]",
+  "col-span-2 min-h-[10rem]",
 ];
 
 const FAQS = [
@@ -84,191 +88,185 @@ const FAQS = [
 
 function Index() {
   return (
-    <div className="min-h-screen bg-background font-sans">
+    <div className="min-h-screen bg-background font-sans selection:bg-accent selection:text-accent-foreground">
       <SiteHeader />
 
-      <main>
-        <section className="relative overflow-hidden" style={{ background: "var(--gradient-hero)" }}>
-          <div className="mx-auto max-w-3xl px-5 pt-20 pb-24 text-center md:pt-28">
-            <span className="inline-flex items-center gap-2 rounded-full border border-border bg-card/80 px-4 py-1.5 text-xs font-medium text-muted-foreground">
-              <BadgeCheck className="size-3.5 text-accent" />
-              Billions in benefits go unclaimed every single year
-            </span>
-            <h1 className="mt-7 font-display text-5xl leading-[1.05] tracking-tight md:text-7xl">
-              The money is yours.
-              <br />
-              <em className="text-primary">Go collect it.</em>
-            </h1>
-            <p className="mx-auto mt-6 max-w-xl text-lg text-muted-foreground">
-              Refunds, groceries, coverage, rent help — most people never find out what they
-              qualify for. Have one short conversation and find out in minutes.
-            </p>
-            <div className="mt-9 flex flex-col items-center gap-4">
-              <Link
-                to="/chat"
-                className="group inline-flex items-center gap-2 rounded-full bg-primary px-7 py-3.5 text-base font-medium text-primary-foreground shadow-[var(--shadow-lift)] transition-transform hover:-translate-y-0.5"
-              >
-                Check what I qualify for
-                <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" />
-              </Link>
-              <div className="flex flex-wrap justify-center gap-x-6 gap-y-2 text-xs text-muted-foreground">
-                <span className="inline-flex items-center gap-1.5">
-                  <BadgeCheck className="size-3.5" /> Always free
-                </span>
-                <span className="inline-flex items-center gap-1.5">
-                  <Lock className="size-3.5" /> Private by default
-                </span>
-                <span className="inline-flex items-center gap-1.5">
-                  <ShieldCheck className="size-3.5" /> No SSN required
-                </span>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section className="border-y border-border bg-card">
-          <div className="mx-auto grid max-w-6xl grid-cols-2 divide-x divide-border md:grid-cols-4">
-            {STATS.map((stat) => (
-              <div key={stat.label} className="px-5 py-8 text-center">
-                <div className="font-display text-4xl text-primary">{stat.value}</div>
-                <div className="mt-1 text-xs tracking-wide text-muted-foreground uppercase">
-                  {stat.label}
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        <section className="mx-auto max-w-6xl px-5 py-24">
-          <h2 className="font-display text-4xl md:text-5xl">How it works</h2>
-          <p className="mt-3 max-w-lg text-muted-foreground">
-            Three steps, built to be understandable by anyone — not just people who like paperwork.
+      <main className="mx-auto max-w-7xl space-y-28 px-5 py-20 md:space-y-32 lg:px-12">
+        {/* Hero */}
+        <section className="space-y-8 text-center">
+          <span className="inline-flex items-center gap-2 rounded-full border border-border px-4 py-1.5 text-xs font-medium tracking-widest text-muted-foreground uppercase">
+            <BadgeCheck className="size-3.5 text-accent" />
+            Billions go unclaimed every year
+          </span>
+          <h1 className="mx-auto max-w-4xl font-display text-6xl leading-[1.02] tracking-tight md:text-8xl">
+            Reclaiming your <em className="text-accent">hidden</em> benefits.
+          </h1>
+          <p className="mx-auto max-w-xl text-xl leading-relaxed font-light text-muted-foreground">
+            We track over {PROGRAMS.length} government programs to find refunds, credits, and
+            support you didn't know existed. Fast, private, and entirely risk-free.
           </p>
-          <div className="mt-12 grid gap-6 md:grid-cols-3">
+          <div className="space-y-6 pt-2">
+            <Link
+              to="/chat"
+              className="group inline-flex items-center gap-2 rounded-full bg-accent px-10 py-5 font-semibold text-accent-foreground shadow-[var(--shadow-lift)] transition-transform duration-300 hover:scale-105 active:scale-95"
+            >
+              Start your free chat
+              <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" />
+            </Link>
+            <div className="flex flex-wrap justify-center gap-x-6 gap-y-2 text-xs text-muted-foreground">
+              <span className="inline-flex items-center gap-1.5">
+                <BadgeCheck className="size-3.5" /> Always free
+              </span>
+              <span className="inline-flex items-center gap-1.5">
+                <Lock className="size-3.5" /> Private by default
+              </span>
+              <span className="inline-flex items-center gap-1.5">
+                <ShieldCheck className="size-3.5" /> No SSN required
+              </span>
+            </div>
+          </div>
+        </section>
+
+        {/* Stats */}
+        <section className="grid gap-6 md:grid-cols-3">
+          {STATS.map((stat) => (
+            <div
+              key={stat.label}
+              className="rounded-[2rem] border border-border bg-card/60 p-10 text-center backdrop-blur-sm"
+            >
+              <span className="block font-display text-5xl text-accent">{stat.value}</span>
+              <span className="mt-2 block text-sm tracking-widest text-muted-foreground uppercase">
+                {stat.label}
+              </span>
+            </div>
+          ))}
+        </section>
+
+        {/* Process */}
+        <section className="space-y-16">
+          <h2 className="text-center font-display text-5xl italic">How it works</h2>
+          <div className="grid gap-12 md:grid-cols-3">
             {STEPS.map((step, i) => (
-              <div
-                key={step.title}
-                className="rounded-2xl border border-border bg-card p-7 shadow-[var(--shadow-soft)]"
-              >
-                <div className="flex size-11 items-center justify-center rounded-xl bg-secondary text-primary">
-                  <step.icon className="size-5" />
+              <div key={step.title} className="group space-y-4">
+                <div className="flex size-12 items-center justify-center rounded-full border border-accent text-accent transition-all duration-500 group-hover:bg-accent group-hover:text-accent-foreground">
+                  {i + 1}
                 </div>
-                <div className="mt-6 text-xs font-medium tracking-widest text-muted-foreground">
-                  STEP {i + 1}
-                </div>
-                <h3 className="mt-1 font-display text-2xl">{step.title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{step.body}</p>
+                <h3 className="text-2xl font-medium">{step.title}</h3>
+                <p className="leading-relaxed text-muted-foreground">{step.body}</p>
               </div>
             ))}
           </div>
         </section>
 
-        <section className="border-y border-border bg-secondary/40">
-          <div className="mx-auto max-w-6xl px-5 py-24">
-            <div className="flex flex-wrap items-end justify-between gap-4">
-              <div>
-                <h2 className="font-display text-4xl md:text-5xl">What we look for</h2>
-                <p className="mt-3 max-w-lg text-muted-foreground">
-                  {PROGRAMS.length} federal, state, and local programs across {CATEGORIES.length}{" "}
-                  parts of everyday life.
-                </p>
-              </div>
-              <Link
-                to="/programs"
-                className="inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:underline"
-              >
-                Browse every program <ArrowRight className="size-4" />
-              </Link>
-            </div>
-            <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-              {CATEGORIES.map((cat) => (
+        {/* Category bento */}
+        <section className="space-y-12">
+          <div className="flex flex-col justify-between gap-4 md:flex-row md:items-end">
+            <h2 className="font-display text-5xl">Find what's yours</h2>
+            <p className="max-w-xs text-muted-foreground">
+              {CATEGORIES.length} categories covering {PROGRAMS.length} federal, state, and local
+              programs.
+            </p>
+          </div>
+          <div className="grid grid-cols-2 gap-4 md:grid-cols-4 lg:grid-cols-6">
+            {CATEGORIES.map((cat, i) => {
+              const count = PROGRAMS.filter((p) => p.category === cat.key).length;
+              const featured = i === 0;
+              return (
                 <Link
                   key={cat.key}
                   to="/programs"
-                  className="group rounded-2xl border border-border bg-card p-7 transition-all hover:-translate-y-1 hover:shadow-[var(--shadow-lift)]"
+                  className={`group relative flex flex-col justify-end overflow-hidden rounded-3xl border border-border p-6 transition-colors hover:border-accent/60 ${
+                    featured ? "bg-secondary/60 p-8" : "bg-card/40"
+                  } ${SPANS[i] ?? "min-h-[10rem]"}`}
                 >
-                  <div className="flex items-start justify-between gap-4">
-                    <h3 className="font-display text-2xl">{cat.key}</h3>
-                    <span className="rounded-full bg-secondary px-2.5 py-1 text-xs text-muted-foreground">
-                      {PROGRAMS.filter((p) => p.category === cat.key).length}
-                    </span>
-                  </div>
-                  <p className="mt-2 text-sm text-muted-foreground">{cat.blurb}</p>
+                  {featured && (
+                    <div className="absolute -top-16 -right-16 size-32 rounded-full bg-accent/10 transition-transform duration-700 group-hover:scale-150" />
+                  )}
+                  <span
+                    className={
+                      featured
+                        ? "font-display text-4xl italic"
+                        : "text-lg leading-snug font-medium"
+                    }
+                  >
+                    {cat.key}
+                  </span>
+                  <p
+                    className={`mt-2 text-sm text-muted-foreground ${featured ? "" : "line-clamp-2"}`}
+                  >
+                    {featured ? cat.blurb : `${count} programs`}
+                  </p>
                 </Link>
-              ))}
-            </div>
+              );
+            })}
           </div>
         </section>
 
-        <section className="mx-auto grid max-w-6xl gap-12 px-5 py-24 md:grid-cols-2">
-          <div>
-            <h2 className="font-display text-4xl md:text-5xl">Guidance that fits your values</h2>
-            <p className="mt-4 leading-relaxed text-muted-foreground">
-              Ask the assistant for Islamic values guidance and it will mark each match as
-              straightforward or worth a second look — for example, where a program routes through
-              interest-bearing accounts. It's optional, and you can turn it on mid-conversation.
-            </p>
-          </div>
-          <div className="space-y-4">
-            {[
-              {
-                quote:
-                  "I assumed freelancers got nothing. Turned out there was a credit I'd been skipping for three years.",
-                name: "Maria S.",
-                role: "Independent contractor",
-              },
-              {
-                quote:
-                  "It felt less like an application and more like asking a friend who actually knows the rules.",
-                name: "David L.",
-                role: "Father of two",
-              },
-            ].map((t) => (
-              <figure
-                key={t.name}
-                className="rounded-2xl border border-border bg-card p-6 shadow-[var(--shadow-soft)]"
-              >
-                <blockquote className="font-display text-xl leading-snug">"{t.quote}"</blockquote>
-                <figcaption className="mt-4 text-sm text-muted-foreground">
-                  {t.name} · {t.role}
-                </figcaption>
-              </figure>
-            ))}
-          </div>
-        </section>
-
-        <section className="border-t border-border bg-card">
-          <div className="mx-auto max-w-3xl px-5 py-24">
-            <h2 className="font-display text-4xl md:text-5xl">Common questions</h2>
-            <Accordion type="single" collapsible className="mt-8">
-              {FAQS.map((faq) => (
-                <AccordionItem key={faq.q} value={faq.q}>
-                  <AccordionTrigger className="text-left text-base">{faq.q}</AccordionTrigger>
-                  <AccordionContent className="text-muted-foreground">{faq.a}</AccordionContent>
-                </AccordionItem>
-              ))}
-            </Accordion>
-          </div>
-        </section>
-
-        <section className="px-5 py-24">
-          <div
-            className="mx-auto max-w-5xl rounded-3xl px-8 py-16 text-center"
-            style={{ background: "var(--gradient-deep)" }}
-          >
-            <h2 className="font-display text-4xl text-primary-foreground md:text-5xl">
-              Find out in four minutes.
-            </h2>
-            <p className="mx-auto mt-3 max-w-md text-primary-foreground/75">
-              No account, no cost, no commitment. Just answers.
-            </p>
-            <Link
-              to="/chat"
-              className="mt-8 inline-flex items-center gap-2 rounded-full bg-background px-7 py-3.5 text-base font-medium text-foreground transition-transform hover:-translate-y-0.5"
+        {/* Testimonials */}
+        <section className="grid gap-6 md:grid-cols-2">
+          {[
+            {
+              quote:
+                "I assumed freelancers got nothing. Turned out there was a credit I'd been skipping for three years.",
+              name: "Maria S.",
+              role: "Independent contractor",
+            },
+            {
+              quote:
+                "It felt less like an application and more like asking a friend who actually knows the rules.",
+              name: "David L.",
+              role: "Father of two",
+            },
+          ].map((t) => (
+            <figure
+              key={t.name}
+              className="rounded-[2.5rem] border border-border bg-card/50 p-10 backdrop-blur-sm"
             >
-              Start the conversation <ArrowRight className="size-4" />
+              <blockquote className="font-display text-2xl leading-snug italic">
+                "{t.quote}"
+              </blockquote>
+              <figcaption className="mt-8 text-sm tracking-widest text-muted-foreground uppercase">
+                {t.name} · {t.role}
+              </figcaption>
+            </figure>
+          ))}
+        </section>
+
+        {/* FAQ */}
+        <section className="mx-auto max-w-3xl">
+          <h2 className="text-center font-display text-5xl">Frequently asked</h2>
+          <Accordion type="single" collapsible className="mt-10">
+            {FAQS.map((faq) => (
+              <AccordionItem key={faq.q} value={faq.q} className="border-border">
+                <AccordionTrigger className="py-6 text-left text-lg font-medium">
+                  {faq.q}
+                </AccordionTrigger>
+                <AccordionContent className="text-muted-foreground">{faq.a}</AccordionContent>
+              </AccordionItem>
+            ))}
+          </Accordion>
+        </section>
+
+        {/* Closing CTA */}
+        <section
+          className="relative space-y-8 overflow-hidden rounded-[3rem] p-12 text-center md:p-16"
+          style={{ background: "var(--gradient-deep)" }}
+        >
+          <div className="pointer-events-none absolute inset-0 bg-linear-to-br from-accent/15 to-transparent" />
+          <h2 className="relative z-10 font-display text-5xl text-primary-foreground">
+            Don't leave your money behind.
+          </h2>
+          <div className="relative z-10">
+            <Link
+              to="/eligibility"
+              className="inline-flex items-center gap-2 rounded-full bg-background px-12 py-5 text-lg font-bold text-foreground transition-transform hover:-translate-y-0.5"
+            >
+              Check eligibility now <ArrowRight className="size-4" />
             </Link>
           </div>
+          <p className="relative z-10 text-sm text-primary-foreground/70">
+            No account, no cost, no SSN required.
+          </p>
         </section>
       </main>
 
