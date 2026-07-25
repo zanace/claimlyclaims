@@ -53,7 +53,7 @@ const STEPS = [
 ];
 
 const STATS = [
-  { value: `${PROGRAMS.length}`, label: "programs tracked" },
+  { value: `${PROGRAMS.length}+`, label: "programs tracked" },
   { value: "4 min", label: "typical check" },
   { value: "$0", label: "cost, always" },
   { value: "Halal", label: "guidance optional" },
