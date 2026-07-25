@@ -7,8 +7,10 @@ import { supabase } from "@/integrations/supabase/client";
 
 export type UserInfo = {
   state: string;
+  gender: string;
   householdSize: string;
   monthlyIncome: string;
+  householdIncome: string;
   filingStatus: string;
   dependents: string;
   workSituation: string;
@@ -20,8 +22,10 @@ export type UserInfo = {
 
 export const EMPTY_INFO: UserInfo = {
   state: "",
+  gender: "",
   householdSize: "",
   monthlyIncome: "",
+  householdIncome: "",
   filingStatus: "",
   dependents: "",
   workSituation: "",
@@ -37,6 +41,11 @@ const FIELDS: { key: keyof UserInfo; label: string; placeholder: string }[] = [
   { key: "state", label: "State", placeholder: "Ohio" },
   { key: "householdSize", label: "People in household", placeholder: "3" },
   { key: "monthlyIncome", label: "Monthly income (before tax)", placeholder: "2,400" },
+  {
+    key: "householdIncome",
+    label: "Total household income per year (optional)",
+    placeholder: "38,000",
+  },
   { key: "filingStatus", label: "Tax filing status", placeholder: "Head of household" },
   { key: "dependents", label: "Kids / dependents & ages", placeholder: "2 kids, 4 and 9" },
   { key: "workSituation", label: "Work situation", placeholder: "Part-time + some 1099" },
@@ -57,7 +66,7 @@ export function loadStoredInfo(): UserInfo {
 }
 
 export function infoToPrompt(info: UserInfo): string {
-  const lines = FIELDS.filter((f) => info[f.key].trim()).map(
+  const lines = ALL_FIELDS.filter((f) => info[f.key].trim()).map(
     (f) => `- ${f.label}: ${info[f.key].trim()}`,
   );
   return lines.length ? lines.join("\n") : "";
