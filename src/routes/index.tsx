@@ -168,7 +168,7 @@ function Index() {
 
         {/* Process */}
         <section className="space-y-16">
-          <h2 className="text-center font-display text-5xl italic">How it works</h2>
+          <h2 className="text-center font-display text-5xl italic text-accent">How it works</h2>
           <div className="grid gap-12 md:grid-cols-3">
             {STEPS.map((step, i) => (
               <div key={step.title} className="group space-y-4">
@@ -209,7 +209,7 @@ function Index() {
                   <span
                     className={
                       featured
-                        ? "font-display text-4xl italic"
+                        ? "font-display text-4xl italic text-accent"
                         : "text-lg leading-snug font-medium"
                     }
                   >
@@ -246,7 +246,7 @@ function Index() {
               key={t.name}
               className="rounded-[2.5rem] border border-border bg-card/50 p-10 backdrop-blur-sm"
             >
-              <blockquote className="font-display text-2xl leading-snug italic">
+              <blockquote className="font-display text-2xl leading-snug italic text-accent">
                 "{t.quote}"
               </blockquote>
               <figcaption className="mt-8 text-sm tracking-widest text-muted-foreground uppercase">
