@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as UnlockRouteImport } from './routes/unlock'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as ProgramsRouteImport } from './routes/programs'
+import { Route as MoneyYouCouldGetRouteImport } from './routes/money-you-could-get'
 import { Route as LegalRouteImport } from './routes/legal'
 import { Route as HowItWorksRouteImport } from './routes/how-it-works'
 import { Route as EligibilityRouteImport } from './routes/eligibility'
@@ -21,6 +22,8 @@ import { Route as ChatRouteImport } from './routes/chat'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as BlogIndexRouteImport } from './routes/blog.index'
+import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 import { Route as ApiChatRouteImport } from './routes/api/chat'
 
 const UnlockRoute = UnlockRouteImport.update({
@@ -36,6 +39,11 @@ const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
 const ProgramsRoute = ProgramsRouteImport.update({
   id: '/programs',
   path: '/programs',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MoneyYouCouldGetRoute = MoneyYouCouldGetRouteImport.update({
+  id: '/money-you-could-get',
+  path: '/money-you-could-get',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LegalRoute = LegalRouteImport.update({
@@ -83,6 +91,16 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BlogIndexRoute = BlogIndexRouteImport.update({
+  id: '/blog/',
+  path: '/blog/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BlogSlugRoute = BlogSlugRouteImport.update({
+  id: '/blog/$slug',
+  path: '/blog/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiChatRoute = ApiChatRouteImport.update({
   id: '/api/chat',
   path: '/api/chat',
@@ -99,10 +117,13 @@ export interface FileRoutesByFullPath {
   '/eligibility': typeof EligibilityRoute
   '/how-it-works': typeof HowItWorksRoute
   '/legal': typeof LegalRoute
+  '/money-you-could-get': typeof MoneyYouCouldGetRoute
   '/programs': typeof ProgramsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/unlock': typeof UnlockRoute
   '/api/chat': typeof ApiChatRoute
+  '/blog/$slug': typeof BlogSlugRoute
+  '/blog/': typeof BlogIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -114,10 +135,13 @@ export interface FileRoutesByTo {
   '/eligibility': typeof EligibilityRoute
   '/how-it-works': typeof HowItWorksRoute
   '/legal': typeof LegalRoute
+  '/money-you-could-get': typeof MoneyYouCouldGetRoute
   '/programs': typeof ProgramsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/unlock': typeof UnlockRoute
   '/api/chat': typeof ApiChatRoute
+  '/blog/$slug': typeof BlogSlugRoute
+  '/blog': typeof BlogIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -130,10 +154,13 @@ export interface FileRoutesById {
   '/eligibility': typeof EligibilityRoute
   '/how-it-works': typeof HowItWorksRoute
   '/legal': typeof LegalRoute
+  '/money-you-could-get': typeof MoneyYouCouldGetRoute
   '/programs': typeof ProgramsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/unlock': typeof UnlockRoute
   '/api/chat': typeof ApiChatRoute
+  '/blog/$slug': typeof BlogSlugRoute
+  '/blog/': typeof BlogIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -147,10 +174,13 @@ export interface FileRouteTypes {
     | '/eligibility'
     | '/how-it-works'
     | '/legal'
+    | '/money-you-could-get'
     | '/programs'
     | '/sitemap.xml'
     | '/unlock'
     | '/api/chat'
+    | '/blog/$slug'
+    | '/blog/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -162,10 +192,13 @@ export interface FileRouteTypes {
     | '/eligibility'
     | '/how-it-works'
     | '/legal'
+    | '/money-you-could-get'
     | '/programs'
     | '/sitemap.xml'
     | '/unlock'
     | '/api/chat'
+    | '/blog/$slug'
+    | '/blog'
   id:
     | '__root__'
     | '/'
@@ -177,10 +210,13 @@ export interface FileRouteTypes {
     | '/eligibility'
     | '/how-it-works'
     | '/legal'
+    | '/money-you-could-get'
     | '/programs'
     | '/sitemap.xml'
     | '/unlock'
     | '/api/chat'
+    | '/blog/$slug'
+    | '/blog/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -193,10 +229,13 @@ export interface RootRouteChildren {
   EligibilityRoute: typeof EligibilityRoute
   HowItWorksRoute: typeof HowItWorksRoute
   LegalRoute: typeof LegalRoute
+  MoneyYouCouldGetRoute: typeof MoneyYouCouldGetRoute
   ProgramsRoute: typeof ProgramsRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   UnlockRoute: typeof UnlockRoute
   ApiChatRoute: typeof ApiChatRoute
+  BlogSlugRoute: typeof BlogSlugRoute
+  BlogIndexRoute: typeof BlogIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -220,6 +259,13 @@ declare module '@tanstack/react-router' {
       path: '/programs'
       fullPath: '/programs'
       preLoaderRoute: typeof ProgramsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/money-you-could-get': {
+      id: '/money-you-could-get'
+      path: '/money-you-could-get'
+      fullPath: '/money-you-could-get'
+      preLoaderRoute: typeof MoneyYouCouldGetRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/legal': {
@@ -285,6 +331,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/blog/': {
+      id: '/blog/'
+      path: '/blog'
+      fullPath: '/blog/'
+      preLoaderRoute: typeof BlogIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/blog/$slug': {
+      id: '/blog/$slug'
+      path: '/blog/$slug'
+      fullPath: '/blog/$slug'
+      preLoaderRoute: typeof BlogSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/chat': {
       id: '/api/chat'
       path: '/api/chat'
@@ -305,10 +365,13 @@ const rootRouteChildren: RootRouteChildren = {
   EligibilityRoute: EligibilityRoute,
   HowItWorksRoute: HowItWorksRoute,
   LegalRoute: LegalRoute,
+  MoneyYouCouldGetRoute: MoneyYouCouldGetRoute,
   ProgramsRoute: ProgramsRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   UnlockRoute: UnlockRoute,
   ApiChatRoute: ApiChatRoute,
+  BlogSlugRoute: BlogSlugRoute,
+  BlogIndexRoute: BlogIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

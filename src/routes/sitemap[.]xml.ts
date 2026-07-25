@@ -1,3 +1,4 @@
+import { ARTICLES } from "@/lib/blog";
 import { createFileRoute } from "@tanstack/react-router";
 import type {} from "@tanstack/react-start";
 
@@ -9,7 +10,15 @@ export const Route = createFileRoute("/sitemap.xml")({
       GET: async () => {
         const entries = [
           { path: "/", changefreq: "weekly", priority: "1.0" },
+          { path: "/how-it-works", changefreq: "monthly", priority: "0.9" },
           { path: "/programs", changefreq: "monthly", priority: "0.8" },
+          { path: "/money-you-could-get", changefreq: "monthly", priority: "0.8" },
+          { path: "/blog", changefreq: "weekly", priority: "0.8" },
+          ...ARTICLES.map((a) => ({
+            path: `/blog/${a.slug}`,
+            changefreq: "monthly",
+            priority: "0.6",
+          })),
           { path: "/eligibility", changefreq: "monthly", priority: "0.9" },
           { path: "/claims", changefreq: "monthly", priority: "0.6" },
           { path: "/documents", changefreq: "monthly", priority: "0.7" },
