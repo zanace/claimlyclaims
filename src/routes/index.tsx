@@ -92,17 +92,17 @@ function Index() {
             { icon: Sparkles, title: "AI maps your matches", body: `We compare your situation against ${PROGRAMS.length}+ federal and state programs.` },
             { icon: FileText, title: "File with confidence", body: "Get direct .gov links, checklists, and step-by-step guidance." },
           ].map(({ icon: Icon, title: t, body }) => (
-            <div key={t} className="rounded-2xl border border-border bg-card/40 p-6 text-white backdrop-blur">
+            <div key={t} className="rounded-2xl border border-border bg-card/40 p-6 text-foreground backdrop-blur">
               <Icon className="mb-4 size-6 text-accent" />
-              <h3 className="font-display text-2xl text-white">{t}</h3>
-              <p className="mt-2 text-sm text-white/80">{body}</p>
+              <h3 className="font-display text-2xl text-foreground">{t}</h3>
+              <p className="mt-2 text-sm text-foreground/80">{body}</p>
             </div>
           ))}
         </section>
 
-        <section className="mb-24 rounded-3xl border border-border bg-card/40 p-10 text-center text-white backdrop-blur">
-          <h2 className="font-display text-4xl text-white md:text-5xl">Ready to see what's yours?</h2>
-          <p className="mx-auto mt-3 max-w-lg text-white/80">
+        <section className="mb-24 rounded-3xl border border-border bg-card/40 p-10 text-center text-foreground backdrop-blur">
+          <h2 className="font-display text-4xl text-foreground md:text-5xl">Ready to see what's yours?</h2>
+          <p className="mx-auto mt-3 max-w-lg text-foreground/80">
             Free, private, and takes under 3 minutes.
           </p>
           <Link
