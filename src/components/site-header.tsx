@@ -41,7 +41,7 @@ export function SiteHeader() {
           <img src={logo} alt="Claimly logo" width={32} height={32} className="size-8 rounded-lg" />
           <span className="font-display text-xl leading-none tracking-tight">Claimly</span>
         </Link>
-        <nav className="hidden flex-1 items-center justify-center gap-x-4 gap-y-1 text-[13px] whitespace-nowrap text-muted-foreground lg:flex">
+        <nav className="hidden flex-1 items-center justify-center gap-x-4 gap-y-1 text-[13px] whitespace-nowrap text-muted-foreground dark:text-white lg:flex">
           {items.map((item) => (
             <Link
               key={item.to}
@@ -99,7 +99,7 @@ export function SiteHeader() {
       </div>
       {open && (
         <nav className="border-t border-border/70 bg-background/95 px-5 py-3 lg:hidden">
-          <ul className="grid grid-cols-2 gap-x-4 gap-y-2 text-sm text-muted-foreground sm:grid-cols-3">
+          <ul className="grid grid-cols-2 gap-x-4 gap-y-2 text-sm text-muted-foreground dark:text-white sm:grid-cols-3">
             {items.map((item) => (
               <li key={item.to}>
                 <Link
