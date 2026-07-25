@@ -113,10 +113,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 });
 
 function RootShell({ children }: { children: ReactNode }) {
-  return shell(children);
-}
-
-function shell(children: ReactNode) {
+  return (
   return (
     <html lang="en">
       <head>
