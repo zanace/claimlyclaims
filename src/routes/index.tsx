@@ -51,20 +51,29 @@ function Index() {
 
       <main className="mx-auto w-full max-w-5xl px-5">
         <section className="flex min-h-[calc(100vh-4rem)] flex-col items-center justify-center gap-6 text-center">
-        <span className="inline-flex items-center gap-2 rounded-full border border-border px-4 py-1.5 text-xs font-medium tracking-widest text-muted-foreground uppercase">
+        <span
+          className="inline-flex items-center gap-2 rounded-full border border-border px-4 py-1.5 text-xs font-medium tracking-widest text-muted-foreground uppercase animate-fade-in-up"
+          style={{ animationDelay: "0ms" }}
+        >
           <BadgeCheck className="size-3.5 text-accent" />
             Billions go unclaimed every year
           </span>
-        <h1 className="mx-auto max-w-4xl font-display text-5xl leading-[1.02] tracking-tight md:text-7xl">
+        <h1
+          className="mx-auto max-w-4xl font-display text-5xl leading-[1.02] tracking-tight md:text-7xl animate-fade-in-up"
+          style={{ animationDelay: "120ms" }}
+        >
             {headline.pre}
             <em className="text-accent">{headline.em}</em>
             {headline.post}
           </h1>
-        <p className="mx-auto max-w-xl text-lg leading-relaxed font-light text-muted-foreground">
+        <p
+          className="mx-auto max-w-xl text-lg leading-relaxed font-light text-muted-foreground animate-fade-in-up"
+          style={{ animationDelay: "240ms" }}
+        >
             We track over {PROGRAMS.length} government programs to find refunds, credits, and
             support you didn't know existed. Fast, private, and entirely risk-free.
           </p>
-        <div className="space-y-5">
+        <div className="space-y-5 animate-fade-in-up" style={{ animationDelay: "360ms" }}>
             <Link
               to="/chat"
             className="group inline-flex items-center gap-2 rounded-full bg-accent px-9 py-4 font-semibold text-accent-foreground shadow-[var(--shadow-lift)] transition-transform duration-300 hover:scale-105 active:scale-95"
@@ -91,8 +100,12 @@ function Index() {
             { icon: MessageSquare, title: "Chat in plain English", body: "No jargon, no forms. Just answer a few questions about your household." },
             { icon: Sparkles, title: "AI maps your matches", body: `We compare your situation against ${PROGRAMS.length}+ federal and state programs.` },
             { icon: FileText, title: "File with confidence", body: "Get direct .gov links, checklists, and step-by-step guidance." },
-          ].map(({ icon: Icon, title: t, body }) => (
-            <div key={t} className="rounded-2xl border border-border bg-card/40 p-6 text-foreground backdrop-blur">
+          ].map(({ icon: Icon, title: t, body }, i) => (
+            <div
+              key={t}
+              className="rounded-2xl border border-border bg-card/40 p-6 text-foreground backdrop-blur animate-fade-in-up"
+              style={{ animationDelay: `${i * 120}ms` }}
+            >
               <Icon className="mb-4 size-6 text-accent" />
               <h3 className="font-display text-2xl text-foreground">{t}</h3>
               <p className="mt-2 text-sm text-foreground/80">{body}</p>
@@ -100,7 +113,7 @@ function Index() {
           ))}
         </section>
 
-        <section className="mb-24 rounded-3xl border border-border bg-card/40 p-10 text-center text-foreground backdrop-blur">
+        <section className="mb-24 rounded-3xl border border-border bg-card/40 p-10 text-center text-foreground backdrop-blur animate-fade-in-up">
           <h2 className="font-display text-4xl text-foreground md:text-5xl">Ready to see what's yours?</h2>
           <p className="mx-auto mt-3 max-w-lg text-foreground/80">
             Free, private, and takes under 3 minutes.
