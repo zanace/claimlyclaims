@@ -25,7 +25,7 @@ export const isUnlocked = createServerFn({ method: "GET" }).handler(async () => 
 });
 
 export const unlockSite = createServerFn({ method: "POST" })
-  .inputValidator((data: { passcode: string }) => data)
+  .validator((data: { passcode: string }) => data)
   .handler(async ({ data }) => {
     const expected = process.env.SITE_PASSWORD;
     if (!expected) throw new Error("SITE_PASSWORD is not set");
