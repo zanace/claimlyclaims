@@ -53,14 +53,14 @@ function Index() {
         <section className="flex min-h-[calc(100vh-4rem)] flex-col items-center justify-center gap-6 text-center">
         <span
           className="inline-flex items-center gap-2 rounded-full border border-border px-4 py-1.5 text-xs font-medium tracking-widest text-muted-foreground uppercase animate-fade-in-up"
-          style={{ animationDelay: "0ms" }}
+          style={{ animationDelay: "100ms" }}
         >
           <BadgeCheck className="size-3.5 text-accent" />
             Billions go unclaimed every year
           </span>
         <h1
           className="mx-auto max-w-4xl font-display text-5xl leading-[1.02] tracking-tight md:text-7xl animate-blur-in"
-          style={{ animationDelay: "120ms" }}
+          style={{ animationDelay: "500ms" }}
         >
             {headline.pre}
             <em className="text-accent">{headline.em}</em>
@@ -68,12 +68,12 @@ function Index() {
           </h1>
         <p
           className="mx-auto max-w-xl text-lg leading-relaxed font-light text-muted-foreground animate-fade-in-up"
-          style={{ animationDelay: "240ms" }}
+          style={{ animationDelay: "1100ms" }}
         >
             We track over {PROGRAMS.length} government programs to find refunds, credits, and
             support you didn't know existed. Fast, private, and entirely risk-free.
           </p>
-        <div className="space-y-5 animate-fade-in-up" style={{ animationDelay: "360ms" }}>
+        <div className="space-y-5 animate-fade-in-up" style={{ animationDelay: "1600ms" }}>
             <Link
               to="/chat"
             className="group inline-flex items-center gap-2 rounded-full bg-accent px-9 py-4 font-semibold text-accent-foreground shadow-[var(--shadow-lift)] transition-all duration-300 hover:scale-105 hover:shadow-2xl active:scale-95"
@@ -104,7 +104,7 @@ function Index() {
             <div
               key={t}
               className="group rounded-2xl border border-border bg-card/40 p-6 text-foreground backdrop-blur hover-lift reveal-on-scroll animate-fade-in-up"
-              style={{ animationDelay: `${i * 120}ms` }}
+              style={{ animationDelay: `${i * 250}ms` }}
             >
               <Icon className="mb-4 size-6 text-accent transition-transform duration-500 group-hover:scale-110 group-hover:rotate-3" />
               <h3 className="font-display text-2xl text-foreground">{t}</h3>
