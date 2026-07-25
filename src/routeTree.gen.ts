@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as TeamRouteImport } from './routes/team'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as SavedRouteImport } from './routes/saved'
 import { Route as ProgramsRouteImport } from './routes/programs'
 import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as MoneyYouCouldGetRouteImport } from './routes/money-you-could-get'
@@ -37,6 +38,11 @@ const TeamRoute = TeamRouteImport.update({
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
   path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SavedRoute = SavedRouteImport.update({
+  id: '/saved',
+  path: '/saved',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ProgramsRoute = ProgramsRouteImport.update({
@@ -139,6 +145,7 @@ export interface FileRoutesByFullPath {
   '/money-you-could-get': typeof MoneyYouCouldGetRoute
   '/profile': typeof ProfileRoute
   '/programs': typeof ProgramsRoute
+  '/saved': typeof SavedRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/team': typeof TeamRoute
   '/api/chat': typeof ApiChatRoute
@@ -160,6 +167,7 @@ export interface FileRoutesByTo {
   '/money-you-could-get': typeof MoneyYouCouldGetRoute
   '/profile': typeof ProfileRoute
   '/programs': typeof ProgramsRoute
+  '/saved': typeof SavedRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/team': typeof TeamRoute
   '/api/chat': typeof ApiChatRoute
@@ -182,6 +190,7 @@ export interface FileRoutesById {
   '/money-you-could-get': typeof MoneyYouCouldGetRoute
   '/profile': typeof ProfileRoute
   '/programs': typeof ProgramsRoute
+  '/saved': typeof SavedRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/team': typeof TeamRoute
   '/api/chat': typeof ApiChatRoute
@@ -205,6 +214,7 @@ export interface FileRouteTypes {
     | '/money-you-could-get'
     | '/profile'
     | '/programs'
+    | '/saved'
     | '/sitemap.xml'
     | '/team'
     | '/api/chat'
@@ -226,6 +236,7 @@ export interface FileRouteTypes {
     | '/money-you-could-get'
     | '/profile'
     | '/programs'
+    | '/saved'
     | '/sitemap.xml'
     | '/team'
     | '/api/chat'
@@ -247,6 +258,7 @@ export interface FileRouteTypes {
     | '/money-you-could-get'
     | '/profile'
     | '/programs'
+    | '/saved'
     | '/sitemap.xml'
     | '/team'
     | '/api/chat'
@@ -269,6 +281,7 @@ export interface RootRouteChildren {
   MoneyYouCouldGetRoute: typeof MoneyYouCouldGetRoute
   ProfileRoute: typeof ProfileRoute
   ProgramsRoute: typeof ProgramsRoute
+  SavedRoute: typeof SavedRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   TeamRoute: typeof TeamRoute
   ApiChatRoute: typeof ApiChatRoute
@@ -291,6 +304,13 @@ declare module '@tanstack/react-router' {
       path: '/sitemap.xml'
       fullPath: '/sitemap.xml'
       preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/saved': {
+      id: '/saved'
+      path: '/saved'
+      fullPath: '/saved'
+      preLoaderRoute: typeof SavedRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/programs': {
@@ -429,6 +449,7 @@ const rootRouteChildren: RootRouteChildren = {
   MoneyYouCouldGetRoute: MoneyYouCouldGetRoute,
   ProfileRoute: ProfileRoute,
   ProgramsRoute: ProgramsRoute,
+  SavedRoute: SavedRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   TeamRoute: TeamRoute,
   ApiChatRoute: ApiChatRoute,
