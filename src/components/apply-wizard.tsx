@@ -306,7 +306,7 @@ function QuestionStage({
   const choices = question.type === "yesno" ? ["Yes", "No"] : (question.choices ?? []);
 
   return (
-    <div key={question.id} className="flex min-h-[420px] flex-col p-7 sm:p-9 animate-fade-in-up">
+    <div key={question.id} className="flex min-h-[420px] flex-col p-7 sm:p-9 animate-fade-in">
       <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
         Question {index + 1} of {total}
       </p>
