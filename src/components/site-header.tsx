@@ -31,8 +31,8 @@ export function SiteHeader() {
 
   return (
     <header className="sticky top-0 z-40 border-b border-border/70 bg-background/85 backdrop-blur-md">
-      <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-8 px-5">
-        <Link to="/" className="flex items-center gap-2.5">
+      <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-10 px-5">
+        <Link to="/" className="mr-4 flex shrink-0 items-center gap-2.5 xl:mr-10">
           <img src={logo} alt="Claimly logo" width={32} height={32} className="size-8 rounded-lg" />
           <span className="font-display text-2xl leading-none tracking-tight">Claimly</span>
         </Link>
