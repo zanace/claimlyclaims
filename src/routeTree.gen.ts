@@ -14,6 +14,7 @@ import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as SavedRouteImport } from './routes/saved'
 import { Route as ProgramsRouteImport } from './routes/programs'
 import { Route as ProfileRouteImport } from './routes/profile'
+import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as MoneyYouCouldGetRouteImport } from './routes/money-you-could-get'
 import { Route as LegalRouteImport } from './routes/legal'
 import { Route as HowItWorksRouteImport } from './routes/how-it-works'
@@ -54,6 +55,11 @@ const ProgramsRoute = ProgramsRouteImport.update({
 const ProfileRoute = ProfileRouteImport.update({
   id: '/profile',
   path: '/profile',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrivacyRoute = PrivacyRouteImport.update({
+  id: '/privacy',
+  path: '/privacy',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MoneyYouCouldGetRoute = MoneyYouCouldGetRouteImport.update({
@@ -150,6 +156,7 @@ export interface FileRoutesByFullPath {
   '/how-it-works': typeof HowItWorksRoute
   '/legal': typeof LegalRoute
   '/money-you-could-get': typeof MoneyYouCouldGetRoute
+  '/privacy': typeof PrivacyRoute
   '/profile': typeof ProfileRoute
   '/programs': typeof ProgramsRoute
   '/saved': typeof SavedRoute
@@ -173,6 +180,7 @@ export interface FileRoutesByTo {
   '/how-it-works': typeof HowItWorksRoute
   '/legal': typeof LegalRoute
   '/money-you-could-get': typeof MoneyYouCouldGetRoute
+  '/privacy': typeof PrivacyRoute
   '/profile': typeof ProfileRoute
   '/programs': typeof ProgramsRoute
   '/saved': typeof SavedRoute
@@ -197,6 +205,7 @@ export interface FileRoutesById {
   '/how-it-works': typeof HowItWorksRoute
   '/legal': typeof LegalRoute
   '/money-you-could-get': typeof MoneyYouCouldGetRoute
+  '/privacy': typeof PrivacyRoute
   '/profile': typeof ProfileRoute
   '/programs': typeof ProgramsRoute
   '/saved': typeof SavedRoute
@@ -222,6 +231,7 @@ export interface FileRouteTypes {
     | '/how-it-works'
     | '/legal'
     | '/money-you-could-get'
+    | '/privacy'
     | '/profile'
     | '/programs'
     | '/saved'
@@ -245,6 +255,7 @@ export interface FileRouteTypes {
     | '/how-it-works'
     | '/legal'
     | '/money-you-could-get'
+    | '/privacy'
     | '/profile'
     | '/programs'
     | '/saved'
@@ -268,6 +279,7 @@ export interface FileRouteTypes {
     | '/how-it-works'
     | '/legal'
     | '/money-you-could-get'
+    | '/privacy'
     | '/profile'
     | '/programs'
     | '/saved'
@@ -292,6 +304,7 @@ export interface RootRouteChildren {
   HowItWorksRoute: typeof HowItWorksRoute
   LegalRoute: typeof LegalRoute
   MoneyYouCouldGetRoute: typeof MoneyYouCouldGetRoute
+  PrivacyRoute: typeof PrivacyRoute
   ProfileRoute: typeof ProfileRoute
   ProgramsRoute: typeof ProgramsRoute
   SavedRoute: typeof SavedRoute
@@ -338,6 +351,13 @@ declare module '@tanstack/react-router' {
       path: '/profile'
       fullPath: '/profile'
       preLoaderRoute: typeof ProfileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/privacy': {
+      id: '/privacy'
+      path: '/privacy'
+      fullPath: '/privacy'
+      preLoaderRoute: typeof PrivacyRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/money-you-could-get': {
@@ -468,6 +488,7 @@ const rootRouteChildren: RootRouteChildren = {
   HowItWorksRoute: HowItWorksRoute,
   LegalRoute: LegalRoute,
   MoneyYouCouldGetRoute: MoneyYouCouldGetRoute,
+  PrivacyRoute: PrivacyRoute,
   ProfileRoute: ProfileRoute,
   ProgramsRoute: ProgramsRoute,
   SavedRoute: SavedRoute,
