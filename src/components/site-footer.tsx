@@ -27,6 +27,9 @@ export function SiteFooter() {
           <Link to="/chat" className="hover:text-foreground">
             Assistant
           </Link>
+          <Link to="/auth" className="hover:text-foreground">
+            Log in
+          </Link>
           <Link to="/legal" className="hover:text-foreground">
             Privacy &amp; terms
           </Link>
