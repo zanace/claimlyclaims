@@ -52,7 +52,7 @@ function Documents() {
 
   useEffect(() => {
     try {
-      const raw = window.localStorage.getItem(KEY);
+      const raw = store.getItem(KEY);
       if (raw) setDone(JSON.parse(raw) as string[]);
     } catch {
       /* ignore */
@@ -62,7 +62,7 @@ function Documents() {
   function toggle(item: string) {
     const next = done.includes(item) ? done.filter((d) => d !== item) : [...done, item];
     setDone(next);
-    window.localStorage.setItem(KEY, JSON.stringify(next));
+    store.setItem(KEY, JSON.stringify(next));
   }
 
   const total = DOC_GROUPS.reduce((n, g) => n + g.items.length, 0);

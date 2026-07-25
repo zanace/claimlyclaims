@@ -22,7 +22,7 @@ function Dashboard() {
 
   useEffect(() => {
     try {
-      const raw = localStorage.getItem("claimly.saved");
+      const raw = store.getItem("claimly.saved");
       if (raw) setSavedCount((JSON.parse(raw) as string[]).length);
     } catch {}
   }, []);

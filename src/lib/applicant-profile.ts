@@ -38,7 +38,7 @@ export const FIELD_LABELS: Record<string, string> = {
 export function loadAnswers(): Answers {
   if (typeof window === "undefined") return {};
   try {
-    const raw = localStorage.getItem(KEY);
+    const raw = store.getItem(KEY);
     const parsed = raw ? (JSON.parse(raw) as Answers) : {};
     return parsed && typeof parsed === "object" ? parsed : {};
   } catch {
@@ -49,7 +49,7 @@ export function loadAnswers(): Answers {
 export function saveAnswers(next: Answers) {
   if (typeof window === "undefined") return;
   try {
-    localStorage.setItem(KEY, JSON.stringify(next));
+    store.setItem(KEY, JSON.stringify(next));
   } catch {}
 }
 

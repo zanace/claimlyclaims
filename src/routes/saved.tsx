@@ -29,7 +29,7 @@ function Saved() {
 
   useEffect(() => {
     try {
-      const raw = localStorage.getItem("claimly.saved");
+      const raw = store.getItem("claimly.saved");
       if (raw) setIds(JSON.parse(raw));
     } catch {}
   }, []);
@@ -37,7 +37,7 @@ function Saved() {
   function remove(id: string) {
     setIds((prev) => {
       const next = prev.filter((x) => x !== id);
-      try { localStorage.setItem("claimly.saved", JSON.stringify(next)); } catch {}
+      try { store.setItem("claimly.saved", JSON.stringify(next)); } catch {}
       return next;
     });
   }
