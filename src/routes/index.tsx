@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import {
-  ArrowRight, ArrowUpRight, Bookmark, BookmarkCheck, Lock, Sparkles, Search,
+  ArrowRight, ArrowUpRight, Bookmark, BookmarkCheck, Lock, Search,
   Utensils, Baby, HeartPulse, Stethoscope, HandHeart, Home as HomeIcon,
 } from "lucide-react";
 import { useEffect, useMemo, useState, type ComponentType } from "react";
