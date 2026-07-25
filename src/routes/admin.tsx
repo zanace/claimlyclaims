@@ -258,7 +258,7 @@ function Field({ label, value }: { label: string; value: string }) {
 
 function Shell({ children }: { children: React.ReactNode }) {
   return (
-    <div className="min-h-screen bg-background font-sans">
+    <div className="min-h-screen font-sans">
       <SiteHeader />
       <main className="mx-auto max-w-6xl px-5 py-16">{children}</main>
       <SiteFooter />

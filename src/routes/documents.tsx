@@ -68,7 +68,7 @@ function Documents() {
   const total = DOC_GROUPS.reduce((n, g) => n + g.items.length, 0);
 
   return (
-    <div className="min-h-screen bg-background font-sans">
+    <div className="min-h-screen font-sans">
       <SiteHeader />
       <main className="mx-auto max-w-4xl px-5 py-16">
         <h1 className="font-display text-5xl tracking-tight md:text-6xl">Document checklist</h1>

@@ -45,7 +45,7 @@ function Programs() {
   );
 
   return (
-    <div className="min-h-screen bg-background font-sans">
+    <div className="min-h-screen font-sans">
       <SiteHeader />
       <main className="mx-auto max-w-6xl px-5 py-16">
         <header className="max-w-2xl">

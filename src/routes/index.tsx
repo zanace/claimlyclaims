@@ -43,7 +43,7 @@ function Index() {
   }, []);
 
   return (
-    <div className="flex h-screen flex-col overflow-hidden bg-background font-sans selection:bg-accent selection:text-accent-foreground">
+    <div className="flex h-screen flex-col overflow-hidden font-sans selection:bg-accent selection:text-accent-foreground">
       <SiteHeader />
 
       <main className="mx-auto flex w-full max-w-5xl flex-1 flex-col items-center justify-center gap-6 px-5 text-center">

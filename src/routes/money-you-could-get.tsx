@@ -56,7 +56,7 @@ const CATEGORIES = [
 
 function MoneyPage() {
   return (
-    <div className="min-h-screen bg-background font-sans">
+    <div className="min-h-screen font-sans">
       <SiteHeader />
       <main>
         <section className="mx-auto max-w-3xl px-5 pt-20 pb-12 text-center">
