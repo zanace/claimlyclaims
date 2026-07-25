@@ -1,3 +1,4 @@
+import { store } from "@/lib/store";
 import { useEffect } from "react";
 import { PencilLine } from "lucide-react";
 import { Button } from "@/components/ui/button";

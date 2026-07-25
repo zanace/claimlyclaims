@@ -1,3 +1,4 @@
+import { store } from "@/lib/store";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { ArrowRight, Bookmark, MessageSquare, FileText, ClipboardList } from "lucide-react";

@@ -1,3 +1,4 @@
+import { store } from "@/lib/store";
 // Shared answer memory. Every question the user answers anywhere in Claimly is
 // stored here by canonical field id, so we never ask the same thing twice.
 export type FieldType = "text" | "number" | "zip" | "money" | "choice" | "yesno";

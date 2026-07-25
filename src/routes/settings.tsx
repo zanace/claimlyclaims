@@ -1,3 +1,4 @@
+import { store } from "@/lib/store";
 import { useEffect, useMemo, useState } from "react";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { toast } from "sonner";
