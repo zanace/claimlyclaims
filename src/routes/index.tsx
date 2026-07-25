@@ -1,12 +1,12 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import {
-  ArrowRight, ArrowUpRight, Bookmark, BookmarkCheck, Lock, Search, Sparkles,
+  ArrowRight, Bookmark, BookmarkCheck, Lock, Search, Sparkles,
   Utensils, Baby, HeartPulse, Stethoscope, HandHeart, Home as HomeIcon,
 } from "lucide-react";
 import { useEffect, useMemo, useState, type ComponentType } from "react";
 import { toast } from "sonner";
 import { SiteHeader } from "@/components/site-header";
-import { ApplyModal } from "@/components/apply-modal";
+import { ApplyWizard } from "@/components/apply-wizard";
 
 const title = "Claimly - Find the help you're entitled to";
 const description =
@@ -272,20 +272,18 @@ function Index() {
                     </div>
                   )}
                   <div className="mt-5 flex items-center gap-3">
-                    <a
-                      href={c.learnMore}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="inline-flex items-center gap-1.5 rounded-full border border-border bg-background px-4 py-2 text-sm font-medium text-foreground transition hover:bg-secondary"
-                    >
-                      Learn more <ArrowUpRight className="size-3.5" />
-                    </a>
                     <button
                       onClick={() => setApplyFor(c as ProgramCard)}
-                      className="inline-flex items-center gap-1.5 rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground shadow-sm transition hover:brightness-110"
+                      className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-full bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm transition hover:brightness-110"
                     >
-                      Apply
+                      Apply here <ArrowRight className="size-3.5" />
                     </button>
+                    <Link
+                      to="/chat"
+                      className="inline-flex items-center gap-1.5 rounded-full border border-border bg-background px-4 py-2.5 text-sm font-medium text-foreground transition hover:bg-secondary"
+                    >
+                      Ask AI
+                    </Link>
                   </div>
                 </article>
               ))}
@@ -298,7 +296,7 @@ function Index() {
           <section className="mt-20 grid gap-5 md:grid-cols-3">
             {[
               { title: "Instant matches", body: "AI reads your situation and returns the exact programs you likely qualify for." },
-              { title: "Real .gov links", body: "Every result points to the official government page - never a paid middleman." },
+              { title: "Apply right here", body: "Finish your whole application inside Claimly - no confusing government websites." },
               { title: "Save & come back", body: "Bookmark programs and pick up where you left off. Nothing shared, ever." },
             ].map((f, i) => (
               <div
@@ -314,7 +312,7 @@ function Index() {
         )}
       </main>
 
-      <ApplyModal
+      <ApplyWizard
         open={!!applyFor}
         program={applyFor}
         onClose={() => setApplyFor(null)}

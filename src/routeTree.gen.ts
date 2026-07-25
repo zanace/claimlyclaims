@@ -31,6 +31,7 @@ import { Route as BlogIndexRouteImport } from './routes/blog.index'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 import { Route as ApiMatchRouteImport } from './routes/api/match'
 import { Route as ApiChatRouteImport } from './routes/api/chat'
+import { Route as ApiApplyRouteImport } from './routes/api/apply'
 
 const TeamRoute = TeamRouteImport.update({
   id: '/team',
@@ -142,6 +143,11 @@ const ApiChatRoute = ApiChatRouteImport.update({
   path: '/api/chat',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiApplyRoute = ApiApplyRouteImport.update({
+  id: '/api/apply',
+  path: '/api/apply',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -162,6 +168,7 @@ export interface FileRoutesByFullPath {
   '/saved': typeof SavedRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/team': typeof TeamRoute
+  '/api/apply': typeof ApiApplyRoute
   '/api/chat': typeof ApiChatRoute
   '/api/match': typeof ApiMatchRoute
   '/blog/$slug': typeof BlogSlugRoute
@@ -186,6 +193,7 @@ export interface FileRoutesByTo {
   '/saved': typeof SavedRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/team': typeof TeamRoute
+  '/api/apply': typeof ApiApplyRoute
   '/api/chat': typeof ApiChatRoute
   '/api/match': typeof ApiMatchRoute
   '/blog/$slug': typeof BlogSlugRoute
@@ -211,6 +219,7 @@ export interface FileRoutesById {
   '/saved': typeof SavedRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/team': typeof TeamRoute
+  '/api/apply': typeof ApiApplyRoute
   '/api/chat': typeof ApiChatRoute
   '/api/match': typeof ApiMatchRoute
   '/blog/$slug': typeof BlogSlugRoute
@@ -237,6 +246,7 @@ export interface FileRouteTypes {
     | '/saved'
     | '/sitemap.xml'
     | '/team'
+    | '/api/apply'
     | '/api/chat'
     | '/api/match'
     | '/blog/$slug'
@@ -261,6 +271,7 @@ export interface FileRouteTypes {
     | '/saved'
     | '/sitemap.xml'
     | '/team'
+    | '/api/apply'
     | '/api/chat'
     | '/api/match'
     | '/blog/$slug'
@@ -285,6 +296,7 @@ export interface FileRouteTypes {
     | '/saved'
     | '/sitemap.xml'
     | '/team'
+    | '/api/apply'
     | '/api/chat'
     | '/api/match'
     | '/blog/$slug'
@@ -310,6 +322,7 @@ export interface RootRouteChildren {
   SavedRoute: typeof SavedRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   TeamRoute: typeof TeamRoute
+  ApiApplyRoute: typeof ApiApplyRoute
   ApiChatRoute: typeof ApiChatRoute
   ApiMatchRoute: typeof ApiMatchRoute
   BlogSlugRoute: typeof BlogSlugRoute
@@ -472,6 +485,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiChatRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/apply': {
+      id: '/api/apply'
+      path: '/api/apply'
+      fullPath: '/api/apply'
+      preLoaderRoute: typeof ApiApplyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -494,6 +514,7 @@ const rootRouteChildren: RootRouteChildren = {
   SavedRoute: SavedRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   TeamRoute: TeamRoute,
+  ApiApplyRoute: ApiApplyRoute,
   ApiChatRoute: ApiChatRoute,
   ApiMatchRoute: ApiMatchRoute,
   BlogSlugRoute: BlogSlugRoute,
