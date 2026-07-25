@@ -9,15 +9,13 @@ import { supabase } from "@/integrations/supabase/client";
 
 const NAV = [
   { to: "/", label: "Home" },
+  { to: "/dashboard", label: "Dashboard" },
   { to: "/how-it-works", label: "How it works" },
   { to: "/programs", label: "Programs" },
-  { to: "/money-you-could-get", label: "How much" },
-  { to: "/blog", label: "Resources" },
-  { to: "/eligibility", label: "Eligibility" },
-  { to: "/claims", label: "My claims" },
-  { to: "/documents", label: "Documents" },
+  { to: "/saved", label: "Saved" },
   { to: "/chat", label: "Assistant" },
-  { to: "/team", label: "Team" },
+  { to: "/about", label: "About" },
+  { to: "/privacy", label: "Privacy" },
 ] as const;
 
 export function SiteHeader() {

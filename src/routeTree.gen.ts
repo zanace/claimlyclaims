@@ -11,20 +11,25 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as TeamRouteImport } from './routes/team'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as SavedRouteImport } from './routes/saved'
 import { Route as ProgramsRouteImport } from './routes/programs'
 import { Route as ProfileRouteImport } from './routes/profile'
+import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as MoneyYouCouldGetRouteImport } from './routes/money-you-could-get'
 import { Route as LegalRouteImport } from './routes/legal'
 import { Route as HowItWorksRouteImport } from './routes/how-it-works'
 import { Route as EligibilityRouteImport } from './routes/eligibility'
 import { Route as DocumentsRouteImport } from './routes/documents'
+import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as ClaimsRouteImport } from './routes/claims'
 import { Route as ChatRouteImport } from './routes/chat'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AdminRouteImport } from './routes/admin'
+import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as BlogIndexRouteImport } from './routes/blog.index'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
+import { Route as ApiMatchRouteImport } from './routes/api/match'
 import { Route as ApiChatRouteImport } from './routes/api/chat'
 
 const TeamRoute = TeamRouteImport.update({
@@ -37,6 +42,11 @@ const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   path: '/sitemap.xml',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SavedRoute = SavedRouteImport.update({
+  id: '/saved',
+  path: '/saved',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ProgramsRoute = ProgramsRouteImport.update({
   id: '/programs',
   path: '/programs',
@@ -45,6 +55,11 @@ const ProgramsRoute = ProgramsRouteImport.update({
 const ProfileRoute = ProfileRouteImport.update({
   id: '/profile',
   path: '/profile',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrivacyRoute = PrivacyRouteImport.update({
+  id: '/privacy',
+  path: '/privacy',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MoneyYouCouldGetRoute = MoneyYouCouldGetRouteImport.update({
@@ -72,6 +87,11 @@ const DocumentsRoute = DocumentsRouteImport.update({
   path: '/documents',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DashboardRoute = DashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ClaimsRoute = ClaimsRouteImport.update({
   id: '/claims',
   path: '/claims',
@@ -92,6 +112,11 @@ const AdminRoute = AdminRouteImport.update({
   path: '/admin',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AboutRoute = AboutRouteImport.update({
+  id: '/about',
+  path: '/about',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -107,6 +132,11 @@ const BlogSlugRoute = BlogSlugRouteImport.update({
   path: '/blog/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiMatchRoute = ApiMatchRouteImport.update({
+  id: '/api/match',
+  path: '/api/match',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiChatRoute = ApiChatRouteImport.update({
   id: '/api/chat',
   path: '/api/chat',
@@ -115,59 +145,74 @@ const ApiChatRoute = ApiChatRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
   '/admin': typeof AdminRoute
   '/auth': typeof AuthRoute
   '/chat': typeof ChatRoute
   '/claims': typeof ClaimsRoute
+  '/dashboard': typeof DashboardRoute
   '/documents': typeof DocumentsRoute
   '/eligibility': typeof EligibilityRoute
   '/how-it-works': typeof HowItWorksRoute
   '/legal': typeof LegalRoute
   '/money-you-could-get': typeof MoneyYouCouldGetRoute
+  '/privacy': typeof PrivacyRoute
   '/profile': typeof ProfileRoute
   '/programs': typeof ProgramsRoute
+  '/saved': typeof SavedRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/team': typeof TeamRoute
   '/api/chat': typeof ApiChatRoute
+  '/api/match': typeof ApiMatchRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/blog/': typeof BlogIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
   '/admin': typeof AdminRoute
   '/auth': typeof AuthRoute
   '/chat': typeof ChatRoute
   '/claims': typeof ClaimsRoute
+  '/dashboard': typeof DashboardRoute
   '/documents': typeof DocumentsRoute
   '/eligibility': typeof EligibilityRoute
   '/how-it-works': typeof HowItWorksRoute
   '/legal': typeof LegalRoute
   '/money-you-could-get': typeof MoneyYouCouldGetRoute
+  '/privacy': typeof PrivacyRoute
   '/profile': typeof ProfileRoute
   '/programs': typeof ProgramsRoute
+  '/saved': typeof SavedRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/team': typeof TeamRoute
   '/api/chat': typeof ApiChatRoute
+  '/api/match': typeof ApiMatchRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/blog': typeof BlogIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
   '/admin': typeof AdminRoute
   '/auth': typeof AuthRoute
   '/chat': typeof ChatRoute
   '/claims': typeof ClaimsRoute
+  '/dashboard': typeof DashboardRoute
   '/documents': typeof DocumentsRoute
   '/eligibility': typeof EligibilityRoute
   '/how-it-works': typeof HowItWorksRoute
   '/legal': typeof LegalRoute
   '/money-you-could-get': typeof MoneyYouCouldGetRoute
+  '/privacy': typeof PrivacyRoute
   '/profile': typeof ProfileRoute
   '/programs': typeof ProgramsRoute
+  '/saved': typeof SavedRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/team': typeof TeamRoute
   '/api/chat': typeof ApiChatRoute
+  '/api/match': typeof ApiMatchRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/blog/': typeof BlogIndexRoute
 }
@@ -175,78 +220,98 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/about'
     | '/admin'
     | '/auth'
     | '/chat'
     | '/claims'
+    | '/dashboard'
     | '/documents'
     | '/eligibility'
     | '/how-it-works'
     | '/legal'
     | '/money-you-could-get'
+    | '/privacy'
     | '/profile'
     | '/programs'
+    | '/saved'
     | '/sitemap.xml'
     | '/team'
     | '/api/chat'
+    | '/api/match'
     | '/blog/$slug'
     | '/blog/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/about'
     | '/admin'
     | '/auth'
     | '/chat'
     | '/claims'
+    | '/dashboard'
     | '/documents'
     | '/eligibility'
     | '/how-it-works'
     | '/legal'
     | '/money-you-could-get'
+    | '/privacy'
     | '/profile'
     | '/programs'
+    | '/saved'
     | '/sitemap.xml'
     | '/team'
     | '/api/chat'
+    | '/api/match'
     | '/blog/$slug'
     | '/blog'
   id:
     | '__root__'
     | '/'
+    | '/about'
     | '/admin'
     | '/auth'
     | '/chat'
     | '/claims'
+    | '/dashboard'
     | '/documents'
     | '/eligibility'
     | '/how-it-works'
     | '/legal'
     | '/money-you-could-get'
+    | '/privacy'
     | '/profile'
     | '/programs'
+    | '/saved'
     | '/sitemap.xml'
     | '/team'
     | '/api/chat'
+    | '/api/match'
     | '/blog/$slug'
     | '/blog/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AboutRoute: typeof AboutRoute
   AdminRoute: typeof AdminRoute
   AuthRoute: typeof AuthRoute
   ChatRoute: typeof ChatRoute
   ClaimsRoute: typeof ClaimsRoute
+  DashboardRoute: typeof DashboardRoute
   DocumentsRoute: typeof DocumentsRoute
   EligibilityRoute: typeof EligibilityRoute
   HowItWorksRoute: typeof HowItWorksRoute
   LegalRoute: typeof LegalRoute
   MoneyYouCouldGetRoute: typeof MoneyYouCouldGetRoute
+  PrivacyRoute: typeof PrivacyRoute
   ProfileRoute: typeof ProfileRoute
   ProgramsRoute: typeof ProgramsRoute
+  SavedRoute: typeof SavedRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   TeamRoute: typeof TeamRoute
   ApiChatRoute: typeof ApiChatRoute
+  ApiMatchRoute: typeof ApiMatchRoute
   BlogSlugRoute: typeof BlogSlugRoute
   BlogIndexRoute: typeof BlogIndexRoute
 }
@@ -267,6 +332,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SitemapDotxmlRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/saved': {
+      id: '/saved'
+      path: '/saved'
+      fullPath: '/saved'
+      preLoaderRoute: typeof SavedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/programs': {
       id: '/programs'
       path: '/programs'
@@ -279,6 +351,13 @@ declare module '@tanstack/react-router' {
       path: '/profile'
       fullPath: '/profile'
       preLoaderRoute: typeof ProfileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/privacy': {
+      id: '/privacy'
+      path: '/privacy'
+      fullPath: '/privacy'
+      preLoaderRoute: typeof PrivacyRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/money-you-could-get': {
@@ -316,6 +395,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DocumentsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/dashboard': {
+      id: '/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof DashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/claims': {
       id: '/claims'
       path: '/claims'
@@ -344,6 +430,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/about': {
+      id: '/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -365,6 +458,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BlogSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/match': {
+      id: '/api/match'
+      path: '/api/match'
+      fullPath: '/api/match'
+      preLoaderRoute: typeof ApiMatchRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/chat': {
       id: '/api/chat'
       path: '/api/chat'
@@ -377,20 +477,25 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AboutRoute: AboutRoute,
   AdminRoute: AdminRoute,
   AuthRoute: AuthRoute,
   ChatRoute: ChatRoute,
   ClaimsRoute: ClaimsRoute,
+  DashboardRoute: DashboardRoute,
   DocumentsRoute: DocumentsRoute,
   EligibilityRoute: EligibilityRoute,
   HowItWorksRoute: HowItWorksRoute,
   LegalRoute: LegalRoute,
   MoneyYouCouldGetRoute: MoneyYouCouldGetRoute,
+  PrivacyRoute: PrivacyRoute,
   ProfileRoute: ProfileRoute,
   ProgramsRoute: ProgramsRoute,
+  SavedRoute: SavedRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   TeamRoute: TeamRoute,
   ApiChatRoute: ApiChatRoute,
+  ApiMatchRoute: ApiMatchRoute,
   BlogSlugRoute: BlogSlugRoute,
   BlogIndexRoute: BlogIndexRoute,
 }
