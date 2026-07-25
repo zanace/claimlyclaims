@@ -62,6 +62,36 @@ export type Database = {
         }
         Relationships: []
       }
+      document_uploads: {
+        Row: {
+          created_at: string
+          file_name: string | null
+          id: string
+          item: string
+          mime_type: string | null
+          path: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          file_name?: string | null
+          id?: string
+          item: string
+          mime_type?: string | null
+          path: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          file_name?: string | null
+          id?: string
+          item?: string
+          mime_type?: string | null
+          path?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           created_at: string
