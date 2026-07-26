@@ -795,7 +795,7 @@ function SuccessStage({
         </svg>
       </div>
       <h3 className="mt-5 text-2xl font-semibold tracking-tight text-foreground">
-        Your {program.name} application is submitted
+        Your {program.name} application is ready
       </h3>
       {review?.monthlyBenefit && (
         <p className="mt-2 text-base font-medium text-primary">
@@ -803,9 +803,9 @@ function SuccessStage({
         </p>
       )}
       <p className="mx-auto mt-4 max-w-md text-base leading-relaxed text-muted-foreground">
-        This is a demo submission. In the production version of Claimly, this step would
-        securely submit your completed application on your behalf, after your review and
-        explicit approval - without you ever leaving Claimly.
+        Your answers are filled into a completed application. Download it, then use the
+        step-by-step instructions for your state to hand it in to the agency that runs this
+        program.
       </p>
       <p className="mx-auto mt-3 max-w-md text-sm text-muted-foreground">
         Claimly auto-filled {autoFilled} fields and saved you about {minutes} minutes. Your next
@@ -827,12 +827,23 @@ function SuccessStage({
           Opens a print-ready copy. Choose "Save as PDF" to keep it or hand it in.
         </p>
         <button
+          onClick={() => setShowGuide(true)}
+          className="inline-flex items-center justify-center gap-2 rounded-2xl border border-border px-7 py-3.5 text-base font-semibold transition hover:border-primary"
+        >
+          <ListChecks className="size-4" /> How to submit it in my state
+        </button>
+        <button
           onClick={onDone}
           className="inline-flex items-center justify-center gap-2 rounded-2xl bg-foreground px-7 py-3.5 text-base font-semibold text-background transition hover:opacity-90"
         >
           <Check className="size-4" /> Done
         </button>
       </div>
+      <OfficialGuide
+        program={{ id: program.id, name: program.name }}
+        open={showGuide}
+        onClose={() => setShowGuide(false)}
+      />
     </div>
   );
 }
