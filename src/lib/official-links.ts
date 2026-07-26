@@ -51,3 +51,49 @@ export const OFFICIAL_LINKS: OfficialLink[] = [
 export const OFFICIAL_LINKS_PROMPT = OFFICIAL_LINKS.map(
   (l) => `- ${l.label}: ${l.url} - ${l.note}`,
 ).join("\n");
+
+// ---- Program -> official application source -------------------------------
+// Maps a program name/id to the real government page where the application
+// lives, plus the documents that page asks for.
+export type OfficialSource = {
+  label: string;
+  url: string;
+  docs: string[];
+};
+
+const PROGRAM_SOURCES: Array<{ match: RegExp; source: OfficialSource }> = [
+  { match: /\bsnap\b|food stamp|ebt/i, source: { label: "USDA SNAP state application directory", url: "https://www.fns.usda.gov/snap/state-directory", docs: ["Photo ID", "Proof of income (recent pay stubs)", "Proof of address (utility bill or lease)", "Social Security numbers for household members"] } },
+  { match: /\bwic\b/i, source: { label: "WIC state agency directory", url: "https://www.fns.usda.gov/wic/contacts", docs: ["Photo ID", "Proof of address", "Proof of income", "Proof of pregnancy or child's birth certificate"] } },
+  { match: /medicaid|chip\b|children's health/i, source: { label: "Medicaid & CHIP state offices", url: "https://www.medicaid.gov/about-us/where-can-people-get-help-medicaid-chip/index.html", docs: ["Photo ID", "Proof of income", "Proof of citizenship or immigration status", "Household member SSNs"] } },
+  { match: /marketplace|affordable care|premium tax credit|health insurance/i, source: { label: "HealthCare.gov application", url: "https://www.healthcare.gov/", docs: ["Household income estimate for the year", "SSNs or document numbers", "Current policy numbers if insured", "Form 1095-A if you had marketplace coverage"] } },
+  { match: /medicare|extra help|part d/i, source: { label: "Medicare Extra Help (SSA)", url: "https://www.ssa.gov/medicare/part-d-extra-help", docs: ["Medicare card", "Bank statements", "Proof of income and resources"] } },
+  { match: /earned income|eitc/i, source: { label: "IRS EITC (claimed on Form 1040 + Schedule EIC)", url: "https://www.irs.gov/credits-deductions/individuals/earned-income-tax-credit-eitc", docs: ["W-2s and 1099s", "Children's SSNs and birth dates", "Last year's return if you have it"] } },
+  { match: /child tax credit|schedule 8812/i, source: { label: "IRS Child Tax Credit (Form 1040 + Schedule 8812)", url: "https://www.irs.gov/credits-deductions/individuals/child-tax-credit", docs: ["Children's SSNs", "W-2s and 1099s", "Proof children lived with you (school or medical records)"] } },
+  { match: /child (and )?dependent care/i, source: { label: "IRS Child & Dependent Care Credit (Form 2441)", url: "https://www.irs.gov/credits-deductions/individuals/child-and-dependent-care-credit-information", docs: ["Care provider name, address, and EIN/SSN", "Receipts for care paid", "W-2s"] } },
+  { match: /education credit|american opportunity|lifetime learning|1098-t/i, source: { label: "IRS education credits (Form 8863)", url: "https://www.irs.gov/credits-deductions/individuals/education-credits-aotc-llc", docs: ["Form 1098-T from the school", "Receipts for books and supplies"] } },
+  { match: /fafsa|pell|student aid|college/i, source: { label: "Federal Student Aid (FAFSA)", url: "https://studentaid.gov/h/apply-for-aid/fafsa", docs: ["FSA ID", "Last year's tax return", "Bank and investment records", "Social Security number"] } },
+  { match: /liheap|energy|heating|cooling|utility|water assistance|lihwap/i, source: { label: "LIHEAP energy assistance by state", url: "https://www.acf.hhs.gov/ocs/programs/liheap/consumer-info", docs: ["Recent utility bill or shutoff notice", "Photo ID", "Proof of income", "Proof of address"] } },
+  { match: /housing|rent|hud|voucher|section 8|homeless|eviction|weatheriz|home repair/i, source: { label: "HUD rental assistance & local PHA finder", url: "https://www.hud.gov/helping-americans/public-indian-housing", docs: ["Photo ID for each adult", "Birth certificates and SSNs", "Proof of income", "Current lease or eviction notice"] } },
+  { match: /tanf|cash assistance|welfare|emergency cash/i, source: { label: "TANF cash assistance state contacts", url: "https://www.acf.hhs.gov/ofa/map/about/help-families", docs: ["Photo ID", "Proof of income", "Proof of address", "Birth certificates for children"] } },
+  { match: /\bssi\b|\bssdi\b|social security|disability|retirement/i, source: { label: "Social Security & SSI applications", url: "https://www.ssa.gov/apply", docs: ["Birth certificate", "Social Security number", "Medical records and doctor contacts", "W-2s or self-employment tax return"] } },
+  { match: /veteran|\bva\b|gi bill|military/i, source: { label: "VA benefits applications", url: "https://www.va.gov/", docs: ["DD-214 discharge papers", "Medical records", "Dependent birth/marriage certificates"] } },
+  { match: /child care|ccdf|head start|pre-?k/i, source: { label: "Child care assistance by state (CCDF)", url: "https://childcare.gov/state-resources", docs: ["Photo ID", "Proof of income", "Proof of work/school schedule", "Child's birth certificate and immunizations"] } },
+  { match: /lifeline|broadband|internet|phone/i, source: { label: "Lifeline phone & internet discount", url: "https://www.lifelinesupport.org/", docs: ["Photo ID", "Proof of program participation (SNAP/Medicaid letter) or income"] } },
+  { match: /unclaimed|savings bond|escheat/i, source: { label: "Official state unclaimed property directory", url: "https://unclaimed.org/", docs: ["Photo ID", "Proof of past addresses", "Any old account or policy numbers"] } },
+  { match: /disaster|fema|hurricane|flood|wildfire/i, source: { label: "DisasterAssistance.gov", url: "https://www.disasterassistance.gov/", docs: ["Photo ID", "Proof of address at the damaged home", "Insurance information", "Damage photos"] } },
+  { match: /free file|tax return|refund|amend|1040|tax credit|filing/i, source: { label: "IRS Free File (start your return)", url: "https://www.irs.gov/filing/irs-free-file-do-your-taxes-for-free", docs: ["W-2s and 1099s", "Last year's return", "SSNs for everyone on the return", "Bank routing and account number"] } },
+];
+
+const FALLBACK_SOURCE: OfficialSource = {
+  label: "Benefits.gov official program finder",
+  url: "https://www.benefits.gov/benefit-finder",
+  docs: ["Photo ID", "Proof of income", "Proof of address", "SSNs for household members"],
+};
+
+export function officialSourceFor(nameOrId: string): OfficialSource {
+  const hay = (nameOrId || "").toLowerCase();
+  for (const entry of PROGRAM_SOURCES) {
+    if (entry.match.test(hay)) return entry.source;
+  }
+  return FALLBACK_SOURCE;
+}
