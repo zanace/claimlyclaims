@@ -1,9 +1,10 @@
 import { ListChecks, FileText, ArrowRight, AlertTriangle } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { PROGRAMS } from "@/lib/programs";
 import { officialSourceFor } from "@/lib/official-links";
 import { OfficialGuide } from "@/components/official-guide";
 import { screenProgram, type Signals } from "@/lib/eligibility";
+import { logContradiction } from "@/lib/tracker";
 
 export type Confidence = "strong" | "maybe" | "not_fit";
 export type ApplyTarget = {
@@ -145,6 +146,27 @@ export function ChatApplyActions({
       return t;
     });
   }, [text, signals]);
+
+  // Log any case where the engine had to demote an AI recommendation.
+  useEffect(() => {
+    if (!signals) return;
+    const raw = programsMentioned(text);
+    for (const t of raw) {
+      const verdict = screenProgram(t.id, signals);
+      if (verdict.fit === "not_fit" && t.confidence !== "not_fit") {
+        logContradiction({
+          programId: t.id,
+          programName: t.name,
+          aiConfidence: t.confidence,
+          engineVerdict: "not_fit",
+          reason: verdict.reason,
+          signals,
+          messageExcerpt: text,
+        });
+      }
+    }
+  }, [text, signals]);
+
   const [guide, setGuide] = useState<ApplyTarget | null>(null);
   if (!targets.length) return null;
 

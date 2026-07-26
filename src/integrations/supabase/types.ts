@@ -62,6 +62,81 @@ export type Database = {
         }
         Relationships: []
       }
+      assistant_events: {
+        Row: {
+          ai_confidence: string | null
+          created_at: string
+          engine_verdict: string | null
+          event_type: string
+          id: string
+          message_excerpt: string | null
+          program_id: string | null
+          program_name: string | null
+          reason: string | null
+          route: string | null
+          signals: Json | null
+          user_id: string | null
+        }
+        Insert: {
+          ai_confidence?: string | null
+          created_at?: string
+          engine_verdict?: string | null
+          event_type: string
+          id?: string
+          message_excerpt?: string | null
+          program_id?: string | null
+          program_name?: string | null
+          reason?: string | null
+          route?: string | null
+          signals?: Json | null
+          user_id?: string | null
+        }
+        Update: {
+          ai_confidence?: string | null
+          created_at?: string
+          engine_verdict?: string | null
+          event_type?: string
+          id?: string
+          message_excerpt?: string | null
+          program_id?: string | null
+          program_name?: string | null
+          reason?: string | null
+          route?: string | null
+          signals?: Json | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      chat_answers: {
+        Row: {
+          content: string
+          created_at: string
+          id: string
+          role: string
+          route: string | null
+          signals: Json | null
+          user_id: string | null
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          id?: string
+          role: string
+          route?: string | null
+          signals?: Json | null
+          user_id?: string | null
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          id?: string
+          role?: string
+          route?: string | null
+          signals?: Json | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       document_uploads: {
         Row: {
           created_at: string

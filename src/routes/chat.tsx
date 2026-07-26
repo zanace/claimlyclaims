@@ -24,6 +24,7 @@ import { ApplyWizard } from "@/components/apply-wizard";
 import { ChatApplyActions, type ApplyTarget } from "@/components/chat-apply-actions";
 import { supabase } from "@/integrations/supabase/client";
 import { extractSignals, signalsFromInfo } from "@/lib/eligibility";
+import { logChatMessage } from "@/lib/tracker";
 
 const title = "Benefits assistant | Claimly";
 const description =
@@ -93,6 +94,7 @@ function ChatPage() {
     const value = text.trim();
     if (!value || busy) return;
     const details = [infoToPrompt(info), memorySummary()].filter(Boolean).join("\n\n");
+    logChatMessage({ role: "user", content: value, signals });
     void sendMessage({ text: value }, details ? { body: { userInfo: details } } : undefined);
     setInput("");
   };
