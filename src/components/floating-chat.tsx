@@ -7,6 +7,7 @@ import { ApplyWizard } from "@/components/apply-wizard";
 import { ChatApplyActions, type ApplyTarget } from "@/components/chat-apply-actions";
 import { extractSignals, signalsFromInfo } from "@/lib/eligibility";
 import { loadStoredInfo } from "@/components/info-panel";
+import { logChatMessage } from "@/lib/tracker";
 
 export function FloatingChat() {
   const [open, setOpen] = useState(false);
@@ -40,6 +41,7 @@ export function FloatingChat() {
     const value = input.trim();
     if (!value || busy) return;
     const memory = memorySummary();
+    logChatMessage({ role: "user", content: value, signals });
     void sendMessage({ text: value }, memory ? { body: { userInfo: memory } } : undefined);
     setInput("");
   };
