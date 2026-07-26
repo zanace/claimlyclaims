@@ -98,10 +98,20 @@ function Applications() {
     });
   }
 
-  function remove(id: string) {
+  async function remove(id: string) {
     const next = apps.filter((a) => a.id !== id);
     setApps(next);
     saveApplications(next);
+    if (user?.id) {
+      // Best-effort: match on either the record id (uuid rows created before we stored the CLM id)
+      // or on the CLM id embedded in the notes payload.
+      const { error } = await supabase
+        .from("applications")
+        .delete()
+        .eq("user_id", user.id)
+        .or(`id.eq.${id},notes.ilike.%"${id}"%`);
+      if (error) toast.error("Removed here, but couldn't sync deletion to your account.");
+    }
   }
 
   const cards = [
