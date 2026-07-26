@@ -116,7 +116,7 @@ function Applications() {
     { label: "Applications completed", value: metrics.applications, Icon: Layers },
     { label: "Fields auto-filled", value: metrics.fieldsAutoFilled, Icon: Sparkles },
     { label: "Documents reused", value: metrics.documentsReused, Icon: FileText },
-    { label: "Estimated hours saved", value: metrics.hoursSaved, Icon: Clock },
+    { label: "Estimated time saved", value: metrics.hoursSaved, Icon: Clock },
   ];
 
   return (
