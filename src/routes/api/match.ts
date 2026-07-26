@@ -1,17 +1,16 @@
 import { createOpenAI } from "@ai-sdk/openai";
 import { createFileRoute } from "@tanstack/react-router";
 import { generateText } from "ai";
+import { PROGRAMS } from "@/lib/programs";
 
 type MatchRequest = { situation?: string; zip?: string };
 
-const PROGRAM_IDS = [
-  "snap",
-  "wic",
-  "medicaid",
-  "chc",
-  "food_pantries",
-  "rental_assistance",
-] as const;
+const CATALOG = PROGRAMS.map(
+  (p) => `${p.id} | ${p.name} | ${p.category} | ${p.estimate} | ${p.who}`,
+).join("\n");
+const VALID_IDS = new Set(PROGRAMS.map((p) => p.id));
+
+type MatchResult = { id: string; why: string; fit: "strong" | "possible" | "worth_checking" };
 
 export const Route = createFileRoute("/api/match")({
   server: {
@@ -22,8 +21,19 @@ export const Route = createFileRoute("/api/match")({
         if (!key) return new Response("Missing OPENAI_API_KEY", { status: 500 });
 
         const openai = createOpenAI({ apiKey: key });
-        const prompt = `A user described their situation and ZIP code. Return STRICT JSON with a "results" array of exactly six objects, one per program id in this order: ${PROGRAM_IDS.join(", ")}.
-Each object: { "id": string, "why": string (1-2 sentences tailored to their situation, plain English, no jargon, no links), "fit": "strong" | "possible" | "worth_checking" }.
+        const prompt = `You are Claimly's matching engine. Pick the 5-8 programs from the catalog below that best fit this specific person. Personalize - do NOT just return the same food/health/housing basics every time. Mix categories: tax refunds, state credits, housing/utility help, unclaimed money, education, veterans, seniors, child care, disaster, etc., based on what fits.
+
+CRITICAL rules:
+- Screen by income. If the person clearly earns above ~250% Federal Poverty Level (roughly $75k+ for a household of 1-4, or $100k+ for any household), do NOT include SNAP, WIC, Medicaid, TANF, SSI, LIHEAP, Section 8, Lifeline, ACP, CHIP, or free lunch. Instead include tax credits (CTC, Saver's Credit, education/energy credits), unclaimed money, disaster aid, veterans, and other non-need-based programs.
+- Only mark "strong" when the person clearly meets the main rules (income, household, category). Use "possible" when likely but not confirmed. Use "worth_checking" for maybes.
+- Do NOT return anything the person clearly doesn't qualify for. If a category doesn't fit, skip it.
+- Prefer state-specific angles when the ZIP suggests a state (state EITC, state property-tax relief, state housing assistance).
+
+Return STRICT JSON: { "results": [ { "id": "<exact catalog id>", "why": "1-2 sentences, plain English, tailored to them, no links", "fit": "strong" | "possible" | "worth_checking" } ] }
+Only use ids from the catalog. Sort strongest fit first. 5-8 items total.
+
+Catalog (id | name | category | estimate | who):
+${CATALOG}
 
 User situation: ${situation || "(not provided)"}
 ZIP: ${zip || "(not provided)"}
@@ -34,18 +44,23 @@ Return ONLY the JSON, no code fences.`;
           const { text } = await generateText({
             model: openai("gpt-4o-mini"),
             prompt,
-            temperature: 0.6,
+            temperature: 0.5,
           });
           const cleaned = text.replace(/^```json\s*|\s*```$/g, "").trim();
-          const parsed = JSON.parse(cleaned);
-          return Response.json(parsed);
+          const parsed = JSON.parse(cleaned) as { results?: MatchResult[] };
+          const filtered = (parsed.results ?? [])
+            .filter((r) => r && VALID_IDS.has(r.id))
+            .slice(0, 8);
+          return Response.json({ results: filtered });
         } catch (err) {
           return Response.json({
-            results: PROGRAM_IDS.map((id) => ({
-              id,
-              why: "Based on what you shared, this program is worth checking in your area.",
-              fit: "worth_checking",
-            })),
+            results: ["eitc", "ctc", "snap", "medicaid", "liheap", "rental_assistance"]
+              .filter((id) => VALID_IDS.has(id))
+              .map((id) => ({
+                id,
+                why: "Based on what you shared, this program may be worth checking in your area.",
+                fit: "worth_checking" as const,
+              })),
             fallback: true,
           });
         }

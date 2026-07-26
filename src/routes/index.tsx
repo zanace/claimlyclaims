@@ -3,11 +3,14 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   ArrowRight, Bookmark, BookmarkCheck, Lock, Search, Sparkles,
   Utensils, Baby, HeartPulse, Stethoscope, HandHeart, Home as HomeIcon,
+  Receipt, DollarSign, GraduationCap, Shield, Users, Zap, AlertTriangle,
+  Wallet, Landmark,
 } from "lucide-react";
 import { useEffect, useMemo, useState, type ComponentType } from "react";
 import { toast } from "sonner";
 import { SiteHeader } from "@/components/site-header";
 import { ApplyWizard } from "@/components/apply-wizard";
+import { PROGRAMS, type Program, type ProgramCategory } from "@/lib/programs";
 
 const title = "Claimly - Find the help you're entitled to";
 const description =
@@ -36,14 +39,35 @@ type ProgramCard = {
   color: string;
 };
 
-const CARDS: ProgramCard[] = [
-  { id: "snap", name: "SNAP", tagline: "Food benefits", description: "Monthly grocery benefits (avg $190/person) loaded onto an EBT card.", learnMore: "https://www.fns.usda.gov/snap/recipient/eligibility", estimate: "4 minutes", Icon: Utensils, color: "from-primary/10 to-primary/5" },
-  { id: "wic", name: "WIC", tagline: "Moms & young kids", description: "Nutrition support, formula, and healthy food for pregnant women, new moms, and kids under 5.", learnMore: "https://www.fns.usda.gov/wic", estimate: "3 minutes", Icon: Baby, color: "from-primary/10 to-primary/5" },
-  { id: "medicaid", name: "Medicaid", tagline: "Free/low-cost health coverage", description: "Comprehensive health coverage for low-income adults, kids, pregnant women, and people with disabilities.", learnMore: "https://www.medicaid.gov/medicaid/eligibility-policy/index.html", estimate: "5 minutes", Icon: HeartPulse, color: "from-primary/10 to-primary/5" },
-  { id: "chc", name: "Community Health Centers", tagline: "Sliding-scale care", description: "See a doctor or dentist near you on a sliding fee scale, even without insurance.", learnMore: "https://findahealthcenter.hrsa.gov/", estimate: "2 minutes", Icon: Stethoscope, color: "from-primary/10 to-primary/5" },
-  { id: "food_pantries", name: "Food Pantries", tagline: "Free groceries this week", description: "Local pantries and food banks provide free groceries and hot meals - no application needed.", learnMore: "https://www.feedingamerica.org/find-your-local-foodbank", estimate: "1 minute", Icon: HandHeart, color: "from-primary/10 to-primary/5" },
-  { id: "rental_assistance", name: "Rental Assistance", tagline: "Rent & utility help", description: "Emergency rental help, HUD housing choice vouchers, and utility bill assistance in your area.", learnMore: "https://www.consumerfinance.gov/coronavirus/mortgage-and-housing-assistance/renter-protections/find-help-with-rent-and-utilities/", estimate: "5 minutes", Icon: HomeIcon, color: "from-primary/10 to-primary/5" },
-];
+const CATEGORY_ICON: Record<ProgramCategory, ComponentType<{ className?: string }>> = {
+  "Tax credits": Receipt,
+  "Cash assistance": DollarSign,
+  "Food": Utensils,
+  "Healthcare": HeartPulse,
+  "Housing & utilities": HomeIcon,
+  "Child care & family": Baby,
+  "Education & training": GraduationCap,
+  "Veterans & military": Shield,
+  "Seniors & disability": Users,
+  "Disaster & legal": Zap,
+  "Unclaimed money": Wallet,
+  "Grants for organizations": Landmark,
+};
+
+function programToCard(p: Program): ProgramCard {
+  return {
+    id: p.id,
+    name: p.name.replace(/\s*\([^)]*\)\s*/g, " ").trim(),
+    tagline: p.category,
+    description: p.summary,
+    learnMore: "",
+    estimate: p.estimate,
+    Icon: CATEGORY_ICON[p.category] ?? Sparkles,
+    color: "from-primary/10 to-primary/5",
+  };
+}
+
+const PROGRAM_BY_ID = new Map(PROGRAMS.map((p) => [p.id, p]));
 
 const SEARCH_STEPS = [
   "Understanding your situation...",
@@ -82,6 +106,12 @@ const HEADLINES: Array<{ pre: string; accent: string; post: string }> = [
 ];
 
 type Result = { id: string; why: string; fit: "strong" | "possible" | "worth_checking" };
+
+const FIT_META: Record<Result["fit"], { label: string; className: string }> = {
+  strong: { label: "Strong fit", className: "bg-primary/15 text-primary" },
+  possible: { label: "Possible fit", className: "bg-amber-500/15 text-amber-600 dark:text-amber-400" },
+  worth_checking: { label: "Worth checking", className: "bg-muted text-muted-foreground" },
+};
 
 function Index() {
   const [situation, setSituation] = useState("");
@@ -146,7 +176,13 @@ function Index() {
 
   const cardsWithReasons = useMemo(() => {
     if (!results) return [];
-    return CARDS.map((c) => ({ ...c, result: results.find((r) => r.id === c.id) }));
+    return results
+      .map((r) => {
+        const program = PROGRAM_BY_ID.get(r.id);
+        if (!program) return null;
+        return { ...programToCard(program), result: r };
+      })
+      .filter((x): x is ProgramCard & { result: Result } => !!x);
   }, [results]);
 
   return (
@@ -260,6 +296,13 @@ function Index() {
               </Link>
             </div>
 
+            {cardsWithReasons.length === 0 && (
+              <div className="rounded-3xl border border-border/70 bg-white/70 p-8 text-center dark:bg-card/60">
+                <p className="text-sm text-muted-foreground">
+                  We couldn't confidently match a program yet. Try the assistant for a full walkthrough.
+                </p>
+              </div>
+            )}
             <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
               {cardsWithReasons.map(({ Icon, color, result, ...c }, i) => (
                 <article
@@ -272,19 +315,27 @@ function Index() {
                     <div className="flex size-11 items-center justify-center rounded-2xl bg-primary/10 text-primary">
                       <Icon className="size-5" />
                     </div>
-                    <button
-                      onClick={() => toggleSave(c.id)}
-                      className="rounded-full border border-border/70 bg-white/80 p-2 text-muted-foreground transition hover:text-primary dark:bg-card/60"
-                      aria-label={saved.has(c.id) ? "Unsave" : "Save"}
-                    >
-                      {saved.has(c.id)
-                        ? <BookmarkCheck className="size-4 text-primary" />
-                        : <Bookmark className="size-4" />}
-                    </button>
+                    <div className="flex items-center gap-2">
+                      {result && (
+                        <span className={`rounded-full px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wide ${FIT_META[result.fit].className}`}>
+                          {FIT_META[result.fit].label}
+                        </span>
+                      )}
+                      <button
+                        onClick={() => toggleSave(c.id)}
+                        className="rounded-full border border-border/70 bg-white/80 p-2 text-muted-foreground transition hover:text-primary dark:bg-card/60"
+                        aria-label={saved.has(c.id) ? "Unsave" : "Save"}
+                      >
+                        {saved.has(c.id)
+                          ? <BookmarkCheck className="size-4 text-primary" />
+                          : <Bookmark className="size-4" />}
+                      </button>
+                    </div>
                   </div>
                   <h3 className="mt-5 text-xl font-semibold tracking-tight text-foreground">{c.name}</h3>
                   <p className="text-xs font-medium tracking-wide text-primary uppercase">{c.tagline}</p>
                   <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{c.description}</p>
+                  <p className="mt-2 text-xs font-medium text-foreground/70">Est. payout: {c.estimate}</p>
                   {result?.why && (
                     <div className="mt-4 rounded-2xl border border-primary/15 bg-primary/5 p-3">
                       <p className="text-xs font-semibold tracking-wide text-primary uppercase">Why for you</p>
@@ -292,12 +343,18 @@ function Index() {
                     </div>
                   )}
                   <div className="mt-5 flex items-center gap-3">
-                    <button
-                      onClick={() => setApplyFor(c as ProgramCard)}
-                      className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-full bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm transition hover:brightness-110"
-                    >
-                      Apply here <ArrowRight className="size-3.5" />
-                    </button>
+                    {result?.fit !== "worth_checking" ? (
+                      <button
+                        onClick={() => setApplyFor({ ...c, Icon, color })}
+                        className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-full bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm transition hover:brightness-110"
+                      >
+                        Apply here <ArrowRight className="size-3.5" />
+                      </button>
+                    ) : (
+                      <div className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-full border border-dashed border-border px-4 py-2.5 text-xs font-medium text-muted-foreground">
+                        <AlertTriangle className="size-3.5" /> Might not be a fit
+                      </div>
+                    )}
                     <Link
                       to="/chat"
                       className="inline-flex items-center gap-1.5 rounded-full border border-border bg-background px-4 py-2.5 text-sm font-medium text-foreground transition hover:bg-secondary"
