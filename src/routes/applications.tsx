@@ -7,6 +7,7 @@ import {
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { ApplyWizard } from "@/components/apply-wizard";
+import { openApplicationPdf } from "@/lib/application-pdf";
 import { labelFor } from "@/lib/applicant-profile";
 import {
   loadApplications, mergeIntoProfile, saveApplications, smartMetrics,
