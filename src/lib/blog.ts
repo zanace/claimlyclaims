@@ -36,13 +36,13 @@ export const ARTICLES: Article[] = [
       {
         paragraphs: [
           "The Earned Income Tax Credit is a refundable tax credit for people who work but don't earn a lot. Refundable is the important word: if the credit is bigger than the tax you owe, the difference comes back to you as a refund. You can owe nothing all year and still get money.",
-          "Every year the IRS estimates that roughly one in five eligible people don't claim it [VERIFY CURRENT FIGURE]. Not because they don't qualify - because they never filed, or they filed and skipped the form.",
+          "Every year the IRS estimates that roughly one in five eligible people don't claim it. Not because they don't qualify - because they never filed, or they filed and skipped the form.",
         ],
       },
       {
         heading: "Who it's for",
         paragraphs: [
-          "In broad strokes: you worked for pay during the year, your income falls under a limit that depends on your filing status and how many qualifying children you have, and your investment income is small. Workers without children can qualify too, though the credit is much smaller and the age rules are tighter [VERIFY].",
+          "In broad strokes: you worked for pay during the year, your income falls under a limit that depends on your filing status and how many qualifying children you have, and your investment income is small. Workers without children can qualify too, though the credit is much smaller and the age rules are tighter.",
           "Self-employment counts. Gig work counts. Cash work you reported counts. A part-time job you held for three months counts.",
         ],
       },
@@ -57,7 +57,7 @@ export const ARTICLES: Article[] = [
       {
         heading: "You can usually go back",
         paragraphs: [
-          "If you were eligible in an earlier year and never filed, you can generally still file a late return and claim the refund for up to three years from the original due date [VERIFY]. After that the money stays with the Treasury. This is the single most overlooked source of real cash for people who have had a few unstable years.",
+          "If you were eligible in an earlier year and never filed, you can generally still file a late return and claim the refund for up to three years from the original due date. After that the money stays with the Treasury. This is the single most overlooked source of real cash for people who have had a few unstable years.",
         ],
       },
       {
@@ -105,7 +105,7 @@ export const ARTICLES: Article[] = [
       {
         heading: "Never pay a finder up front",
         paragraphs: [
-          "You will get letters from firms offering to recover 'your' money for a percentage. You never need one. Claiming from the state is free and the forms are short. Most states also cap what a finder can charge [VERIFY]. If someone asks for a fee before you receive anything, walk away.",
+          "You will get letters from firms offering to recover 'your' money for a percentage. You never need one. Claiming from the state is free and the forms are short. Most states also cap what a finder can charge. If someone asks for a fee before you receive anything, walk away.",
         ],
       },
       {
@@ -140,7 +140,7 @@ export const ARTICLES: Article[] = [
       {
         heading: "Gross versus net",
         paragraphs: [
-          "Most households have to pass two tests: a gross income test and a net income test. Gross income is what you bring in before deductions. Net income is what's left after the program's allowed deductions. Households with an elderly or disabled member often only have to pass the net test [VERIFY].",
+          "Most households have to pass two tests: a gross income test and a net income test. Gross income is what you bring in before deductions. Net income is what's left after the program's allowed deductions. Households with an elderly or disabled member often only have to pass the net test.",
           "That distinction matters, because the deductions are substantial.",
         ],
       },
@@ -153,7 +153,7 @@ export const ARTICLES: Article[] = [
       {
         heading: "What usually doesn't",
         paragraphs: [
-          "Federal tax refunds, including the EITC. Most student financial aid used for tuition and fees. Loans you have to repay. Reimbursements for actual expenses. Non-recurring lump sums are often treated as an asset rather than income [VERIFY]. Money paid directly to a third party on your behalf is generally excluded.",
+          "Federal tax refunds, including the EITC. Most student financial aid used for tuition and fees. Loans you have to repay. Reimbursements for actual expenses. Non-recurring lump sums are often treated as an asset rather than income. Money paid directly to a third party on your behalf is generally excluded.",
         ],
       },
       {
@@ -172,7 +172,7 @@ export const ARTICLES: Article[] = [
       {
         heading: "When in doubt, apply",
         paragraphs: [
-          "States run their own versions with their own limits, and several use broad-based categorical eligibility that raises or removes the asset test [VERIFY]. The application is free, a denial costs you nothing, and the worst realistic outcome is a letter. Estimates like ours are a starting point - the agency makes the decision.",
+          "States run their own versions with their own limits, and several use broad-based categorical eligibility that raises or removes the asset test. The application is free, a denial costs you nothing, and the worst realistic outcome is a letter. Estimates like ours are a starting point - the agency makes the decision.",
         ],
       },
     ],
@@ -194,7 +194,7 @@ export const ARTICLES: Article[] = [
       {
         heading: "1. The Child Tax Credit",
         paragraphs: [
-          "A per-child credit for qualifying children under the age limit, with a portion refundable for families whose tax bill is already low [VERIFY CURRENT FIGURE]. You have to file to get it, even if your income is below the filing requirement - which is exactly the group that most often skips filing.",
+          "A per-child credit for qualifying children under the age limit, with a portion refundable for families whose tax bill is already low. You have to file to get it, even if your income is below the filing requirement - which is exactly the group that most often skips filing.",
         ],
       },
       {
@@ -212,7 +212,7 @@ export const ARTICLES: Article[] = [
       {
         heading: "4. Education credits",
         paragraphs: [
-          "The American Opportunity Credit covers undergraduate costs for a limited number of years and is partly refundable; the Lifetime Learning Credit is smaller but covers a wider range of coursework, including a single class to keep a job skill current [VERIFY]. Parents paying tuition for a dependent claim it on their own return.",
+          "The American Opportunity Credit covers undergraduate costs for a limited number of years and is partly refundable; the Lifetime Learning Credit is smaller but covers a wider range of coursework, including a single class to keep a job skill current. Parents paying tuition for a dependent claim it on their own return.",
         ],
       },
       {
@@ -246,7 +246,7 @@ export const ARTICLES: Article[] = [
       {
         heading: "The three-year window",
         paragraphs: [
-          "You generally have three years from the original due date to file and still receive a refund [VERIFY]. After that the claim expires and the money stays with the Treasury. Two things follow from this: check your oldest unfiled year first, and don't wait for a quiet weekend.",
+          "You generally have three years from the original due date to file and still receive a refund. After that the claim expires and the money stays with the Treasury. Two things follow from this: check your oldest unfiled year first, and don't wait for a quiet weekend.",
           "If you owed tax rather than being owed a refund, there's no deadline to file - and filing late is still much better than not filing, because penalties and interest keep running.",
         ],
       },
@@ -277,7 +277,7 @@ export const ARTICLES: Article[] = [
       {
         heading: "Free help exists",
         paragraphs: [
-          "IRS-sponsored volunteer tax programs prepare returns at no cost for households under an income threshold, and Low Income Taxpayer Clinics handle disputes and back-year messes [VERIFY]. You don't have to pay a percentage of your refund to anyone.",
+          "IRS-sponsored volunteer tax programs prepare returns at no cost for households under an income threshold, and Low Income Taxpayer Clinics handle disputes and back-year messes. You don't have to pay a percentage of your refund to anyone.",
         ],
       },
     ],
