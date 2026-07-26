@@ -17,9 +17,11 @@ const STOP = new Set([
   "food", "cash", "housing", "health", "care", "tax", "free", "low", "income",
 ]);
 
+type AcronymTarget = Omit<ApplyTarget, "confidence">;
+
 /** Acronyms (SNAP, WIC, LIHEAP...) are assigned to the single shortest-named program that owns them. */
-const ACRONYMS: Map<string, ApplyTarget> = (() => {
-  const map = new Map<string, { name: string; target: ApplyTarget }>();
+const ACRONYMS: Map<string, AcronymTarget> = (() => {
+  const map = new Map<string, { name: string; target: AcronymTarget }>();
   for (const p of PROGRAMS) {
     const tokens = p.name.match(/\b[A-Z][A-Za-z0-9-]{1,}\b/g) ?? [];
     for (const raw of tokens) {
