@@ -60,6 +60,7 @@ export function ApplyWizard({
   const [stage, setStage] = useState<Stage>("intro");
   const [answers, setAnswers] = useState<Answers>({});
   const [profileSnapshot, setProfileSnapshot] = useState<Answers>({});
+  const [submitted, setSubmitted] = useState<SavedApplication | null>(null);
   const [persistToProfile, setPersistToProfile] = useState(true);
   const [changedIds, setChangedIds] = useState<string[]>([]);
   const [questions, setQuestions] = useState<WizardQuestion[]>([]);
