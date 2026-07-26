@@ -1,7 +1,7 @@
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
 import { useEffect, useRef, useState } from "react";
-import { Menu, X, ChevronDown, Compass, LayoutDashboard, Building2 } from "lucide-react";
+import { Menu, X, ChevronDown, Compass, LayoutDashboard, Building2, Settings as SettingsIcon } from "lucide-react";
 import logo from "@/assets/logo.png";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { useAuth } from "@/lib/use-auth";
@@ -31,7 +31,6 @@ const GROUPS: NavGroup[] = [
       { to: "/applications", label: "Applications", hint: "Status and history" },
       { to: "/vault", label: "Vault", hint: "Secure documents" },
       { to: "/saved", label: "Saved", hint: "Bookmarked programs" },
-      { to: "/settings", label: "Settings", hint: "Smart Profile info" },
     ],
   },
   {
@@ -175,6 +174,14 @@ export function SiteHeader() {
             </span>
           </button>
           <ThemeToggle />
+          <Link
+            to="/settings"
+            aria-label="Settings"
+            title="Settings"
+            className="rounded-full border border-border bg-secondary p-2 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground [&.active]:text-primary"
+          >
+            <SettingsIcon className="size-4" />
+          </Link>
           {user ? (
             <>
               <Link
