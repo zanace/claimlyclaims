@@ -11,6 +11,9 @@ import {
 import {
   minutesSaved, newApplicationId, recordApplication, SMART_FIELDS,
 } from "@/lib/smart-profile";
+import type { SavedApplication } from "@/lib/smart-profile";
+import { openApplicationPdf } from "@/lib/application-pdf";
+import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/use-auth";
 
@@ -198,7 +201,7 @@ export function ApplyWizard({
   const saved = minutesSaved(autoFilled);
 
   const submit = () => {
-    recordApplication({
+    const record: SavedApplication = {
       id: newApplicationId(),
       programId: program.id,
       programName: program.name,
@@ -209,7 +212,9 @@ export function ApplyWizard({
       autoFilled,
       asked: total,
       documentsReused: docsReused,
-    });
+    };
+    recordApplication(record);
+    setSubmitted(record);
     setStage("success");
   };
 
@@ -315,7 +320,14 @@ export function ApplyWizard({
           )}
 
           {stage === "success" && (
-            <SuccessStage program={program} review={review} autoFilled={autoFilled} minutes={saved} onDone={onClose} />
+            <SuccessStage
+              program={program}
+              review={review}
+              autoFilled={autoFilled}
+              minutes={saved}
+              record={submitted}
+              onDone={onClose}
+            />
           )}
         </div>
       </div>
@@ -765,12 +777,13 @@ function PreviewStage({
 }
 
 function SuccessStage({
-  program, review, autoFilled, minutes, onDone,
+  program, review, autoFilled, minutes, record, onDone,
 }: {
   program: Program;
   review: Review | null;
   autoFilled: number;
   minutes: number;
+  record: SavedApplication | null;
   onDone: () => void;
 }) {
   return (
