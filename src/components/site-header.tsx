@@ -174,6 +174,14 @@ export function SiteHeader() {
             </span>
           </button>
           <ThemeToggle />
+          <Link
+            to="/settings"
+            aria-label="Settings"
+            title="Settings"
+            className="rounded-full border border-border bg-secondary p-2 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground [&.active]:text-primary"
+          >
+            <SettingsIcon className="size-4" />
+          </Link>
           {user ? (
             <>
               <Link
