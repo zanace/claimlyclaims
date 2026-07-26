@@ -2,7 +2,7 @@ import { useChat } from "@ai-sdk/react";
 import { memorySummary } from "@/lib/smart-profile";
 import { createFileRoute } from "@tanstack/react-router";
 import { DefaultChatTransport } from "ai";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
 import logo from "@/assets/logo.png";
 import {
@@ -24,7 +24,6 @@ import { ApplyWizard } from "@/components/apply-wizard";
 import { ChatApplyActions, type ApplyTarget } from "@/components/chat-apply-actions";
 import { supabase } from "@/integrations/supabase/client";
 import { extractSignals, signalsFromInfo } from "@/lib/eligibility";
-import { useMemo } from "react";
 
 const title = "Benefits assistant | Claimly";
 const description =
