@@ -36,7 +36,6 @@ import { Route as ApiMatchRouteImport } from './routes/api/match'
 import { Route as ApiGuideRouteImport } from './routes/api/guide'
 import { Route as ApiChatRouteImport } from './routes/api/chat'
 import { Route as ApiApplyRouteImport } from './routes/api/apply'
-import { Route as AdminTrackerRouteImport } from './routes/admin.tracker'
 
 const VaultRoute = VaultRouteImport.update({
   id: '/vault',
@@ -173,16 +172,11 @@ const ApiApplyRoute = ApiApplyRouteImport.update({
   path: '/api/apply',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AdminTrackerRoute = AdminTrackerRouteImport.update({
-  id: '/tracker',
-  path: '/tracker',
-  getParentRoute: () => AdminRoute,
-} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/admin': typeof AdminRouteWithChildren
+  '/admin': typeof AdminRoute
   '/applications': typeof ApplicationsRoute
   '/auth': typeof AuthRoute
   '/chat': typeof ChatRoute
@@ -201,7 +195,6 @@ export interface FileRoutesByFullPath {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/team': typeof TeamRoute
   '/vault': typeof VaultRoute
-  '/admin/tracker': typeof AdminTrackerRoute
   '/api/apply': typeof ApiApplyRoute
   '/api/chat': typeof ApiChatRoute
   '/api/guide': typeof ApiGuideRoute
@@ -212,7 +205,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/admin': typeof AdminRouteWithChildren
+  '/admin': typeof AdminRoute
   '/applications': typeof ApplicationsRoute
   '/auth': typeof AuthRoute
   '/chat': typeof ChatRoute
@@ -231,7 +224,6 @@ export interface FileRoutesByTo {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/team': typeof TeamRoute
   '/vault': typeof VaultRoute
-  '/admin/tracker': typeof AdminTrackerRoute
   '/api/apply': typeof ApiApplyRoute
   '/api/chat': typeof ApiChatRoute
   '/api/guide': typeof ApiGuideRoute
@@ -243,7 +235,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/admin': typeof AdminRouteWithChildren
+  '/admin': typeof AdminRoute
   '/applications': typeof ApplicationsRoute
   '/auth': typeof AuthRoute
   '/chat': typeof ChatRoute
@@ -262,7 +254,6 @@ export interface FileRoutesById {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/team': typeof TeamRoute
   '/vault': typeof VaultRoute
-  '/admin/tracker': typeof AdminTrackerRoute
   '/api/apply': typeof ApiApplyRoute
   '/api/chat': typeof ApiChatRoute
   '/api/guide': typeof ApiGuideRoute
@@ -294,7 +285,6 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/team'
     | '/vault'
-    | '/admin/tracker'
     | '/api/apply'
     | '/api/chat'
     | '/api/guide'
@@ -324,7 +314,6 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/team'
     | '/vault'
-    | '/admin/tracker'
     | '/api/apply'
     | '/api/chat'
     | '/api/guide'
@@ -354,7 +343,6 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/team'
     | '/vault'
-    | '/admin/tracker'
     | '/api/apply'
     | '/api/chat'
     | '/api/guide'
@@ -366,7 +354,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
-  AdminRoute: typeof AdminRouteWithChildren
+  AdminRoute: typeof AdminRoute
   ApplicationsRoute: typeof ApplicationsRoute
   AuthRoute: typeof AuthRoute
   ChatRoute: typeof ChatRoute
@@ -584,30 +572,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiApplyRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/admin/tracker': {
-      id: '/admin/tracker'
-      path: '/tracker'
-      fullPath: '/admin/tracker'
-      preLoaderRoute: typeof AdminTrackerRouteImport
-      parentRoute: typeof AdminRoute
-    }
   }
 }
-
-interface AdminRouteChildren {
-  AdminTrackerRoute: typeof AdminTrackerRoute
-}
-
-const AdminRouteChildren: AdminRouteChildren = {
-  AdminTrackerRoute: AdminTrackerRoute,
-}
-
-const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
-  AdminRoute: AdminRouteWithChildren,
+  AdminRoute: AdminRoute,
   ApplicationsRoute: ApplicationsRoute,
   AuthRoute: AuthRoute,
   ChatRoute: ChatRoute,
