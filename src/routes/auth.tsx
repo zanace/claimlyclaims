@@ -87,7 +87,7 @@ function AuthPage() {
   return (
     <div className="min-h-screen font-sans">
       <SiteHeader />
-      <main className="mx-auto flex max-w-md flex-col px-5 py-20">
+      <main className="mx-auto flex max-w-md flex-col items-center px-5 py-20 text-center">
         <h1 className="font-display text-4xl tracking-tight">
           {mode === "signin" ? "Log in" : "Create your account"}
         </h1>
@@ -109,7 +109,7 @@ function AuthPage() {
           <span className="h-px flex-1 bg-border" /> or <span className="h-px flex-1 bg-border" />
         </div>
 
-        <form onSubmit={onSubmit} className="space-y-4">
+        <form onSubmit={onSubmit} className="w-full space-y-4 text-left">
           {mode === "signup" && (
             <div className="space-y-2">
               <Label htmlFor="name">Full name</Label>
