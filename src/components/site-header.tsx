@@ -20,7 +20,6 @@ const GROUPS: NavGroup[] = [
       { to: "/how-it-works", label: "How it works", hint: "The 3-step process" },
       { to: "/programs", label: "Programs", hint: "150+ program directory" },
       { to: "/chat", label: "Assistant", hint: "Ask the AI anything" },
-      { to: "/blog", label: "Resources", hint: "Guides and articles" },
     ],
   },
   {
@@ -36,10 +35,11 @@ const GROUPS: NavGroup[] = [
     ],
   },
   {
-    id: "company",
-    label: "Company",
+    id: "about",
+    label: "About",
     icon: Building2,
     items: [
+      { to: "/blog", label: "Resources", hint: "Guides and articles" },
       { to: "/team", label: "Team", hint: "The people behind Claimly" },
       { to: "/about", label: "About", hint: "Our mission" },
       { to: "/privacy", label: "Privacy", hint: "How we handle data" },
