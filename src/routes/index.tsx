@@ -11,6 +11,7 @@ import { toast } from "sonner";
 import { SiteHeader } from "@/components/site-header";
 import { ApplyWizard } from "@/components/apply-wizard";
 import { PROGRAMS, type Program, type ProgramCategory } from "@/lib/programs";
+import { logChatMessage } from "@/lib/tracker";
 
 const title = "Claimly - Find the help you're entitled to";
 const description =
@@ -147,6 +148,10 @@ function Index() {
     if (!situation.trim()) return;
     setStatus("searching");
     setResults(null);
+    logChatMessage({
+      role: "user",
+      content: zip ? `${situation.trim()} [ZIP ${zip}]` : situation.trim(),
+    });
     try {
       const [data] = await Promise.all([
         fetch("/api/match", {
