@@ -326,8 +326,28 @@ function SettingsPage() {
             </ul>
           )}
         </section>
+
+        {/* Danger zone */}
+        <section className="mt-8 rounded-2xl border border-destructive/40 bg-card p-8">
+          <div className="flex items-center gap-2 text-sm font-semibold text-destructive">
+            <AlertTriangle className="size-4" /> Delete account
+          </div>
+          <p className="mt-1 max-w-xl text-sm text-muted-foreground">
+            This permanently deletes your account and everything tied to it: your profile,
+            application answers, saved programs, and uploaded documents. It cannot be undone.
+          </p>
+          <Button
+            type="button"
+            variant="destructive"
+            className="mt-6"
+            disabled={deleting}
+            onClick={handleDeleteAccount}
+          >
+            <Trash2 className="mr-2 size-4" />
+            {deleting ? "Deleting..." : "Delete account"}
+          </Button>
+        </section>
       </main>
-      <SiteFooter />
       <SiteFooter />
     </div>
   );
