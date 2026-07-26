@@ -1,16 +1,22 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import {
-  ArrowLeft, ArrowRight, Check, CheckCircle2, Clock, Lock, Pencil, ShieldCheck, X,
+  ArrowLeft, ArrowRight, Check, CheckCircle2, Clock, FileText, Lock, Pencil, Sparkles,
+  ShieldCheck, X,
 } from "lucide-react";
 import {
   labelFor, loadAnswers, saveAnswers,
   type Answers, type WizardQuestion,
 } from "@/lib/applicant-profile";
+import {
+  minutesSaved, newApplicationId, recordApplication, SMART_FIELDS,
+} from "@/lib/smart-profile";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/lib/use-auth";
 
 type Program = { id: string; name: string; estimate?: string };
 
-type Stage = "intro" | "questions" | "processing" | "preview" | "success";
+type Stage = "confirm" | "review-saved" | "intro" | "questions" | "processing" | "preview" | "success";
 
 type Review = {
   eligibility?: "likely" | "possible" | "unlikely";
@@ -21,6 +27,8 @@ type Review = {
   nextSteps?: string[];
 };
 
+type SavedDoc = { id: string; item: string; created_at: string };
+
 const PROCESSING_STEPS = [
   "Preparing your application...",
   "Filling in your personal information...",
@@ -28,6 +36,13 @@ const PROCESSING_STEPS = [
   "Reviewing your answers...",
   "Finalizing your application...",
 ];
+
+function daysAgoLabel(iso: string) {
+  const d = Math.floor((Date.now() - new Date(iso).getTime()) / 86400000);
+  if (d <= 0) return "today";
+  if (d === 1) return "yesterday";
+  return `${d} days ago`;
+}
 
 export function ApplyWizard({
   program,
@@ -38,8 +53,12 @@ export function ApplyWizard({
   open: boolean;
   onClose: () => void;
 }) {
+  const { user } = useAuth();
   const [stage, setStage] = useState<Stage>("intro");
   const [answers, setAnswers] = useState<Answers>({});
+  const [profileSnapshot, setProfileSnapshot] = useState<Answers>({});
+  const [persistToProfile, setPersistToProfile] = useState(true);
+  const [changedIds, setChangedIds] = useState<string[]>([]);
   const [questions, setQuestions] = useState<WizardQuestion[]>([]);
   const [intro, setIntro] = useState("");
   const [loadingPlan, setLoadingPlan] = useState(false);
@@ -47,22 +66,33 @@ export function ApplyWizard({
   const [draft, setDraft] = useState("");
   const [stepIdx, setStepIdx] = useState(0);
   const [review, setReview] = useState<Review | null>(null);
+  const [docs, setDocs] = useState<SavedDoc[]>([]);
+  const [docsReused, setDocsReused] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const known = useMemo(
     () => Object.entries(answers).filter(([, v]) => String(v ?? "").trim()),
     [answers],
   );
+  const autoFilled = useMemo(
+    () => SMART_FIELDS.filter((f) => String(answers[f.id] ?? "").trim()).length,
+    [answers],
+  );
 
   // Load remembered answers + ask the AI which questions still need asking.
   useEffect(() => {
     if (!open || !program) return;
-    setStage("intro");
     setQIdx(0);
     setDraft("");
     setReview(null);
+    setChangedIds([]);
+    setDocsReused(0);
+    setPersistToProfile(true);
     const saved = loadAnswers();
+    setProfileSnapshot(saved);
     setAnswers(saved);
+    const hasSaved = Object.values(saved).some((v) => String(v ?? "").trim());
+    setStage(hasSaved ? "confirm" : "intro");
     setLoadingPlan(true);
     fetch("/api/apply", {
       method: "POST",
@@ -77,6 +107,18 @@ export function ApplyWizard({
       .catch(() => setQuestions([]))
       .finally(() => setLoadingPlan(false));
   }, [open, program]);
+
+  // Documents already in the library, so we can offer to reuse them.
+  useEffect(() => {
+    if (!open || !user?.id) return;
+    void supabase
+      .from("document_uploads")
+      .select("id, item, created_at")
+      .eq("user_id", user.id)
+      .order("created_at", { ascending: false })
+      .limit(20)
+      .then(({ data }) => setDocs((data as SavedDoc[]) ?? []));
+  }, [open, user?.id]);
 
   useEffect(() => {
     if (stage !== "questions") return;
@@ -103,7 +145,6 @@ export function ApplyWizard({
     [program],
   );
 
-  // Animated processing sequence; waits for the AI review before moving on.
   useEffect(() => {
     if (stage !== "processing") return;
     let i = 0;
@@ -136,25 +177,41 @@ export function ApplyWizard({
 
   if (!open || !program || typeof document === "undefined") return null;
 
-  const commit = (next: Answers) => {
+  const commit = (next: Answers, persist = true) => {
     setAnswers(next);
-    saveAnswers(next);
+    if (persist) saveAnswers(next);
     return next;
   };
 
   const answerCurrent = (value: string) => {
     const q = questions[qIdx];
     if (!q) return;
-    const next = commit({ ...answers, [q.id]: value });
-    if (qIdx + 1 < questions.length) {
-      setQIdx(qIdx + 1);
-    } else {
-      runReview(next);
-    }
+    const next = commit({ ...answers, [q.id]: value }, persistToProfile);
+    if (qIdx + 1 < questions.length) setQIdx(qIdx + 1);
+    else runReview(next);
   };
 
   const total = questions.length;
   const progress = total ? Math.round((qIdx / total) * 100) : 0;
+  const requiredTotal = autoFilled + total;
+  const completion = Math.round((autoFilled / SMART_FIELDS.length) * 100);
+  const saved = minutesSaved(autoFilled);
+
+  const submit = () => {
+    recordApplication({
+      id: newApplicationId(),
+      programId: program.id,
+      programName: program.name,
+      submittedAt: new Date().toISOString(),
+      status: "Submitted",
+      estimate: review?.monthlyBenefit,
+      answers,
+      autoFilled,
+      asked: total,
+      documentsReused: docsReused,
+    });
+    setStage("success");
+  };
 
   return createPortal(
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-0 sm:p-6" role="dialog" aria-modal="true">
@@ -180,6 +237,28 @@ export function ApplyWizard({
         )}
 
         <div className="flex-1 overflow-y-auto">
+          {stage === "confirm" && (
+            <ConfirmStage
+              knownCount={autoFilled}
+              minutes={saved}
+              onUse={() => setStage("intro")}
+              onReview={() => setStage("review-saved")}
+              onFresh={() => {
+                setAnswers({});
+                setPersistToProfile(false);
+                setStage("intro");
+              }}
+            />
+          )}
+
+          {stage === "review-saved" && (
+            <ReviewSavedStage
+              answers={answers}
+              onEdit={(id, value) => commit({ ...answers, [id]: value }, persistToProfile)}
+              onDone={() => setStage("intro")}
+            />
+          )}
+
           {stage === "intro" && (
             <IntroStage
               program={program}
@@ -187,6 +266,13 @@ export function ApplyWizard({
               known={known}
               loading={loadingPlan}
               remaining={total}
+              autoFilled={autoFilled}
+              requiredTotal={requiredTotal}
+              completion={completion}
+              minutes={saved}
+              docs={docs}
+              docsReused={docsReused}
+              onReuseDoc={() => setDocsReused((n) => n + 1)}
               onStart={() => (total ? setStage("questions") : runReview(answers))}
             />
           )}
@@ -211,12 +297,26 @@ export function ApplyWizard({
               program={program}
               review={review}
               answers={answers}
-              onEdit={(id, value) => commit({ ...answers, [id]: value })}
-              onSubmit={() => setStage("success")}
+              changedIds={changedIds}
+              onEdit={(id, value) => {
+                setAnswers((a) => ({ ...a, [id]: value }));
+                setChangedIds((ids) =>
+                  String(profileSnapshot[id] ?? "") !== value && !ids.includes(id) ? [...ids, id] : ids,
+                );
+              }}
+              onUpdateProfile={() => {
+                saveAnswers({ ...loadAnswers(), ...answers });
+                setProfileSnapshot({ ...loadAnswers(), ...answers });
+                setChangedIds([]);
+              }}
+              onKeepLocal={() => setChangedIds([])}
+              onSubmit={submit}
             />
           )}
 
-          {stage === "success" && <SuccessStage program={program} review={review} onDone={onClose} />}
+          {stage === "success" && (
+            <SuccessStage program={program} review={review} autoFilled={autoFilled} minutes={saved} onDone={onClose} />
+          )}
         </div>
       </div>
     </div>,
@@ -224,16 +324,118 @@ export function ApplyWizard({
   );
 }
 
+function ConfirmStage({
+  knownCount, minutes, onUse, onReview, onFresh,
+}: {
+  knownCount: number;
+  minutes: number;
+  onUse: () => void;
+  onReview: () => void;
+  onFresh: () => void;
+}) {
+  return (
+    <div className="p-7 sm:p-9 animate-fade-in">
+      <div className="flex size-12 items-center justify-center rounded-2xl bg-primary/10 text-primary">
+        <Sparkles className="size-6" />
+      </div>
+      <h2 className="mt-5 text-2xl font-semibold tracking-tight text-foreground sm:text-3xl">
+        We found information from your previous applications.
+      </h2>
+      <p className="mt-3 text-base leading-relaxed text-muted-foreground">
+        Claimly remembers {knownCount} detail{knownCount === 1 ? "" : "s"} you've already given us.
+        Reusing them saves about {minutes} minute{minutes === 1 ? "" : "s"} on this application.
+      </p>
+      <div className="mt-7 grid gap-3">
+        <button
+          onClick={onUse}
+          className="inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-primary px-5 py-4 text-base font-semibold text-primary-foreground transition hover:brightness-110"
+        >
+          Use saved information <ArrowRight className="size-5" />
+        </button>
+        <button
+          onClick={onReview}
+          className="w-full rounded-2xl border border-border px-5 py-4 text-base font-medium text-foreground transition hover:bg-secondary"
+        >
+          Review saved information
+        </button>
+        <button
+          onClick={onFresh}
+          className="w-full rounded-2xl px-5 py-3 text-sm font-medium text-muted-foreground transition hover:text-foreground"
+        >
+          Start fresh
+        </button>
+      </div>
+      <SecurityNote />
+    </div>
+  );
+}
+
+function SecurityNote() {
+  return (
+    <div className="mt-6 flex items-start gap-2 rounded-2xl border border-border/70 bg-secondary/40 p-4 text-sm text-foreground/80">
+      <ShieldCheck className="mt-0.5 size-5 shrink-0 text-primary" />
+      <p>
+        Your information is encrypted and stored securely. Claimly only reuses it with your
+        permission, and you can edit or delete it at any time.
+      </p>
+    </div>
+  );
+}
+
+function ReviewSavedStage({
+  answers, onEdit, onDone,
+}: {
+  answers: Answers;
+  onEdit: (id: string, value: string) => void;
+  onDone: () => void;
+}) {
+  const entries = SMART_FIELDS.filter((f) => String(answers[f.id] ?? "").trim());
+  return (
+    <div className="p-7 sm:p-9 animate-fade-in">
+      <p className="text-xs font-semibold uppercase tracking-widest text-primary">Smart Profile</p>
+      <h2 className="mt-3 text-2xl font-semibold tracking-tight text-foreground">Your saved information</h2>
+      <p className="mt-2 text-base text-muted-foreground">Change anything that's out of date. Edits save to your profile.</p>
+      <div className="mt-6 grid gap-3">
+        {entries.map((f) => (
+          <div key={f.id}>
+            <label className="text-xs font-medium text-muted-foreground">{f.label}</label>
+            <input
+              value={answers[f.id] ?? ""}
+              onChange={(e) => onEdit(f.id, e.target.value)}
+              className="mt-1 w-full rounded-2xl border border-border bg-background px-4 py-3 text-base text-foreground focus:border-primary/60 focus:outline-none"
+            />
+          </div>
+        ))}
+      </div>
+      <button
+        onClick={onDone}
+        className="mt-7 inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-primary px-5 py-4 text-base font-semibold text-primary-foreground transition hover:brightness-110"
+      >
+        Looks right, continue <ArrowRight className="size-5" />
+      </button>
+    </div>
+  );
+}
+
 function IntroStage({
-  program, intro, known, loading, remaining, onStart,
+  program, intro, known, loading, remaining, autoFilled, requiredTotal, completion, minutes,
+  docs, docsReused, onReuseDoc, onStart,
 }: {
   program: Program;
   intro: string;
   known: Array<[string, string]>;
   loading: boolean;
   remaining: number;
+  autoFilled: number;
+  requiredTotal: number;
+  completion: number;
+  minutes: number;
+  docs: SavedDoc[];
+  docsReused: number;
+  onReuseDoc: () => void;
   onStart: () => void;
 }) {
+  const suggestion = docs[0];
   return (
     <div className="p-7 sm:p-9">
       <p className="text-xs font-semibold uppercase tracking-widest text-primary">Apply with Claimly</p>
@@ -245,8 +447,30 @@ function IntroStage({
         <Clock className="size-4" /> About {program.estimate ?? "3-5 minutes"}
       </p>
 
+      {autoFilled > 0 && (
+        <div className="mt-6 rounded-2xl border border-primary/20 bg-primary/5 p-5">
+          <p className="text-base font-semibold text-foreground">
+            We've already completed {autoFilled} of {requiredTotal} required fields using your saved
+            profile.
+          </p>
+          <div className="mt-4 flex items-center justify-between text-xs font-medium text-muted-foreground">
+            <span>Profile completion</span>
+            <span className="text-primary">{completion}%</span>
+          </div>
+          <div className="mt-2 h-2.5 w-full overflow-hidden rounded-full bg-secondary">
+            <div
+              className="h-full rounded-full bg-primary transition-all duration-1000"
+              style={{ width: `${completion}%` }}
+            />
+          </div>
+          <p className="mt-3 text-sm text-muted-foreground">
+            Estimated time saved: <span className="font-semibold text-foreground">{minutes} minutes</span>
+          </p>
+        </div>
+      )}
+
       {known.length > 0 && (
-        <div className="mt-6 rounded-2xl border border-primary/20 bg-primary/5 p-4">
+        <div className="mt-5 rounded-2xl border border-border/70 bg-secondary/30 p-4">
           <p className="flex items-center gap-1.5 text-sm font-semibold text-primary">
             <CheckCircle2 className="size-4" /> Already filled in for you
           </p>
@@ -262,13 +486,30 @@ function IntroStage({
         </div>
       )}
 
-      <div className="mt-5 flex items-start gap-2 rounded-2xl border border-border/70 bg-secondary/40 p-4 text-sm text-foreground/80">
-        <ShieldCheck className="mt-0.5 size-5 shrink-0 text-primary" />
-        <p>
-          No Social Security number and no bank details. Everything happens right here in
-          Claimly - you never have to visit another website.
-        </p>
-      </div>
+      {suggestion && (
+        <div className="mt-5 rounded-2xl border border-border/70 bg-card p-4">
+          <p className="flex items-center gap-2 text-sm font-medium text-foreground">
+            <FileText className="size-4 text-primary" />
+            We found a {suggestion.item.toLowerCase()} uploaded {daysAgoLabel(suggestion.created_at)}.
+          </p>
+          <div className="mt-3 flex flex-wrap gap-2">
+            <button
+              onClick={onReuseDoc}
+              className="rounded-full bg-primary px-3.5 py-1.5 text-xs font-semibold text-primary-foreground transition hover:brightness-110"
+            >
+              {docsReused ? "Using existing document" : "Use existing document"}
+            </button>
+            <a
+              href="/vault"
+              className="rounded-full border border-border px-3.5 py-1.5 text-xs text-muted-foreground transition hover:text-foreground"
+            >
+              Upload new version
+            </a>
+          </div>
+        </div>
+      )}
+
+      <SecurityNote />
 
       <button
         onClick={onStart}
@@ -407,12 +648,15 @@ const ELIGIBILITY_COPY: Record<string, { label: string; tone: string }> = {
 };
 
 function PreviewStage({
-  program, review, answers, onEdit, onSubmit,
+  program, review, answers, changedIds, onEdit, onUpdateProfile, onKeepLocal, onSubmit,
 }: {
   program: Program;
   review: Review | null;
   answers: Answers;
+  changedIds: string[];
   onEdit: (id: string, value: string) => void;
+  onUpdateProfile: () => void;
+  onKeepLocal: () => void;
   onSubmit: () => void;
 }) {
   const sections =
@@ -450,6 +694,29 @@ function PreviewStage({
           )}
         </div>
       </div>
+
+      {changedIds.length > 0 && (
+        <div className="mt-6 rounded-2xl border border-primary/30 bg-primary/5 p-5 animate-fade-in">
+          <p className="text-sm font-medium text-foreground">
+            You changed {changedIds.map(labelFor).join(", ")}. Would you like to update your saved
+            profile with this new information?
+          </p>
+          <div className="mt-3 flex flex-wrap gap-2">
+            <button
+              onClick={onUpdateProfile}
+              className="rounded-full bg-primary px-4 py-1.5 text-xs font-semibold text-primary-foreground transition hover:brightness-110"
+            >
+              Update profile
+            </button>
+            <button
+              onClick={onKeepLocal}
+              className="rounded-full border border-border px-4 py-1.5 text-xs text-muted-foreground transition hover:text-foreground"
+            >
+              Only for this application
+            </button>
+          </div>
+        </div>
+      )}
 
       {sections.map((s) => (
         <div key={s.title} className="mt-6">
@@ -498,10 +765,12 @@ function PreviewStage({
 }
 
 function SuccessStage({
-  program, review, onDone,
+  program, review, autoFilled, minutes, onDone,
 }: {
   program: Program;
   review: Review | null;
+  autoFilled: number;
+  minutes: number;
   onDone: () => void;
 }) {
   return (
@@ -525,7 +794,8 @@ function SuccessStage({
         explicit approval - without you ever leaving Claimly.
       </p>
       <p className="mx-auto mt-3 max-w-md text-sm text-muted-foreground">
-        Your answers are saved, so your next application will be nearly filled out already.
+        Claimly auto-filled {autoFilled} fields and saved you about {minutes} minutes. Your next
+        application will be even faster - find it under My Applications.
       </p>
       <button
         onClick={onDone}
