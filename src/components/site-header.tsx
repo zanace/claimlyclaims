@@ -53,6 +53,7 @@ export function SiteHeader() {
   const queryClient = useQueryClient();
   const [open, setOpen] = useState(false);
   const [menu, setMenu] = useState<string | null>(null);
+  const [mobileGroup, setMobileGroup] = useState<string | null>(null);
   const navRef = useRef<HTMLDivElement>(null);
   const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -213,7 +214,7 @@ export function SiteHeader() {
           <div className="grid gap-2">
             {groups.map((group, gi) => {
               const Icon = group.icon;
-              const isOpen = menu === group.id;
+              const isOpen = mobileGroup === group.id;
               return (
                 <div
                   key={group.id}
@@ -223,7 +224,7 @@ export function SiteHeader() {
                   <button
                     type="button"
                     aria-expanded={isOpen}
-                    onClick={() => setMenu(isOpen ? null : group.id)}
+                    onClick={() => setMobileGroup((cur) => (cur === group.id ? null : group.id))}
                     className="flex w-full items-center gap-2 px-3 py-3 text-sm text-foreground"
                   >
                     <Icon className="size-4 text-primary" />
@@ -245,6 +246,7 @@ export function SiteHeader() {
                             onClick={() => {
                               setOpen(false);
                               setMenu(null);
+                              setMobileGroup(null);
                             }}
                             activeOptions={{ exact: item.to === "/" }}
                             className="block rounded-xl px-3 py-2 transition-colors hover:bg-secondary [&.active]:bg-secondary [&.active_.lbl]:font-semibold [&.active_.lbl]:text-primary"
