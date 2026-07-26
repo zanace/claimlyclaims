@@ -1,6 +1,6 @@
 import { store } from "@/lib/store";
-import { useEffect } from "react";
-import { PencilLine } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Check, PencilLine } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -83,10 +83,14 @@ export function infoToPrompt(info: UserInfo): string {
 export function InfoPanel({
   info,
   onChange,
+  onSubmit,
 }: {
   info: UserInfo;
   onChange: (info: UserInfo) => void;
+  onSubmit?: (info: UserInfo) => void;
 }) {
+  const [saved, setSaved] = useState(false);
+  const locked = saved;
   // Prefill anything blank from the signed-in profile, once.
   useEffect(() => {
     let cancelled = false;
@@ -119,6 +123,7 @@ export function InfoPanel({
   const set = (key: keyof UserInfo, value: string) => {
     const next = { ...info, [key]: value.slice(0, 200) };
     onChange(next);
+    setSaved(false);
     try {
       store.setItem(STORAGE_KEY, JSON.stringify(next));
     } catch {
@@ -148,6 +153,7 @@ export function InfoPanel({
                 key={g}
                 type="button"
                 aria-pressed={info.gender === g}
+                disabled={locked}
                 onClick={() => set("gender", info.gender === g ? "" : g)}
                 className={`rounded-full border px-3 py-1.5 text-xs transition-colors ${
                   info.gender === g
@@ -170,13 +176,45 @@ export function InfoPanel({
               value={info[field.key]}
               placeholder={field.placeholder}
               maxLength={200}
+              readOnly={locked}
               onChange={(e) => set(field.key, e.target.value)}
             />
           </div>
         ))}
       </div>
 
-      <div className="mt-5 flex items-center justify-between gap-3">
+      <div className="mt-5 space-y-3">
+        {locked ? (
+          <Button type="button" variant="outline" className="w-full" onClick={() => setSaved(false)}>
+            <PencilLine className="size-4" />
+            Edit my info
+          </Button>
+        ) : (
+          <Button
+            type="button"
+            className="w-full"
+            onClick={() => {
+              try {
+                store.setItem(STORAGE_KEY, JSON.stringify(info));
+              } catch {
+                /* storage unavailable */
+              }
+              setSaved(true);
+              onSubmit?.(info);
+            }}
+          >
+            <Check className="size-4" />
+            Save &amp; send to assistant
+          </Button>
+        )}
+        {locked && (
+          <p className="text-center text-xs text-accent">
+            Saved - the assistant is using this info.
+          </p>
+        )}
+      </div>
+
+      <div className="mt-4 flex items-center justify-between gap-3">
         <span className="text-xs text-muted-foreground">{filled}/{ALL_FIELDS.length} filled</span>
         <Button
           type="button"
@@ -184,6 +222,7 @@ export function InfoPanel({
           size="sm"
           onClick={() => {
             onChange(EMPTY_INFO);
+            setSaved(false);
             store.removeItem(STORAGE_KEY);
           }}
         >
