@@ -217,6 +217,11 @@ function Admin() {
                         Declined
                       </span>
                     )}
+                    {!approved && !declined && (
+                      <span className="rounded-full bg-muted px-2.5 py-0.5 text-xs font-medium text-muted-foreground">
+                        Undecided
+                      </span>
+                    )}
                   </p>
                   <p className="mt-1 text-sm text-muted-foreground">
                     {emails[a.user_id] ?? "Unknown applicant"}
@@ -227,27 +232,23 @@ function Admin() {
                   <p className="text-xs uppercase tracking-wide text-muted-foreground">
                     {new Date(a.created_at).toLocaleDateString()}
                   </p>
-                  {!approved && (
-                    <Button
-                      size="sm"
-                      className="rounded-full"
-                      disabled={busyId === a.id}
-                      onClick={() => void decide(a, "Approved")}
-                    >
-                      {busyId === a.id ? "Saving…" : "Accept"}
-                    </Button>
-                  )}
-                  {!declined && (
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      className="rounded-full"
-                      disabled={busyId === a.id}
-                      onClick={() => void decide(a, "Declined")}
-                    >
-                      Decline
-                    </Button>
-                  )}
+                  <Button
+                    size="sm"
+                    className="rounded-full"
+                    disabled={busyId === a.id || approved}
+                    onClick={() => void decide(a, "Approved")}
+                  >
+                    {busyId === a.id ? "Saving…" : "Accept"}
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    className="rounded-full"
+                    disabled={busyId === a.id || declined}
+                    onClick={() => void decide(a, "Declined")}
+                  >
+                    Decline
+                  </Button>
                 </div>
               </article>
             );
