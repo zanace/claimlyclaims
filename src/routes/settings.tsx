@@ -71,7 +71,7 @@ function SettingsPage() {
     try {
       await runDeleteAccount({ data: undefined });
       saveAnswers({});
-      store.remove(SAVED_KEY);
+      store.removeItem(SAVED_KEY);
       await supabase.auth.signOut();
       toast.success("Your account and all saved data were deleted.");
       navigate({ to: "/" });
