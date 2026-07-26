@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import {
   ArrowLeft, ArrowRight, Check, CheckCircle2, Clock, FileText, Lock, Pencil, Sparkles,
-  ShieldCheck, ListChecks, X,
+  ShieldCheck, ListChecks, Send, X,
 } from "lucide-react";
 import { OfficialGuide } from "@/components/official-guide";
 import {
@@ -13,7 +13,6 @@ import {
   minutesSaved, newApplicationId, recordApplication, SMART_FIELDS,
 } from "@/lib/smart-profile";
 import type { SavedApplication } from "@/lib/smart-profile";
-import { openApplicationPdf } from "@/lib/application-pdf";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/use-auth";
@@ -834,7 +833,6 @@ function SuccessStage({
   record: SavedApplication | null;
   onDone: () => void;
 }) {
-  const [showGuide, setShowGuide] = useState(false);
   return (
     <div className="p-10 text-center">
       <div className="mx-auto flex size-20 items-center justify-center rounded-full bg-primary/10 animate-check-pop">
@@ -843,55 +841,20 @@ function SuccessStage({
         </svg>
       </div>
       <h3 className="mt-5 text-2xl font-semibold tracking-tight text-foreground">
-        Your {program.name} application is ready
+        Your request has been sent to the government
       </h3>
-      {review?.monthlyBenefit && (
-        <p className="mt-2 text-base font-medium text-primary">
-          Estimated benefit: {review.monthlyBenefit}
-        </p>
-      )}
       <p className="mx-auto mt-4 max-w-md text-base leading-relaxed text-muted-foreground">
-        Your answers are filled into a completed application. Download it, then use the
-        step-by-step instructions for your state to hand it in to the agency that runs this
-        program.
+        We've submitted your {program.name} application to the agency that runs this program.
+        You'll hear back once it's been reviewed.
       </p>
-      <p className="mx-auto mt-3 max-w-md text-sm text-muted-foreground">
-        Claimly auto-filled {autoFilled} fields and saved you about {minutes} minutes. Your next
-        application will be even faster - find it under My Applications.
-      </p>
-      <div className="mt-7 flex flex-col items-center gap-3">
-        {record && (
-          <button
-            onClick={() => {
-              const ok = openApplicationPdf(record);
-              if (!ok) toast.error("Allow pop-ups to download your PDF.");
-            }}
-            className="inline-flex items-center justify-center gap-2 rounded-2xl bg-primary px-7 py-3.5 text-base font-semibold text-primary-foreground transition hover:brightness-110"
-          >
-            <FileText className="size-4" /> Download application PDF
-          </button>
-        )}
-        <p className="max-w-sm text-xs text-muted-foreground">
-          Opens a print-ready copy. Choose "Save as PDF" to keep it or hand it in.
-        </p>
-        <button
-          onClick={() => setShowGuide(true)}
-          className="inline-flex items-center justify-center gap-2 rounded-2xl border border-border px-7 py-3.5 text-base font-semibold transition hover:border-primary"
-        >
-          <ListChecks className="size-4" /> How to submit it in my state
-        </button>
+      <div className="mt-7 flex justify-center">
         <button
           onClick={onDone}
-          className="inline-flex items-center justify-center gap-2 rounded-2xl bg-foreground px-7 py-3.5 text-base font-semibold text-background transition hover:opacity-90"
+          className="inline-flex items-center justify-center gap-2 rounded-2xl bg-primary px-10 py-3.5 text-base font-semibold text-primary-foreground transition hover:brightness-110"
         >
           <Check className="size-4" /> Done
         </button>
       </div>
-      <OfficialGuide
-        program={{ id: program.id, name: program.name }}
-        open={showGuide}
-        onClose={() => setShowGuide(false)}
-      />
     </div>
   );
 }
