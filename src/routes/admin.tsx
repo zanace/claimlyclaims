@@ -14,6 +14,8 @@ type Application = {
   program_name: string;
   state: string | null;
   created_at: string;
+  status: string | null;
+  reviewed_at: string | null;
 };
 
 const title = "Admin submissions | Claimly";
