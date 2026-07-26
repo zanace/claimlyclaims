@@ -73,7 +73,7 @@ function Privacy() {
           <div>
             <h2 className="text-xl font-semibold text-foreground">Delete anytime</h2>
             <p className="mt-2">
-              Email <a className="text-primary hover:underline" href="mailto:hello@claimly.claims">hello@claimly.claims</a> to delete your account and every record tied to it, no questions asked.
+              Open <a className="text-primary hover:underline" href="/settings">Settings</a> and use the <strong className="text-foreground">Delete account</strong> button at the bottom of the page. It permanently removes your account and every record tied to it - profile, application answers, saved programs, and uploaded documents - no questions asked.
             </p>
           </div>
         </section>

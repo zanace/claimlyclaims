@@ -2,7 +2,7 @@ import { store } from "@/lib/store";
 import { useEffect, useMemo, useState } from "react";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { toast } from "sonner";
-import { Trash2, Save, LogOut, User as UserIcon, Bookmark, ListChecks } from "lucide-react";
+import { Trash2, Save, LogOut, User as UserIcon, Bookmark, ListChecks, AlertTriangle } from "lucide-react";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { Button } from "@/components/ui/button";
@@ -10,6 +10,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/use-auth";
+import { useServerFn } from "@tanstack/react-start";
+import { deleteMyAccount } from "@/lib/account.functions";
 import {
   FIELD_LABELS, labelFor, loadAnswers, saveAnswers, type Answers,
 } from "@/lib/applicant-profile";
@@ -55,6 +57,30 @@ function SettingsPage() {
   const [saving, setSaving] = useState(false);
   const [answers, setAnswers] = useState<Answers>({});
   const [saved, setSaved] = useState<string[]>([]);
+  const [deleting, setDeleting] = useState(false);
+  const runDeleteAccount = useServerFn(deleteMyAccount);
+
+  async function handleDeleteAccount() {
+    if (
+      !confirm(
+        "Delete your account? This permanently removes your profile, applications, and uploaded documents. This cannot be undone.",
+      )
+    )
+      return;
+    setDeleting(true);
+    try {
+      await runDeleteAccount({ data: undefined });
+      saveAnswers({});
+      store.removeItem(SAVED_KEY);
+      await supabase.auth.signOut();
+      toast.success("Your account and all saved data were deleted.");
+      navigate({ to: "/" });
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Could not delete your account.");
+    } finally {
+      setDeleting(false);
+    }
+  }
 
   useEffect(() => {
     setAnswers(loadAnswers());
@@ -299,6 +325,27 @@ function SettingsPage() {
               ))}
             </ul>
           )}
+        </section>
+
+        {/* Danger zone */}
+        <section className="mt-8 rounded-2xl border border-destructive/40 bg-card p-8">
+          <div className="flex items-center gap-2 text-sm font-semibold text-destructive">
+            <AlertTriangle className="size-4" /> Delete account
+          </div>
+          <p className="mt-1 max-w-xl text-sm text-muted-foreground">
+            This permanently deletes your account and everything tied to it: your profile,
+            application answers, saved programs, and uploaded documents. It cannot be undone.
+          </p>
+          <Button
+            type="button"
+            variant="destructive"
+            className="mt-6"
+            disabled={deleting}
+            onClick={handleDeleteAccount}
+          >
+            <Trash2 className="mr-2 size-4" />
+            {deleting ? "Deleting..." : "Delete account"}
+          </Button>
         </section>
       </main>
       <SiteFooter />
