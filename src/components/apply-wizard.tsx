@@ -2,8 +2,9 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import {
   ArrowLeft, ArrowRight, Check, CheckCircle2, Clock, FileText, Lock, Pencil, Sparkles,
-  ShieldCheck, X,
+  ShieldCheck, ListChecks, X,
 } from "lucide-react";
+import { OfficialGuide } from "@/components/official-guide";
 import {
   labelFor, loadAnswers, saveAnswers,
   type Answers, type WizardQuestion,
@@ -787,6 +788,7 @@ function SuccessStage({
   record: SavedApplication | null;
   onDone: () => void;
 }) {
+  const [showGuide, setShowGuide] = useState(false);
   return (
     <div className="p-10 text-center">
       <div className="mx-auto flex size-20 items-center justify-center rounded-full bg-primary/10 animate-check-pop">
