@@ -42,6 +42,10 @@ const SECTIONS = [
     body: "Please do not paste Social Security numbers, bank account numbers, or full document images into the chat. The assistant never needs them to screen you for a program.",
   },
   {
+    heading: "We don't ask for your PII",
+    body: "Personally Identifiable Information (PII) is any data that can identify a specific person, either by itself or when mixed with other details. That includes direct identifiers like your full name, Social Security number, driver's license or other ID numbers; sensitive records like financial, bank, and medical data; and indirect background details like date of birth, exact address, or employer that can single you out when combined. Claimly does not ask for any of it. Screening runs on broad, non-identifying facts such as your ZIP or state, household size, and rough income range.",
+  },
+  {
     heading: "Acceptable use",
     body: "Use Claimly to understand and pursue benefits you may genuinely qualify for. Do not use it to prepare false claims, scrape the service, or resell its output as professional advice.",
   },
