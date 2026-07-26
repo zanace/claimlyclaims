@@ -37,7 +37,7 @@ export const Route = createFileRoute("/admin")({
 });
 
 function Admin() {
-  const { user, loading, isAdmin } = useAuth();
+  const { user, loading } = useAuth();
   const [gate, setGate] = useState<"checking" | "locked" | "open">("checking");
   const [passcode, setPasscode] = useState("");
   const [gateError, setGateError] = useState(false);
@@ -72,8 +72,8 @@ function Admin() {
   }, []);
 
   useEffect(() => {
-    if (isAdmin && gate === "open") void load();
-  }, [isAdmin, gate, load]);
+    if (user && gate === "open") void load();
+  }, [user, gate, load]);
 
   const decide = useCallback(
     async (app: Application, status: "Approved" | "Declined") => {
@@ -164,18 +164,6 @@ function Admin() {
         >
           Log in
         </Link>
-      </Shell>
-    );
-  }
-
-  if (!isAdmin) {
-    return (
-      <Shell>
-        <h1 className="font-display text-4xl">Admin</h1>
-        <p className="mt-3 max-w-lg text-muted-foreground">
-          This account doesn't have reviewer access. Ask a Claimly administrator to grant your
-          account the admin role.
-        </p>
       </Shell>
     );
   }

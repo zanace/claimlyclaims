@@ -221,7 +221,7 @@ export function ApplyWizard({
       programId: program.id,
       programName: program.name,
       submittedAt: new Date().toISOString(),
-      status: "Approved",
+      status: "Submitted",
       estimate: review?.monthlyBenefit,
       answers,
       autoFilled,
@@ -248,15 +248,16 @@ export function ApplyWizard({
         description: error.message,
       });
     }
-    // Instant approval confirmation email, always sent to the signed-in
+    // Submission confirmation email, always sent to the signed-in
     // user's own account email (the server never accepts a recipient).
     try {
       await notify({
         data: {
           programName: record.programName,
-          status: "Approved",
+          status: "Submitted",
           applicationId: record.id,
-          reviewerNote: "Your submission was received and instantly approved by Claimly. Our team may follow up if additional verification is needed.",
+          reviewerNote:
+            "Your submission was received and sent to the Claimly administrators for review. We'll let you know as soon as a reviewer makes a decision.",
         },
       });
     } catch (e) {
@@ -840,11 +841,11 @@ function SuccessStage({
         </svg>
       </div>
       <h3 className="mt-5 text-2xl font-semibold tracking-tight text-foreground">
-        Your request has been sent to the government
+        Your request has been sent to the Claimly administrators
       </h3>
       <p className="mx-auto mt-4 max-w-md text-base leading-relaxed text-muted-foreground">
-        We've submitted your {program.name} application to the agency that runs this program.
-        You'll hear back once it's been reviewed.
+        Your {program.name} application is now in the Claimly review queue. A reviewer will
+        approve or decline it, and you'll hear back once that happens.
       </p>
       <div className="mt-7 flex justify-center">
         <button
