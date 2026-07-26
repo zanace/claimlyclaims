@@ -18,7 +18,7 @@ export function applicationHtml(app: SavedApplication) {
 <p style="color:#666;margin:0 0 24px">Prepared ${new Date(app.submittedAt).toLocaleString()} &middot; Status: ${app.status}${app.estimate ? ` &middot; Estimate: ${app.estimate}` : ""}</p>
 <table style="width:100%;border-collapse:collapse;font-size:14px">${rows}</table>
 <p style="margin-top:36px;font-size:13px;color:#444">Applicant signature: ______________________________ &nbsp;&nbsp; Date: ______________</p>
-<p style="margin-top:28px;color:#888;font-size:12px">Prepared by Claimly. Demo application record - not submitted to any agency.</p>
+<p style="margin-top:28px;color:#888;font-size:12px">Prepared by Claimly. Completed application copy - hand this in to the agency listed in your Claimly steps.</p>
 </body></html>`;
 }
 

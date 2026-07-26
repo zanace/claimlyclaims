@@ -1,7 +1,8 @@
-import { ArrowRight, ExternalLink, FileText } from "lucide-react";
-import { useMemo } from "react";
+import { ArrowRight, ListChecks, FileText } from "lucide-react";
+import { useMemo, useState } from "react";
 import { PROGRAMS } from "@/lib/programs";
 import { officialSourceFor } from "@/lib/official-links";
+import { OfficialGuide } from "@/components/official-guide";
 
 export type ApplyTarget = { id: string; name: string; estimate?: string };
 
@@ -78,6 +79,7 @@ export function ChatApplyActions({
   compact?: boolean;
 }) {
   const targets = useMemo(() => programsMentioned(text), [text]);
+  const [guide, setGuide] = useState<ApplyTarget | null>(null);
   if (!targets.length) return null;
 
   return (
@@ -102,15 +104,14 @@ export function ChatApplyActions({
                 Apply here
                 <ArrowRight className="size-3.5" />
               </button>
-              <a
-                href={official.url}
-                target="_blank"
-                rel="noreferrer noopener"
+              <button
+                type="button"
+                onClick={() => setGuide(p)}
                 className="inline-flex items-center gap-1.5 rounded-full border border-border px-3.5 py-2 text-xs font-semibold transition hover:border-primary"
               >
-                <ExternalLink className="size-3.5" />
-                Official form
-              </a>
+                <ListChecks className="size-3.5" />
+                Official steps for my state
+              </button>
             </div>
             <p className="mt-2 flex items-start gap-1.5 text-[11px] leading-relaxed text-muted-foreground">
               <FileText className="mt-0.5 size-3 shrink-0" />
@@ -121,6 +122,7 @@ export function ChatApplyActions({
           </div>
         );
       })}
+      <OfficialGuide program={guide} open={!!guide} onClose={() => setGuide(null)} />
     </div>
   );
 }
