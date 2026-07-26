@@ -344,6 +344,183 @@ function Admin() {
           ))
         )}
       </div>
+
+      <section className="mt-14 border-t border-border pt-10">
+        <div className="flex flex-wrap items-end justify-between gap-3">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-widest text-primary">Confidential</p>
+            <h2 className="mt-1 font-display text-3xl tracking-tight">Assistant tracker</h2>
+            <p className="mt-2 max-w-2xl text-sm text-muted-foreground">
+              Internal-only: AI vs. eligibility-engine mismatches, most-applied programs, and a
+              raw feed of what people are typing into the chat.
+            </p>
+          </div>
+          <div className="flex gap-2 text-xs">
+            <span className="rounded-full bg-secondary px-3 py-1 font-semibold">
+              {contradictions.length} contradictions
+            </span>
+            <span className="rounded-full bg-secondary px-3 py-1 font-semibold">
+              {chatAnswers.length} chat msgs
+            </span>
+          </div>
+        </div>
+
+        <div className="mt-6 rounded-2xl border border-border bg-card p-6 shadow-[var(--shadow-soft)]">
+          <div className="flex items-end justify-between gap-4">
+            <div>
+              <h3 className="font-display text-2xl">Most-applied programs</h3>
+              <p className="mt-1 text-sm text-muted-foreground">
+                What people are actually submitting applications for.
+              </p>
+            </div>
+            <span className="rounded-full bg-secondary px-3 py-1 text-xs font-semibold">
+              {applicationsPoll.total} total
+            </span>
+          </div>
+          {applicationsPoll.entries.length === 0 ? (
+            <p className="mt-4 text-sm text-muted-foreground">No applications yet.</p>
+          ) : (
+            <ul className="mt-4 space-y-2">
+              {applicationsPoll.entries.map((e) => {
+                const pct = applicationsPoll.total ? (e.count / applicationsPoll.total) * 100 : 0;
+                return (
+                  <li key={e.label} className="rounded-xl border border-border/60 p-3">
+                    <div className="flex items-start justify-between gap-4">
+                      <p className="text-sm font-medium">{e.label}</p>
+                      <span className="shrink-0 rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-semibold text-primary">
+                        {e.count}× · {pct.toFixed(0)}%
+                      </span>
+                    </div>
+                    <div className="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-secondary">
+                      <div className="h-full rounded-full bg-primary" style={{ width: `${Math.max(4, pct)}%` }} />
+                    </div>
+                  </li>
+                );
+              })}
+            </ul>
+          )}
+        </div>
+
+        {patterns.length > 0 && (
+          <div className="mt-6 rounded-2xl border border-border bg-card p-6 shadow-[var(--shadow-soft)]">
+            <h3 className="font-display text-2xl">Top contradiction patterns</h3>
+            <p className="mt-1 text-sm text-muted-foreground">
+              Programs the AI keeps recommending that the engine had to demote.
+            </p>
+            <ul className="mt-4 space-y-2 text-sm">
+              {patterns.map((p) => (
+                <li key={p.id} className="flex items-start justify-between gap-4 rounded-xl border border-border/60 p-3">
+                  <div>
+                    <p className="font-semibold">{p.name}</p>
+                    {p.lastReason && (
+                      <p className="mt-0.5 text-xs text-muted-foreground">Last reason: {p.lastReason}</p>
+                    )}
+                  </div>
+                  <span className="rounded-full bg-secondary px-3 py-1 text-xs font-semibold">{p.count}×</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        <div className="mt-6 rounded-2xl border border-border bg-card p-6 shadow-[var(--shadow-soft)]">
+          <div className="flex items-end justify-between gap-4">
+            <div>
+              <h3 className="font-display text-2xl">Homescreen prompt poll</h3>
+              <p className="mt-1 text-sm text-muted-foreground">
+                What visitors are typing into the AI search on the homepage.
+              </p>
+            </div>
+            <span className="rounded-full bg-secondary px-3 py-1 text-xs font-semibold">
+              {homescreenPoll.total} total
+            </span>
+          </div>
+          {homescreenPoll.entries.length === 0 ? (
+            <p className="mt-4 text-sm text-muted-foreground">No homepage prompts yet.</p>
+          ) : (
+            <ul className="mt-4 space-y-2">
+              {homescreenPoll.entries.map((e) => {
+                const pct = homescreenPoll.total ? (e.count / homescreenPoll.total) * 100 : 0;
+                return (
+                  <li key={e.label} className="rounded-xl border border-border/60 p-3">
+                    <div className="flex items-start justify-between gap-4">
+                      <p className="text-sm">{e.label}</p>
+                      <span className="shrink-0 rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-semibold text-primary">
+                        {e.count}× · {pct.toFixed(0)}%
+                      </span>
+                    </div>
+                    <div className="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-secondary">
+                      <div className="h-full rounded-full bg-primary" style={{ width: `${Math.max(4, pct)}%` }} />
+                    </div>
+                  </li>
+                );
+              })}
+            </ul>
+          )}
+        </div>
+
+        <div className="mt-8 flex gap-2">
+          {(["contradictions", "answers"] as const).map((t) => (
+            <button
+              key={t}
+              type="button"
+              onClick={() => setTrackerTab(t)}
+              className={`rounded-full px-4 py-2 text-sm font-medium ${
+                trackerTab === t ? "bg-primary text-primary-foreground" : "border border-border bg-background"
+              }`}
+            >
+              {t === "contradictions" ? "Contradictions" : "Chat answers"}
+            </button>
+          ))}
+        </div>
+
+        <div className="mt-4 space-y-3">
+          {trackerTab === "contradictions" ? (
+            contradictions.length === 0 ? (
+              <div className="rounded-3xl border border-dashed border-border p-12 text-center text-muted-foreground">
+                No contradictions logged yet.
+              </div>
+            ) : (
+              contradictions.map((c) => (
+                <article key={c.id} className="rounded-2xl border border-border bg-card p-5 text-sm">
+                  <div className="flex flex-wrap items-start justify-between gap-3">
+                    <div>
+                      <p className="font-semibold">{c.program_name}</p>
+                      <p className="text-xs text-muted-foreground">
+                        AI said <b>{c.ai_confidence}</b> · engine said <b>{c.engine_verdict}</b> ·{" "}
+                        {new Date(c.created_at).toLocaleString()}
+                      </p>
+                    </div>
+                    <span className="rounded-full bg-amber-100 px-2 py-0.5 text-xs text-amber-800 dark:bg-amber-950 dark:text-amber-200">
+                      demoted
+                    </span>
+                  </div>
+                  {c.reason && <p className="mt-2 text-muted-foreground">Reason: {c.reason}</p>}
+                  {c.message_excerpt && (
+                    <p className="mt-2 rounded-xl bg-secondary/50 p-3 text-xs whitespace-pre-wrap">
+                      {c.message_excerpt}
+                    </p>
+                  )}
+                </article>
+              ))
+            )
+          ) : chatAnswers.length === 0 ? (
+            <div className="rounded-3xl border border-dashed border-border p-12 text-center text-muted-foreground">
+              No chat messages logged yet.
+            </div>
+          ) : (
+            chatAnswers.map((a) => (
+              <article key={a.id} className="rounded-2xl border border-border bg-card p-4 text-sm">
+                <p className="text-xs text-muted-foreground">
+                  <b>{a.role}</b> · {a.user_id ? a.user_id.slice(0, 8) : "anon"} ·{" "}
+                  {a.route ?? "-"} · {new Date(a.created_at).toLocaleString()}
+                </p>
+                <p className="mt-2 whitespace-pre-wrap">{a.content}</p>
+              </article>
+            ))
+          )}
+        </div>
+      </section>
     </Shell>
   );
 }
