@@ -1,5 +1,5 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, Sparkles, Heart, ShieldCheck } from "lucide-react";
+import { createFileRoute } from "@tanstack/react-router";
+import { Sparkles, Heart, ShieldCheck } from "lucide-react";
 import { SiteHeader } from "@/components/site-header";
 
 export const Route = createFileRoute("/about")({
@@ -43,16 +43,6 @@ function About() {
               <p className="mt-2 text-sm text-muted-foreground">{f.body}</p>
             </div>
           ))}
-        </section>
-
-        <section className="mt-16 rounded-3xl border border-border/70 bg-gradient-to-br from-primary/10 to-indigo-500/5 p-10 backdrop-blur animate-fade-in-up">
-          <h2 className="text-3xl font-semibold tracking-tight text-foreground">Our mission</h2>
-          <p className="mt-4 max-w-2xl leading-relaxed text-muted-foreground">
-            We believe every American should know exactly what help they're entitled to, and be able to claim it in minutes - not months. Claimly is built by a small team who's tired of watching families miss out on the support they've already earned.
-          </p>
-          <Link to="/chat" className="mt-6 inline-flex items-center gap-2 rounded-full bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground shadow hover:brightness-110">
-            Try the assistant <ArrowRight className="size-4" />
-          </Link>
         </section>
       </main>
     </div>
