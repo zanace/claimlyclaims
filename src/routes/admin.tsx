@@ -24,6 +24,8 @@ type Application = {
   status: string;
   reviewer_note: string | null;
   created_at: string;
+  reviewed_by: string | null;
+  reviewed_at: string | null;
 };
 
 const title = "Admin review queue | Claimly";
@@ -88,9 +90,10 @@ function Admin() {
   );
 
   async function update(id: string, patch: Partial<Application>) {
-    const { error } = await supabase.from("applications").update(patch).eq("id", id);
+    const stamped = { ...patch, reviewed_by: user?.id ?? null, reviewed_at: new Date().toISOString() };
+    const { error } = await supabase.from("applications").update(stamped).eq("id", id);
     if (error) return toast.error(error.message);
-    setApps((prev) => prev.map((a) => (a.id === id ? { ...a, ...patch } : a)));
+    setApps((prev) => prev.map((a) => (a.id === id ? { ...a, ...stamped } : a)));
     toast.success("Application updated");
     if (patch.status) {
       const app = apps.find((a) => a.id === id);
