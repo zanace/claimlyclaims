@@ -4,6 +4,7 @@ import { createClient } from "@supabase/supabase-js";
 import { convertToModelMessages, streamText, type UIMessage } from "ai";
 import { PROGRAMS } from "@/lib/programs";
 import type { Database } from "@/integrations/supabase/types";
+import { requireApiUser } from "@/lib/api-auth.server";
 
 const CATALOG = PROGRAMS.map(
   (p) => `- ${p.name} (${p.agency}) - ${p.category}; ${p.estimate}; ${p.summary} Who: ${p.who}`,
@@ -122,12 +123,18 @@ export const Route = createFileRoute("/api/chat")({
   server: {
     handlers: {
       POST: async ({ request }) => {
+        const auth = await requireApiUser(request);
+        if ("response" in auth) return auth.response;
+
         const { messages, userInfo } = (await request.json()) as {
           messages?: UIMessage[];
           userInfo?: string;
         };
         if (!Array.isArray(messages)) {
           return new Response("Messages are required", { status: 400 });
+        }
+        if (messages.length > 60) {
+          return new Response("Conversation too long", { status: 413 });
         }
 
         const apiKey = process.env.OPENAI_API_KEY;
