@@ -107,7 +107,7 @@ function Admin() {
           });
           if (result?.ok) toast.success(`Emailed applicant: ${email}`);
           else if (result?.reason === "email_not_configured")
-            toast("Email not sent — connect Resend in Lovable settings.");
+            toast("Status saved. Applicant email not sent - email sending is not connected yet.");
           else toast.error("Couldn't send status email.");
         } catch {
           toast.error("Couldn't send status email.");
