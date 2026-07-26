@@ -7,6 +7,8 @@ import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/use-auth";
 import { isUnlocked, unlockSite } from "@/lib/gate.functions";
+import { sendStatusEmail } from "@/lib/notify.functions";
+import { useServerFn } from "@tanstack/react-start";
 
 const REVIEW_STATUSES = ["Submitted", "In review", "Needs info", "Approved", "Denied"] as const;
 
@@ -44,6 +46,7 @@ export const Route = createFileRoute("/admin")({
 
 function Admin() {
   const { user, loading, isAdmin } = useAuth();
+  const notify = useServerFn(sendStatusEmail);
   const [gate, setGate] = useState<"checking" | "locked" | "open">("checking");
   const [passcode, setPasscode] = useState("");
   const [gateError, setGateError] = useState(false);
@@ -89,6 +92,28 @@ function Admin() {
     if (error) return toast.error(error.message);
     setApps((prev) => prev.map((a) => (a.id === id ? { ...a, ...patch } : a)));
     toast.success("Application updated");
+    if (patch.status) {
+      const app = apps.find((a) => a.id === id);
+      const email = emails[app?.user_id ?? ""]?.split("·").pop()?.trim();
+      if (app && email && /.+@.+\..+/.test(email)) {
+        try {
+          const result = await notify({
+            data: {
+              to: email,
+              programName: app.program_name,
+              status: patch.status,
+              reviewerNote: patch.reviewer_note ?? app.reviewer_note ?? undefined,
+            },
+          });
+          if (result?.ok) toast.success(`Emailed applicant: ${email}`);
+          else if (result?.reason === "email_not_configured")
+            toast("Email not sent — connect Resend in Lovable settings.");
+          else toast.error("Couldn't send status email.");
+        } catch {
+          toast.error("Couldn't send status email.");
+        }
+      }
+    }
   }
 
   if (loading || gate === "checking") {

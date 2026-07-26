@@ -2,7 +2,7 @@ import { store } from "@/lib/store";
 import { useEffect, useMemo, useState } from "react";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { toast } from "sonner";
-import { Trash2, Save, LogOut, User as UserIcon, Bookmark, ListChecks, AlertTriangle } from "lucide-react";
+import { Trash2, Save, LogOut, User as UserIcon, Bookmark, ListChecks, AlertTriangle, Download } from "lucide-react";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { Button } from "@/components/ui/button";
@@ -15,6 +15,7 @@ import { deleteMyAccount } from "@/lib/account.functions";
 import {
   FIELD_LABELS, labelFor, loadAnswers, saveAnswers, type Answers,
 } from "@/lib/applicant-profile";
+import { loadApplications } from "@/lib/smart-profile";
 
 const title = "Settings - Your saved Claimly info";
 const description =
@@ -58,7 +59,58 @@ function SettingsPage() {
   const [answers, setAnswers] = useState<Answers>({});
   const [saved, setSaved] = useState<string[]>([]);
   const [deleting, setDeleting] = useState(false);
+  const [exporting, setExporting] = useState(false);
   const runDeleteAccount = useServerFn(deleteMyAccount);
+
+  async function handleExport() {
+    setExporting(true);
+    try {
+      let profile: unknown = null;
+      let cloudApps: unknown = [];
+      let documents: unknown = [];
+      if (user?.id) {
+        const [{ data: p }, { data: a }, { data: d }] = await Promise.all([
+          supabase.from("profiles").select("*").eq("id", user.id).maybeSingle(),
+          supabase.from("applications").select("*").eq("user_id", user.id),
+          supabase.from("document_uploads").select("id, item, file_name, mime_type, created_at").eq("user_id", user.id),
+        ]);
+        profile = p;
+        cloudApps = a ?? [];
+        documents = d ?? [];
+      }
+      const payload = {
+        exportedAt: new Date().toISOString(),
+        account: user ? { id: user.id, email: user.email } : null,
+        profile,
+        applications: cloudApps,
+        localApplications: loadApplications(),
+        answers: loadAnswers(),
+        savedPrograms: (() => {
+          try {
+            const raw = store.getItem(SAVED_KEY);
+            return raw ? JSON.parse(raw) : [];
+          } catch {
+            return [];
+          }
+        })(),
+        documents,
+      };
+      const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `claimly-export-${new Date().toISOString().slice(0, 10)}.json`;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      URL.revokeObjectURL(url);
+      toast.success("Your Claimly data was exported.");
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Couldn't export your data.");
+    } finally {
+      setExporting(false);
+    }
+  }
 
   async function handleDeleteAccount() {
     if (
@@ -328,6 +380,26 @@ function SettingsPage() {
         </section>
 
         {/* Danger zone */}
+        <section className="mt-8 rounded-2xl border border-border bg-card p-8">
+          <div className="flex items-center gap-2 text-sm font-semibold text-foreground">
+            <Download className="size-4 text-primary" /> Export your data
+          </div>
+          <p className="mt-1 max-w-xl text-sm text-muted-foreground">
+            Download a copy of everything Claimly has for you — profile, submitted applications,
+            saved answers, bookmarks, and your document list — as a single JSON file.
+          </p>
+          <Button
+            type="button"
+            variant="outline"
+            className="mt-6"
+            disabled={exporting}
+            onClick={handleExport}
+          >
+            <Download className="mr-2 size-4" />
+            {exporting ? "Preparing..." : "Export my data"}
+          </Button>
+        </section>
+
         <section className="mt-8 rounded-2xl border border-destructive/40 bg-card p-8">
           <div className="flex items-center gap-2 text-sm font-semibold text-destructive">
             <AlertTriangle className="size-4" /> Delete account
