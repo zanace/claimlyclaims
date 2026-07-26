@@ -4,6 +4,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { DefaultChatTransport } from "ai";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
+import { Paperclip, Mic, X } from "lucide-react";
 import logo from "@/assets/logo.png";
 import {
   Conversation,
@@ -22,6 +23,9 @@ import { EMPTY_INFO, InfoPanel, infoToPrompt, loadStoredInfo, type UserInfo } fr
 import { SiteHeader } from "@/components/site-header";
 import { ApplyWizard } from "@/components/apply-wizard";
 import { ChatApplyActions, type ApplyTarget } from "@/components/chat-apply-actions";
+import { ChatArticleLinks } from "@/components/chat-article-links";
+import { useSpeechInput } from "@/lib/use-speech-input";
+import { readAttachments, type Attachment } from "@/lib/attachments";
 import { supabase } from "@/integrations/supabase/client";
 import { extractSignals, signalsFromInfo } from "@/lib/eligibility";
 import { logChatMessage } from "@/lib/tracker";
@@ -54,7 +58,12 @@ function ChatPage() {
   const [token, setToken] = useState<string | null>(null);
   const [info, setInfo] = useState<UserInfo>(EMPTY_INFO);
   const [wizard, setWizard] = useState<ApplyTarget | null>(null);
+  const [files, setFiles] = useState<Attachment[]>([]);
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
+  const fileRef = useRef<HTMLInputElement | null>(null);
+  const { listening, supported: micSupported, toggle: toggleMic, stop: stopMic } = useSpeechInput(
+    (text) => setInput((prev) => (prev ? `${prev} ${text}` : text)),
+  );
 
   useEffect(() => {
     setInfo(loadStoredInfo());
@@ -92,11 +101,16 @@ function ChatPage() {
 
   const send = (text: string) => {
     const value = text.trim();
-    if (!value || busy) return;
+    if ((!value && files.length === 0) || busy) return;
+    stopMic();
     const details = [infoToPrompt(info), memorySummary()].filter(Boolean).join("\n\n");
     logChatMessage({ role: "user", content: value, signals });
-    void sendMessage({ text: value }, details ? { body: { userInfo: details } } : undefined);
+    void sendMessage(
+      { text: value || "Here's a screenshot - what does it mean and what should I do?", files },
+      details ? { body: { userInfo: details } } : undefined,
+    );
     setInput("");
+    setFiles([]);
   };
 
   return (
@@ -144,10 +158,20 @@ function ChatPage() {
                       {message.parts.map((part, i) =>
                         part.type === "text" ? (
                           <MessageResponse key={i}>{part.text}</MessageResponse>
+                        ) : part.type === "file" ? (
+                          <img
+                            key={i}
+                            src={part.url}
+                            alt={part.filename ?? "Attachment"}
+                            className="mt-2 max-h-56 rounded-xl border border-border object-contain"
+                          />
                         ) : null,
                       )}
                       {message.role === "assistant" && (
-                        <ChatApplyActions text={text} onApply={setWizard} signals={signals} />
+                        <>
+                          <ChatApplyActions text={text} onApply={setWizard} signals={signals} />
+                          <ChatArticleLinks text={text} />
+                        </>
                       )}
                     </MessageContent>
                   </Message>
@@ -165,6 +189,27 @@ function ChatPage() {
             send(input);
           }}
         >
+          {files.length > 0 && (
+            <div className="flex flex-wrap gap-2 px-3 pt-3">
+              {files.map((f, i) => (
+                <div key={f.url} className="relative">
+                  <img
+                    src={f.url}
+                    alt={f.filename}
+                    className="size-16 rounded-xl border border-border object-cover"
+                  />
+                  <button
+                    type="button"
+                    aria-label={`Remove ${f.filename}`}
+                    onClick={() => setFiles((prev) => prev.filter((_, idx) => idx !== i))}
+                    className="absolute -right-1.5 -top-1.5 rounded-full bg-foreground p-0.5 text-background"
+                  >
+                    <X className="size-3" />
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
           <PromptInputTextarea
             ref={textareaRef}
             value={input}
@@ -173,10 +218,50 @@ function ChatPage() {
             onChange={(event) => setInput(event.target.value)}
           />
           <PromptInputFooter className="justify-between">
-            <span className="pl-1 text-xs text-muted-foreground">
-              Estimates only - agencies make the final call.
-            </span>
-            <PromptInputSubmit status={status} disabled={!input.trim() && !busy} />
+            <div className="flex items-center gap-1">
+              <input
+                ref={fileRef}
+                type="file"
+                accept="image/*"
+                multiple
+                className="hidden"
+                onChange={async (event) => {
+                  const picked = await readAttachments(event.target.files);
+                  if (picked.length) setFiles((prev) => [...prev, ...picked].slice(0, 4));
+                  event.target.value = "";
+                }}
+              />
+              <button
+                type="button"
+                aria-label="Attach a screenshot or photo"
+                onClick={() => fileRef.current?.click()}
+                className="rounded-full p-2 text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
+              >
+                <Paperclip className="size-4" />
+              </button>
+              {micSupported && (
+                <button
+                  type="button"
+                  aria-label={listening ? "Stop recording" : "Speak your question"}
+                  aria-pressed={listening}
+                  onClick={toggleMic}
+                  className={`rounded-full p-2 transition-colors ${
+                    listening
+                      ? "bg-primary text-primary-foreground"
+                      : "text-muted-foreground hover:bg-secondary hover:text-foreground"
+                  }`}
+                >
+                  <Mic className="size-4" />
+                </button>
+              )}
+              <span className="pl-1 text-xs text-muted-foreground">
+                {listening ? "Listening…" : "Estimates only - agencies make the final call."}
+              </span>
+            </div>
+            <PromptInputSubmit
+              status={status}
+              disabled={!input.trim() && files.length === 0 && !busy}
+            />
           </PromptInputFooter>
         </PromptInput>
         </div>

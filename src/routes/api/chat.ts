@@ -3,11 +3,16 @@ import { createFileRoute } from "@tanstack/react-router";
 import { createClient } from "@supabase/supabase-js";
 import { convertToModelMessages, streamText, type UIMessage } from "ai";
 import { PROGRAMS } from "@/lib/programs";
+import { ARTICLES } from "@/lib/blog";
 import type { Database } from "@/integrations/supabase/types";
 import { requireApiUser } from "@/lib/api-auth.server";
 
 const CATALOG = PROGRAMS.map(
   (p) => `- ${p.name} (${p.agency}) - ${p.category}; ${p.estimate}; ${p.summary} Who: ${p.who}`,
+).join("\n");
+
+const ARTICLE_LIST = ARTICLES.map(
+  (a) => `- "${a.title}" (${a.category}, ${a.readTime}) - ${a.summary}`,
 ).join("\n");
 
 const SYSTEM_PROMPT = `You are Claimly's benefits guide. You help people in the United States find public benefits and tax credits they may qualify for, then help them apply - entirely inside Claimly.
@@ -40,6 +45,17 @@ How you work:
 - If nothing in the catalog is a strong fit, say that plainly. Do not pad the answer with programs the user obviously doesn't qualify for.
 - If someone asks for halal/Islamic-values guidance, flag programs that involve interest-bearing structures and note where a program is generally fine.
 - Always be clear that estimates are approximate and final eligibility is decided by the agency.
+
+CLAIMLY RESOURCES - always point to a guide:
+- Claimly has its own library of plain-language guides in the Resources tab. Whenever one of them covers what you're talking about, mention it by its EXACT title in your reply (for example: read our guide "..."). Claimly turns that mention into a tappable card that opens the article - so never paste a URL and never say you can't link to it.
+- Reference at most two guides per reply, and only when they genuinely match the topic.
+
+Claimly Resources articles:
+${ARTICLE_LIST}
+
+IMAGES AND SCREENSHOTS:
+- People can attach photos, screenshots of letters, notices, bills, pay stubs, or forms. When one is attached, read it carefully, say in plain words what it is and what it means for them, point out any deadline or action needed, and then continue helping.
+- Never read out or repeat full account numbers, Social Security numbers, or card numbers you see in an image. Say the last few digits at most.
 
 CRITICAL - how the Apply buttons work:
 SCOPE - what you help with:
