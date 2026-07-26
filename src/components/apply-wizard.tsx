@@ -247,21 +247,18 @@ export function ApplyWizard({
         description: error.message,
       });
     }
-    // Instant approval confirmation email to the applicant.
-    const email = user.email ?? (answers.email as string | undefined);
-    if (email) {
-      try {
-        await notify({
-          data: {
-            to: email,
-            programName: record.programName,
-            status: "Approved",
-            reviewerNote: "Your submission was received and instantly approved by Claimly. Our team may follow up if additional verification is needed.",
-          },
-        });
-      } catch (e) {
-        console.error("[apply-wizard] confirmation email failed", e);
-      }
+    // Instant approval confirmation email, always sent to the signed-in
+    // user's own account email (the server never accepts a recipient).
+    try {
+      await notify({
+        data: {
+          programName: record.programName,
+          status: "Approved",
+          reviewerNote: "Your submission was received and instantly approved by Claimly. Our team may follow up if additional verification is needed.",
+        },
+      });
+    } catch (e) {
+      console.error("[apply-wizard] confirmation email failed", e);
     }
   };
 
