@@ -1,3 +1,4 @@
+import { authFetch } from "@/lib/api-client";
 import { store } from "@/lib/store";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import {
@@ -154,7 +155,7 @@ function Index() {
     });
     try {
       const [data] = await Promise.all([
-        fetch("/api/match", {
+        authFetch("/api/match", {
           method: "POST",
           headers: { "content-type": "application/json" },
           body: JSON.stringify({ situation, zip }),
