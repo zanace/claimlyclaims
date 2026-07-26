@@ -1,3 +1,4 @@
+import { authFetch } from "@/lib/api-client";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import {
@@ -103,7 +104,7 @@ export function ApplyWizard({
     const hasSaved = Object.values(saved).some((v) => String(v ?? "").trim());
     setStage(hasSaved ? "confirm" : "intro");
     setLoadingPlan(true);
-    fetch("/api/apply", {
+    authFetch("/api/apply", {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({ action: "plan", program, answers: saved }),
@@ -142,7 +143,7 @@ export function ApplyWizard({
     (finalAnswers: Answers) => {
       setStage("processing");
       setStepIdx(0);
-      fetch("/api/apply", {
+      authFetch("/api/apply", {
         method: "POST",
         headers: { "content-type": "application/json" },
         body: JSON.stringify({ action: "review", program, answers: finalAnswers }),

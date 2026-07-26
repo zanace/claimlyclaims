@@ -1,3 +1,4 @@
+import { authFetch } from "@/lib/api-client";
 import { createPortal } from "react-dom";
 import { useEffect, useState } from "react";
 import { ExternalLink, FileText, Loader2, MapPin, X } from "lucide-react";
@@ -23,7 +24,7 @@ export function OfficialGuide({
     setState(userState);
     setGuide(null);
     setLoading(true);
-    fetch("/api/guide", {
+    authFetch("/api/guide", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ program, state: userState }),

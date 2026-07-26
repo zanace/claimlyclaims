@@ -1,6 +1,7 @@
 import { createOpenAI } from "@ai-sdk/openai";
 import { createFileRoute } from "@tanstack/react-router";
 import { generateText } from "ai";
+import { requireApiUser } from "@/lib/api-auth.server";
 import { PROGRAMS } from "@/lib/programs";
 import { extractSignals, screenProgram, type Signals } from "@/lib/eligibility";
 
@@ -51,6 +52,9 @@ export const Route = createFileRoute("/api/match")({
   server: {
     handlers: {
       POST: async ({ request }) => {
+        const auth = await requireApiUser(request);
+        if ("response" in auth) return auth.response;
+
         const { situation = "", zip = "" } = (await request.json()) as MatchRequest;
         const key = process.env.OPENAI_API_KEY;
         if (!key) return new Response("Missing OPENAI_API_KEY", { status: 500 });

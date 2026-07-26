@@ -1,3 +1,4 @@
+import { authFetch } from "@/lib/api-client";
 import { store } from "@/lib/store";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import {
@@ -154,17 +155,24 @@ function Index() {
     });
     try {
       const [data] = await Promise.all([
-        fetch("/api/match", {
+        authFetch("/api/match", {
           method: "POST",
           headers: { "content-type": "application/json" },
           body: JSON.stringify({ situation, zip }),
-        }).then((r) => r.json()),
+        }).then(async (r) => {
+          if (r.status === 401) throw new Error("auth");
+          return r.json();
+        }),
         new Promise((res) => setTimeout(res, 2400)),
       ]);
       setResults(data.results ?? []);
       setStatus("done");
-    } catch {
-      toast.error("Something went wrong. Please try again.");
+    } catch (err) {
+      toast.error(
+        err instanceof Error && err.message === "auth"
+          ? "Please sign in to get your matches."
+          : "Something went wrong. Please try again.",
+      );
       setStatus("idle");
     }
   }
