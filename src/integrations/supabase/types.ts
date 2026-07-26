@@ -24,6 +24,8 @@ export type Database = {
           notes: string | null
           program_id: string
           program_name: string
+          reviewed_at: string | null
+          reviewed_by: string | null
           reviewer_note: string | null
           state: string | null
           status: string
@@ -39,6 +41,8 @@ export type Database = {
           notes?: string | null
           program_id: string
           program_name: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
           reviewer_note?: string | null
           state?: string | null
           status?: string
@@ -54,6 +58,8 @@ export type Database = {
           notes?: string | null
           program_id?: string
           program_name?: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
           reviewer_note?: string | null
           state?: string | null
           status?: string
