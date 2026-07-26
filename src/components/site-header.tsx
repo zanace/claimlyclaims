@@ -1,34 +1,81 @@
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
-import { useState } from "react";
-import { Menu, X } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { Menu, X, ChevronDown, Compass, LayoutDashboard, Building2, Shield } from "lucide-react";
 import logo from "@/assets/logo.png";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { useAuth } from "@/lib/use-auth";
 import { supabase } from "@/integrations/supabase/client";
 
-const NAV = [
-  { to: "/", label: "Home" },
-  { to: "/dashboard", label: "Dashboard" },
-  { to: "/how-it-works", label: "How it works" },
-  { to: "/programs", label: "Programs" },
-  { to: "/applications", label: "Applications" },
-  { to: "/vault", label: "Vault" },
-  { to: "/saved", label: "Saved" },
-  { to: "/chat", label: "Assistant" },
-  { to: "/blog", label: "Resources" },
-  { to: "/team", label: "Team" },
-  { to: "/about", label: "About" },
-  { to: "/privacy", label: "Privacy" },
-  { to: "/settings", label: "Settings" },
-] as const;
+type NavItem = { to: string; label: string; hint?: string };
+type NavGroup = { id: string; label: string; icon: typeof Compass; items: NavItem[] };
+
+const GROUPS: NavGroup[] = [
+  {
+    id: "explore",
+    label: "Explore",
+    icon: Compass,
+    items: [
+      { to: "/", label: "Home", hint: "Find benefits by ZIP" },
+      { to: "/how-it-works", label: "How it works", hint: "The 3-step process" },
+      { to: "/programs", label: "Programs", hint: "150+ program directory" },
+      { to: "/chat", label: "Assistant", hint: "Ask the AI anything" },
+      { to: "/blog", label: "Resources", hint: "Guides and articles" },
+    ],
+  },
+  {
+    id: "account",
+    label: "My Claimly",
+    icon: LayoutDashboard,
+    items: [
+      { to: "/dashboard", label: "Dashboard", hint: "Your overview" },
+      { to: "/applications", label: "Applications", hint: "Status and history" },
+      { to: "/vault", label: "Vault", hint: "Secure documents" },
+      { to: "/saved", label: "Saved", hint: "Bookmarked programs" },
+      { to: "/settings", label: "Settings", hint: "Smart Profile info" },
+    ],
+  },
+  {
+    id: "company",
+    label: "Company",
+    icon: Building2,
+    items: [
+      { to: "/team", label: "Team", hint: "The people behind Claimly" },
+      { to: "/about", label: "About", hint: "Our mission" },
+      { to: "/privacy", label: "Privacy", hint: "How we handle data" },
+    ],
+  },
+];
 
 export function SiteHeader() {
   const { user, isAdmin } = useAuth();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [open, setOpen] = useState(false);
-  const items = isAdmin ? [...NAV, { to: "/admin", label: "Admin" } as const] : NAV;
+  const [menu, setMenu] = useState<string | null>(null);
+  const navRef = useRef<HTMLDivElement>(null);
+  const groups: NavGroup[] = isAdmin
+    ? GROUPS.map((g) =>
+        g.id === "account"
+          ? { ...g, items: [...g.items, { to: "/admin", label: "Admin", hint: "Review applications" }] }
+          : g,
+      )
+    : GROUPS;
+
+  useEffect(() => {
+    function onDown(e: MouseEvent) {
+      if (navRef.current && !navRef.current.contains(e.target as Node)) setMenu(null);
+    }
+    function onKey(e: KeyboardEvent) {
+      if (e.key === "Escape") setMenu(null);
+    }
+    document.addEventListener("mousedown", onDown);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("mousedown", onDown);
+      document.removeEventListener("keydown", onKey);
+    };
+  }, []);
 
   async function signOut() {
     await queryClient.cancelQueries();
@@ -44,18 +91,51 @@ export function SiteHeader() {
           <img src={logo} alt="Claimly logo" width={32} height={32} className="size-8 rounded-lg" />
           <span className="font-display text-xl leading-none tracking-tight text-black dark:text-white">Claimly</span>
         </Link>
-        <nav className="hidden flex-1 items-center justify-center gap-x-4 gap-y-1 text-[13px] whitespace-nowrap text-muted-foreground dark:text-white lg:flex">
-          {items.map((item) => (
-            <Link
-              key={item.to}
-              to={item.to}
-              activeOptions={{ exact: item.to === "/" }}
-              className="transition-colors hover:text-foreground [&.active]:font-semibold [&.active]:text-primary dark:[&.active]:text-primary"
-            >
-              {item.label}
-            </Link>
-          ))}
-        </nav>
+        <div ref={navRef} className="hidden flex-1 items-center justify-center gap-2 lg:flex">
+          {groups.map((group) => {
+            const Icon = group.icon;
+            const isOpen = menu === group.id;
+            return (
+              <div key={group.id} className="relative">
+                <button
+                  type="button"
+                  aria-expanded={isOpen}
+                  aria-haspopup="menu"
+                  onClick={() => setMenu(isOpen ? null : group.id)}
+                  className={`flex items-center gap-1.5 rounded-full border px-3.5 py-2 text-[13px] whitespace-nowrap transition-colors ${
+                    isOpen
+                      ? "border-border bg-secondary text-foreground"
+                      : "border-transparent text-muted-foreground hover:text-foreground dark:text-white"
+                  }`}
+                >
+                  <Icon className="size-4 text-primary" />
+                  {group.label}
+                  <ChevronDown className={`size-3.5 transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`} />
+                </button>
+                {isOpen && (
+                  <div
+                    role="menu"
+                    className="animate-mobile-nav absolute top-full left-1/2 z-50 mt-2 w-64 origin-top -translate-x-1/2 overflow-hidden rounded-2xl border border-border bg-background/95 p-1.5 shadow-[var(--shadow-soft)] backdrop-blur-md"
+                  >
+                    {group.items.map((item) => (
+                      <Link
+                        key={item.to}
+                        to={item.to}
+                        role="menuitem"
+                        onClick={() => setMenu(null)}
+                        activeOptions={{ exact: item.to === "/" }}
+                        className="block rounded-xl px-3 py-2 transition-colors hover:bg-secondary [&.active]:bg-secondary [&.active_.lbl]:font-semibold [&.active_.lbl]:text-primary"
+                      >
+                        <span className="lbl block text-sm text-foreground">{item.label}</span>
+                        {item.hint && <span className="block text-xs text-muted-foreground">{item.hint}</span>}
+                      </Link>
+                    ))}
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
         <div className="ml-auto flex items-center gap-3">
           <button
             type="button"
@@ -109,25 +189,38 @@ export function SiteHeader() {
         </div>
       </div>
       {open && (
-        <nav className="origin-top overflow-hidden border-t border-border/70 bg-background/95 px-5 py-3 animate-mobile-nav lg:hidden">
-          <ul className="grid grid-cols-2 gap-x-4 gap-y-2 text-sm text-muted-foreground dark:text-white sm:grid-cols-3">
-            {items.map((item, i) => (
-              <li
-                key={item.to}
-                className="animate-mobile-nav-item opacity-0"
-                style={{ animationDelay: `${60 + i * 35}ms` }}
-              >
-                <Link
-                  to={item.to}
-                  onClick={() => setOpen(false)}
-                  activeOptions={{ exact: item.to === "/" }}
-                  className="block py-1 transition-colors hover:text-foreground [&.active]:font-semibold [&.active]:text-primary dark:[&.active]:text-primary"
-                >
-                  {item.label}
-                </Link>
-              </li>
-            ))}
-          </ul>
+        <nav className="animate-mobile-nav origin-top overflow-hidden border-t border-border/70 bg-background/95 px-5 py-3 lg:hidden">
+          <div className="grid gap-4 sm:grid-cols-3">
+            {groups.map((group, gi) => {
+              const Icon = group.icon;
+              return (
+                <div key={group.id}>
+                  <p className="mb-1.5 flex items-center gap-1.5 text-xs font-semibold tracking-wide text-muted-foreground uppercase">
+                    <Icon className="size-3.5 text-primary" />
+                    {group.label}
+                  </p>
+                  <ul className="text-sm text-muted-foreground dark:text-white">
+                    {group.items.map((item, i) => (
+                      <li
+                        key={item.to}
+                        className="animate-mobile-nav-item opacity-0"
+                        style={{ animationDelay: `${60 + (gi * 5 + i) * 30}ms` }}
+                      >
+                        <Link
+                          to={item.to}
+                          onClick={() => setOpen(false)}
+                          activeOptions={{ exact: item.to === "/" }}
+                          className="block py-1 transition-colors hover:text-foreground [&.active]:font-semibold [&.active]:text-primary dark:[&.active]:text-primary"
+                        >
+                          {item.label}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              );
+            })}
+          </div>
         </nav>
       )}
     </header>
