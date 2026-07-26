@@ -8,15 +8,28 @@ import { ChatApplyActions, type ApplyTarget } from "@/components/chat-apply-acti
 import { extractSignals, signalsFromInfo } from "@/lib/eligibility";
 import { loadStoredInfo } from "@/components/info-panel";
 import { logChatMessage } from "@/lib/tracker";
+import { supabase } from "@/integrations/supabase/client";
 
 export function FloatingChat() {
   const [open, setOpen] = useState(false);
   const [input, setInput] = useState("");
   const [wizard, setWizard] = useState<ApplyTarget | null>(null);
   const scrollRef = useRef<HTMLDivElement | null>(null);
+  const [token, setToken] = useState<string | null>(null);
+
+  useEffect(() => {
+    void supabase.auth.getSession().then(({ data }) => setToken(data.session?.access_token ?? null));
+    const { data: sub } = supabase.auth.onAuthStateChange((_e, session) =>
+      setToken(session?.access_token ?? null),
+    );
+    return () => sub.subscription.unsubscribe();
+  }, []);
 
   const { messages, sendMessage, status } = useChat({
-    transport: new DefaultChatTransport({ api: "/api/chat" }),
+    transport: new DefaultChatTransport({
+      api: "/api/chat",
+      headers: token ? { Authorization: `Bearer ${token}` } : undefined,
+    }),
   });
 
   const signals = useMemo(() => {
