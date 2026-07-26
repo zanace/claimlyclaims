@@ -255,6 +255,7 @@ export function ApplyWizard({
         data: {
           programName: record.programName,
           status: "Approved",
+          applicationId: record.id,
           reviewerNote: "Your submission was received and instantly approved by Claimly. Our team may follow up if additional verification is needed.",
         },
       });
