@@ -18,6 +18,8 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/use-auth";
 import { useRouter } from "@tanstack/react-router";
+import { useServerFn } from "@tanstack/react-start";
+import { sendStatusEmail } from "@/lib/notify.functions";
 
 type Program = { id: string; name: string; estimate?: string };
 
@@ -60,6 +62,7 @@ export function ApplyWizard({
 }) {
   const { user } = useAuth();
   const router = useRouter();
+  const notify = useServerFn(sendStatusEmail);
   const [stage, setStage] = useState<Stage>("intro");
   const [answers, setAnswers] = useState<Answers>({});
   const [profileSnapshot, setProfileSnapshot] = useState<Answers>({});
@@ -218,7 +221,7 @@ export function ApplyWizard({
       programId: program.id,
       programName: program.name,
       submittedAt: new Date().toISOString(),
-      status: "Submitted",
+      status: "Approved",
       estimate: review?.monthlyBenefit,
       answers,
       autoFilled,
@@ -244,6 +247,22 @@ export function ApplyWizard({
       toast.error("Saved on this device, but couldn't sync to your account.", {
         description: error.message,
       });
+    }
+    // Instant approval confirmation email to the applicant.
+    const email = user.email ?? (answers.email as string | undefined);
+    if (email) {
+      try {
+        await notify({
+          data: {
+            to: email,
+            programName: record.programName,
+            status: "Approved",
+            reviewerNote: "Your submission was received and instantly approved by Claimly. Our team may follow up if additional verification is needed.",
+          },
+        });
+      } catch (e) {
+        console.error("[apply-wizard] confirmation email failed", e);
+      }
     }
   };
 
