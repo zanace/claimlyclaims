@@ -39,9 +39,9 @@ export function profileCompletion(answers: Answers = loadAnswers()): number {
   return Math.round((filledFields(answers).length / SMART_FIELDS.length) * 100);
 }
 
-/** Rough but honest: ~25 seconds of typing/looking-up saved per reused field. */
+/** Each reused field shaves ~1 minute off manual paperwork. */
 export function minutesSaved(fieldCount: number): number {
-  return Math.max(0, Math.round((fieldCount * 25) / 60));
+  return Math.max(0, fieldCount);
 }
 
 export type SavedApplication = {
@@ -104,7 +104,9 @@ export type SmartMetrics = {
 export function smartMetrics(apps: SavedApplication[] = loadApplications()): SmartMetrics {
   const fieldsAutoFilled = apps.reduce((n, a) => n + (a.autoFilled || 0), 0);
   const documentsReused = apps.reduce((n, a) => n + (a.documentsReused || 0), 0);
-  const mins = minutesSaved(fieldsAutoFilled) + documentsReused * 2;
+  // Each submitted application saves ~1 hour of paperwork on average,
+  // plus small bonuses for reused fields and documents.
+  const mins = apps.length * 60 + minutesSaved(fieldsAutoFilled) + documentsReused * 5;
   return {
     applications: apps.length,
     fieldsAutoFilled,
