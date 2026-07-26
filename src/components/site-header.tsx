@@ -98,12 +98,12 @@ export function SiteHeader() {
 
   return (
     <header className="sticky top-0 z-40 border-b border-border/70 bg-background/85 backdrop-blur-md">
-      <div className="mx-auto flex h-16 max-w-[1400px] items-center gap-6 px-5">
-        <Link to="/" className="flex shrink-0 items-center gap-2">
+      <div className="mx-auto grid h-16 max-w-[1400px] grid-cols-[1fr_auto_1fr] items-center gap-6 px-5">
+        <Link to="/" className="flex shrink-0 items-center gap-2 justify-self-start">
           <img src={logo} alt="Claimly logo" width={32} height={32} className="size-8 rounded-lg" />
           <span className="font-display text-xl leading-none tracking-tight text-black dark:text-white">Claimly</span>
         </Link>
-        <div ref={navRef} className="hidden flex-1 items-center justify-center gap-2 lg:flex">
+        <div ref={navRef} className="hidden items-center justify-center gap-2 lg:flex">
           {groups.map((group) => {
             const Icon = group.icon;
             const isOpen = menu === group.id;
@@ -156,7 +156,7 @@ export function SiteHeader() {
             );
           })}
         </div>
-        <div className="ml-auto flex items-center gap-3">
+        <div className="flex items-center gap-3 justify-self-end">
           <button
             type="button"
             aria-label="Toggle navigation"
