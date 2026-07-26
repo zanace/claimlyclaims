@@ -74,7 +74,7 @@ const FAQ = [
   },
   {
     q: "Does this cost anything?",
-    a: "[INSERT PRICING MODEL] - the founder should confirm the exact model here before launch. What is fixed: Claimly never takes a percentage of a benefit or refund you receive.",
+    a: "Checking what you qualify for is free. Claimly never takes a percentage of a benefit or refund you receive.",
   },
 ];
 
@@ -110,7 +110,7 @@ function HowItWorks() {
             <h2 className="font-display text-3xl tracking-tight">Why it's free to look</h2>
             <p className="mt-3 text-muted-foreground">
               Screening yourself against every program you might qualify for costs you nothing here,
-              and we never take a cut of a benefit or refund you receive. [INSERT PRICING MODEL]
+              and we never take a cut of a benefit or refund you receive.
             </p>
           </div>
         </section>
