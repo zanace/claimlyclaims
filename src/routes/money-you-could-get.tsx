@@ -25,17 +25,17 @@ const CATEGORIES = [
   {
     icon: Receipt,
     name: "Tax refunds & credits",
-    body: "EITC, the Child Tax Credit, education credits, and recovery-rebate-type credits - including years you never filed. Often the largest single amount we find. [VERIFY CURRENT FIGURE]",
+    body: "EITC, the Child Tax Credit, education credits, and recovery-rebate-type credits - including years you never filed. Often the largest single amount we find.",
   },
   {
     icon: Carrot,
     name: "Food assistance",
-    body: "SNAP for households and WIC for pregnant people and young children. Monthly, ongoing support rather than a one-time payment. [VERIFY CURRENT FIGURE]",
+    body: "SNAP for households and WIC for pregnant people and young children. Monthly, ongoing support rather than a one-time payment.",
   },
   {
     icon: Home,
     name: "Utility & housing assistance",
-    body: "LIHEAP for heating and cooling bills, emergency rental assistance, weatherization, and state-run crisis funds. [VERIFY CURRENT FIGURE]",
+    body: "LIHEAP for heating and cooling bills, emergency rental assistance, weatherization, and state-run crisis funds.",
   },
   {
     icon: Search,
@@ -45,12 +45,12 @@ const CATEGORIES = [
   {
     icon: Baby,
     name: "Family & child benefits",
-    body: "Child care subsidies, school meal programs, diaper and formula assistance, and state-specific family credits. [VERIFY CURRENT FIGURE]",
+    body: "Child care subsidies, school meal programs, diaper and formula assistance, and state-specific family credits.",
   },
   {
     icon: Stethoscope,
     name: "Healthcare assistance",
-    body: "Medicaid, CHIP for kids, and marketplace premium subsidies that many households assume they earn too much for. [VERIFY CURRENT FIGURE]",
+    body: "Medicaid, CHIP for kids, and marketplace premium subsidies that many households assume they earn too much for.",
   },
 ];
 
