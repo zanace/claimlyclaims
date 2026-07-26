@@ -16,6 +16,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { ThemeProvider, themeInitScript } from "@/lib/theme";
 import { FloatingChat } from "@/components/floating-chat";
+import { RepoNotice } from "@/components/repo-notice";
 import { useAuth } from "@/lib/use-auth";
 
 const PUBLIC_PATHS = new Set([
@@ -178,6 +179,7 @@ function RootComponent() {
           <Outlet />
         </div>
         <FloatingChat />
+        <RepoNotice />
       </ThemeProvider>
     </QueryClientProvider>
   );
