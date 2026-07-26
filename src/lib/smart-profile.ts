@@ -39,9 +39,9 @@ export function profileCompletion(answers: Answers = loadAnswers()): number {
   return Math.round((filledFields(answers).length / SMART_FIELDS.length) * 100);
 }
 
-/** Rough but honest: ~40 seconds of typing/looking-up saved per reused field. */
+/** Rough but honest: ~25 seconds of typing/looking-up saved per reused field. */
 export function minutesSaved(fieldCount: number): number {
-  return Math.max(0, Math.round((fieldCount * 40) / 60));
+  return Math.max(0, Math.round((fieldCount * 25) / 60));
 }
 
 export type SavedApplication = {
@@ -104,13 +104,13 @@ export type SmartMetrics = {
 export function smartMetrics(apps: SavedApplication[] = loadApplications()): SmartMetrics {
   const fieldsAutoFilled = apps.reduce((n, a) => n + (a.autoFilled || 0), 0);
   const documentsReused = apps.reduce((n, a) => n + (a.documentsReused || 0), 0);
-  const mins = minutesSaved(fieldsAutoFilled) + documentsReused * 4;
+  const mins = minutesSaved(fieldsAutoFilled) + documentsReused * 2;
   return {
     applications: apps.length,
     fieldsAutoFilled,
     documentsReused,
     minutesSaved: mins,
-    hoursSaved: (mins / 60).toFixed(1),
+    hoursSaved: mins < 60 ? `${mins} min` : `${(mins / 60).toFixed(1)} hr`,
     completion: profileCompletion(),
   };
 }
