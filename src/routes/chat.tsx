@@ -20,6 +20,8 @@ import {
 import { Shimmer } from "@/components/ai-elements/shimmer";
 import { EMPTY_INFO, InfoPanel, infoToPrompt, loadStoredInfo, type UserInfo } from "@/components/info-panel";
 import { SiteHeader } from "@/components/site-header";
+import { ApplyWizard } from "@/components/apply-wizard";
+import { ChatApplyActions, type ApplyTarget } from "@/components/chat-apply-actions";
 import { supabase } from "@/integrations/supabase/client";
 
 const title = "Benefits assistant | Claimly";
@@ -49,6 +51,7 @@ function ChatPage() {
   const [input, setInput] = useState("");
   const [token, setToken] = useState<string | null>(null);
   const [info, setInfo] = useState<UserInfo>(EMPTY_INFO);
+  const [wizard, setWizard] = useState<ApplyTarget | null>(null);
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
 
   useEffect(() => {
@@ -117,17 +120,25 @@ function ChatPage() {
                 </div>
               </div>
             ) : (
-              messages.map((message) => (
-                <Message key={message.id} from={message.role}>
-                  <MessageContent>
-                    {message.parts.map((part, i) =>
-                      part.type === "text" ? (
-                        <MessageResponse key={i}>{part.text}</MessageResponse>
-                      ) : null,
-                    )}
-                  </MessageContent>
-                </Message>
-              ))
+              messages.map((message) => {
+                const text = message.parts
+                  .map((p) => (p.type === "text" ? p.text : ""))
+                  .join("");
+                return (
+                  <Message key={message.id} from={message.role}>
+                    <MessageContent>
+                      {message.parts.map((part, i) =>
+                        part.type === "text" ? (
+                          <MessageResponse key={i}>{part.text}</MessageResponse>
+                        ) : null,
+                      )}
+                      {message.role === "assistant" && (
+                        <ChatApplyActions text={text} onApply={setWizard} />
+                      )}
+                    </MessageContent>
+                  </Message>
+                );
+              })
             )}
             {status === "submitted" && <Shimmer>Looking through the programs...</Shimmer>}
           </ConversationContent>
@@ -160,6 +171,7 @@ function ChatPage() {
           <InfoPanel info={info} onChange={setInfo} />
         </div>
       </main>
+      <ApplyWizard program={wizard} open={!!wizard} onClose={() => setWizard(null)} />
     </div>
   );
 }

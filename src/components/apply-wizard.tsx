@@ -11,6 +11,9 @@ import {
 import {
   minutesSaved, newApplicationId, recordApplication, SMART_FIELDS,
 } from "@/lib/smart-profile";
+import type { SavedApplication } from "@/lib/smart-profile";
+import { openApplicationPdf } from "@/lib/application-pdf";
+import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/use-auth";
 
@@ -57,6 +60,7 @@ export function ApplyWizard({
   const [stage, setStage] = useState<Stage>("intro");
   const [answers, setAnswers] = useState<Answers>({});
   const [profileSnapshot, setProfileSnapshot] = useState<Answers>({});
+  const [submitted, setSubmitted] = useState<SavedApplication | null>(null);
   const [persistToProfile, setPersistToProfile] = useState(true);
   const [changedIds, setChangedIds] = useState<string[]>([]);
   const [questions, setQuestions] = useState<WizardQuestion[]>([]);
@@ -198,7 +202,7 @@ export function ApplyWizard({
   const saved = minutesSaved(autoFilled);
 
   const submit = () => {
-    recordApplication({
+    const record: SavedApplication = {
       id: newApplicationId(),
       programId: program.id,
       programName: program.name,
@@ -209,7 +213,9 @@ export function ApplyWizard({
       autoFilled,
       asked: total,
       documentsReused: docsReused,
-    });
+    };
+    recordApplication(record);
+    setSubmitted(record);
     setStage("success");
   };
 
@@ -315,7 +321,14 @@ export function ApplyWizard({
           )}
 
           {stage === "success" && (
-            <SuccessStage program={program} review={review} autoFilled={autoFilled} minutes={saved} onDone={onClose} />
+            <SuccessStage
+              program={program}
+              review={review}
+              autoFilled={autoFilled}
+              minutes={saved}
+              record={submitted}
+              onDone={onClose}
+            />
           )}
         </div>
       </div>
@@ -765,12 +778,13 @@ function PreviewStage({
 }
 
 function SuccessStage({
-  program, review, autoFilled, minutes, onDone,
+  program, review, autoFilled, minutes, record, onDone,
 }: {
   program: Program;
   review: Review | null;
   autoFilled: number;
   minutes: number;
+  record: SavedApplication | null;
   onDone: () => void;
 }) {
   return (
@@ -797,12 +811,28 @@ function SuccessStage({
         Claimly auto-filled {autoFilled} fields and saved you about {minutes} minutes. Your next
         application will be even faster - find it under My Applications.
       </p>
-      <button
-        onClick={onDone}
-        className="mt-7 inline-flex items-center justify-center gap-2 rounded-2xl bg-foreground px-7 py-3.5 text-base font-semibold text-background transition hover:opacity-90"
-      >
-        <Check className="size-4" /> Done
-      </button>
+      <div className="mt-7 flex flex-col items-center gap-3">
+        {record && (
+          <button
+            onClick={() => {
+              const ok = openApplicationPdf(record);
+              if (!ok) toast.error("Allow pop-ups to download your PDF.");
+            }}
+            className="inline-flex items-center justify-center gap-2 rounded-2xl bg-primary px-7 py-3.5 text-base font-semibold text-primary-foreground transition hover:brightness-110"
+          >
+            <FileText className="size-4" /> Download application PDF
+          </button>
+        )}
+        <p className="max-w-sm text-xs text-muted-foreground">
+          Opens a print-ready copy. Choose "Save as PDF" to keep it or hand it in.
+        </p>
+        <button
+          onClick={onDone}
+          className="inline-flex items-center justify-center gap-2 rounded-2xl bg-foreground px-7 py-3.5 text-base font-semibold text-background transition hover:opacity-90"
+        >
+          <Check className="size-4" /> Done
+        </button>
+      </div>
     </div>
   );
 }

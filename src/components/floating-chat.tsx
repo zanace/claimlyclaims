@@ -3,10 +3,13 @@ import { memorySummary } from "@/lib/smart-profile";
 import { DefaultChatTransport } from "ai";
 import { MessageCircle, X, Send } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import { ApplyWizard } from "@/components/apply-wizard";
+import { ChatApplyActions, type ApplyTarget } from "@/components/chat-apply-actions";
 
 export function FloatingChat() {
   const [open, setOpen] = useState(false);
   const [input, setInput] = useState("");
+  const [wizard, setWizard] = useState<ApplyTarget | null>(null);
   const scrollRef = useRef<HTMLDivElement | null>(null);
 
   const { messages, sendMessage, status } = useChat({
@@ -80,6 +83,9 @@ export function FloatingChat() {
                   }
                 >
                   {text}
+                  {m.role === "assistant" && (
+                    <ChatApplyActions text={text} onApply={setWizard} compact />
+                  )}
                 </div>
               );
             })}
@@ -104,6 +110,7 @@ export function FloatingChat() {
           </form>
         </div>
       )}
+      <ApplyWizard program={wizard} open={!!wizard} onClose={() => setWizard(null)} />
     </>
   );
 }
