@@ -31,24 +31,6 @@ export const Route = createFileRoute("/applications")({
   component: Applications,
 });
 
-function applicationHtml(app: SavedApplication) {
-  const rows = Object.entries(app.answers)
-    .filter(([, v]) => String(v ?? "").trim())
-    .map(
-      ([id, v]) =>
-        `<tr><td style="padding:8px 14px;color:#555;border-bottom:1px solid #eee">${labelFor(id)}</td><td style="padding:8px 14px;border-bottom:1px solid #eee"><b>${String(v).replace(/</g, "&lt;")}</b></td></tr>`,
-    )
-    .join("");
-  return `<!doctype html><html><head><meta charset="utf-8"><title>${app.programName} - ${app.id}</title></head>
-<body style="font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;max-width:720px;margin:40px auto;color:#111">
-<h1 style="margin:0;font-size:26px">${app.programName}</h1>
-<p style="color:#666;margin:6px 0 2px">Application ID: <b>${app.id}</b></p>
-<p style="color:#666;margin:0 0 24px">Submitted ${new Date(app.submittedAt).toLocaleString()} &middot; Status: ${app.status}${app.estimate ? ` &middot; Estimate: ${app.estimate}` : ""}</p>
-<table style="width:100%;border-collapse:collapse;font-size:14px">${rows}</table>
-<p style="margin-top:28px;color:#888;font-size:12px">Prepared by Claimly. Demo application record - not submitted to any agency.</p>
-</body></html>`;
-}
-
 function Applications() {
   const [apps, setApps] = useState<SavedApplication[]>([]);
   const [wizard, setWizard] = useState<{ id: string; name: string } | null>(null);
@@ -60,11 +42,7 @@ function Applications() {
   const metrics = useMemo(() => smartMetrics(apps), [apps]);
 
   function openPdf(app: SavedApplication, print: boolean) {
-    const w = window.open("", "_blank");
-    if (!w) return toast.error("Allow pop-ups to view your PDF.");
-    w.document.write(applicationHtml(app));
-    w.document.close();
-    if (print) setTimeout(() => w.print(), 400);
+    if (!openApplicationPdf(app, print)) toast.error("Allow pop-ups to view your PDF.");
   }
 
   function reuse(app: SavedApplication) {
