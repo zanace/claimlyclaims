@@ -153,7 +153,8 @@ function Admin() {
   const patterns = useMemo(() => {
     const map = new Map<string, { name: string; count: number; lastReason?: string }>();
     for (const c of contradictions) {
-      const cur = map.get(c.program_id) ?? { name: c.program_name, count: 0 };
+      const cur: { name: string; count: number; lastReason?: string } =
+        map.get(c.program_id) ?? { name: c.program_name, count: 0 };
       cur.count += 1;
       cur.lastReason = c.reason ?? cur.lastReason;
       map.set(c.program_id, cur);
