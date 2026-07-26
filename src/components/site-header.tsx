@@ -54,6 +54,17 @@ export function SiteHeader() {
   const [open, setOpen] = useState(false);
   const [menu, setMenu] = useState<string | null>(null);
   const navRef = useRef<HTMLDivElement>(null);
+  const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  function openMenu(id: string) {
+    if (closeTimer.current) clearTimeout(closeTimer.current);
+    setMenu(id);
+  }
+  function scheduleClose() {
+    if (closeTimer.current) clearTimeout(closeTimer.current);
+    closeTimer.current = setTimeout(() => setMenu(null), 160);
+  }
+
   const groups: NavGroup[] = isAdmin
     ? GROUPS.map((g) =>
         g.id === "account"
@@ -74,6 +85,7 @@ export function SiteHeader() {
     return () => {
       document.removeEventListener("mousedown", onDown);
       document.removeEventListener("keydown", onKey);
+      if (closeTimer.current) clearTimeout(closeTimer.current);
     };
   }, []);
 
@@ -96,12 +108,19 @@ export function SiteHeader() {
             const Icon = group.icon;
             const isOpen = menu === group.id;
             return (
-              <div key={group.id} className="relative">
+              <div
+                key={group.id}
+                className="relative"
+                onMouseEnter={() => openMenu(group.id)}
+                onMouseLeave={scheduleClose}
+                onFocus={() => openMenu(group.id)}
+                onBlur={scheduleClose}
+              >
                 <button
                   type="button"
                   aria-expanded={isOpen}
                   aria-haspopup="menu"
-                  onClick={() => setMenu(isOpen ? null : group.id)}
+                  onClick={() => (isOpen ? setMenu(null) : openMenu(group.id))}
                   className={`flex items-center gap-1.5 rounded-full border px-3.5 py-2 text-[13px] whitespace-nowrap transition-colors ${
                     isOpen
                       ? "border-border bg-secondary text-foreground"
@@ -115,7 +134,8 @@ export function SiteHeader() {
                 {isOpen && (
                   <div
                     role="menu"
-                    className="animate-mobile-nav absolute top-full left-1/2 z-50 mt-2 w-64 origin-top -translate-x-1/2 overflow-hidden rounded-2xl border border-border bg-background/95 p-1.5 shadow-[var(--shadow-soft)] backdrop-blur-md"
+                    className="animate-mobile-nav absolute top-full left-1/2 z-50 w-64 origin-top -translate-x-1/2 overflow-hidden rounded-2xl border border-border bg-background/95 p-1.5 shadow-[var(--shadow-soft)] backdrop-blur-md before:absolute before:inset-x-0 before:-top-2 before:h-2 before:content-['']"
+                    style={{ marginTop: "0.5rem" }}
                   >
                     {group.items.map((item) => (
                       <Link
