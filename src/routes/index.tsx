@@ -190,6 +190,11 @@ function Index() {
       .filter((x): x is ProgramCard & { result: Result } => !!x);
   }, [results]);
 
+  const assistantQuery = useMemo(
+    () => (zip ? `${situation.trim()} (ZIP ${zip})` : situation.trim()),
+    [situation, zip],
+  );
+
   return (
     <div className="flex min-h-screen flex-col font-sans">
       <SiteHeader />
