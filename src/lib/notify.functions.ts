@@ -1,22 +1,29 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
+import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 
 const GATEWAY_URL = "https://connector-gateway.lovable.dev/resend";
 
 const input = z.object({
-  to: z.string().email(),
   programName: z.string().min(1).max(200),
   status: z.string().min(1).max(80),
   reviewerNote: z.string().max(1000).optional().nullable(),
 });
 
 /**
- * Sends a "your submission was processed" email to the applicant.
+ * Sends a "your submission was processed" email to the signed-in applicant.
+ * The recipient is always the authenticated user's own account email - it can
+ * never be supplied by the caller.
  * Requires the Resend connector to be linked so RESEND_API_KEY is available.
  */
 export const sendStatusEmail = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
   .inputValidator((data: unknown) => input.parse(data))
-  .handler(async ({ data }) => {
+  .handler(async ({ data, context }) => {
+    const to = (context.claims as { email?: string } | null)?.email;
+    if (!to) {
+      return { ok: false, reason: "no_recipient" as const };
+    }
     const lovableKey = process.env.LOVABLE_API_KEY;
     const resendKey = process.env.RESEND_API_KEY;
     if (!lovableKey || !resendKey) {
@@ -44,7 +51,7 @@ export const sendStatusEmail = createServerFn({ method: "POST" })
       },
       body: JSON.stringify({
         from: "Claimly <onboarding@resend.dev>",
-        to: [data.to],
+        to: [to],
         subject,
         html,
       }),
