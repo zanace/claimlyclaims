@@ -1,4 +1,4 @@
-import { ArrowRight, ListChecks, FileText } from "lucide-react";
+import { ListChecks, FileText } from "lucide-react";
 import { useMemo, useState } from "react";
 import { PROGRAMS } from "@/lib/programs";
 import { officialSourceFor } from "@/lib/official-links";
@@ -71,11 +71,11 @@ export function programsMentioned(text: string): ApplyTarget[] {
 
 export function ChatApplyActions({
   text,
-  onApply,
+  onApply: _onApply,
   compact,
 }: {
   text: string;
-  onApply: (program: ApplyTarget) => void;
+  onApply?: (program: ApplyTarget) => void;
   compact?: boolean;
 }) {
   const targets = useMemo(() => programsMentioned(text), [text]);

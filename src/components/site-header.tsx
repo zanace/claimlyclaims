@@ -47,7 +47,7 @@ const GROUPS: NavGroup[] = [
 ];
 
 export function SiteHeader() {
-  const { user, isAdmin } = useAuth();
+  const { user } = useAuth();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [open, setOpen] = useState(false);
