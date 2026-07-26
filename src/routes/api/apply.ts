@@ -1,6 +1,7 @@
 import { createOpenAI } from "@ai-sdk/openai";
 import { createFileRoute } from "@tanstack/react-router";
 import { generateText } from "ai";
+import { requireApiUser } from "@/lib/api-auth.server";
 
 type Body = {
   action?: "plan" | "review";
@@ -29,6 +30,9 @@ export const Route = createFileRoute("/api/apply")({
   server: {
     handlers: {
       POST: async ({ request }) => {
+        const auth = await requireApiUser(request);
+        if ("response" in auth) return auth.response;
+
         const { action = "plan", program, answers = {} } = (await request.json()) as Body;
         const key = process.env.OPENAI_API_KEY;
         const programName = program?.name || "this benefit program";

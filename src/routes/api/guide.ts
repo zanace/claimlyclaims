@@ -1,6 +1,7 @@
 import { createOpenAI } from "@ai-sdk/openai";
 import { createFileRoute } from "@tanstack/react-router";
 import { generateText } from "ai";
+import { requireApiUser } from "@/lib/api-auth.server";
 import { officialSourceFor } from "@/lib/official-links";
 
 type Body = { program?: { id?: string; name?: string }; state?: string };
@@ -48,6 +49,9 @@ export const Route = createFileRoute("/api/guide")({
   server: {
     handlers: {
       POST: async ({ request }) => {
+        const auth = await requireApiUser(request);
+        if ("response" in auth) return auth.response;
+
         const { program, state = "" } = (await request.json()) as Body;
         const programName = program?.name || "this benefit program";
         const src = officialSourceFor(`${program?.id ?? ""} ${programName}`);
