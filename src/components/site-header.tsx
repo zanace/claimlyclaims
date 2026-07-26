@@ -220,6 +220,19 @@ export function SiteHeader() {
       {open && (
         <nav className="animate-mobile-nav origin-top overflow-hidden border-t border-border/70 bg-background/95 px-5 py-3 lg:hidden">
           <div className="grid gap-2">
+            <Link
+              to="/chat"
+              onClick={() => {
+                setOpen(false);
+                setMenu(null);
+                setMobileGroup(null);
+              }}
+              className="animate-mobile-nav-item flex items-center gap-2 rounded-2xl border border-border/70 px-3 py-3 text-sm text-foreground opacity-0 transition-colors hover:bg-secondary [&.active]:bg-secondary [&.active]:font-semibold [&.active]:text-primary"
+              style={{ animationDelay: "30ms" }}
+            >
+              <MessagesSquare className="size-4 text-primary" />
+              <span className="font-medium">Assistant</span>
+            </Link>
             {groups.map((group, gi) => {
               const Icon = group.icon;
               const isOpen = mobileGroup === group.id;
