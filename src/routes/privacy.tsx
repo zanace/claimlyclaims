@@ -50,6 +50,15 @@ function Privacy() {
 
         <section className="mt-14 space-y-6 text-sm leading-relaxed text-muted-foreground animate-fade-in-up">
           <div>
+            <h2 className="text-xl font-semibold text-foreground">We don't ask for your PII</h2>
+            <p className="mt-2">
+              Personally Identifiable Information (PII) is any data that can identify a specific person, either by itself or when mixed with other details. It covers direct identifiers like your full name, Social Security number, and driver's license or other ID numbers; sensitive records like financial, bank, and medical data; and indirect background details like date of birth, exact address, or employer that can single you out when combined with something else.
+            </p>
+            <p className="mt-2">
+              Claimly does not ask for any of it. Screening works from broad, non-identifying facts - your ZIP or state, household size, and a rough income range - and the assistant will never request an SSN, bank account, or ID number.
+            </p>
+          </div>
+          <div>
             <h2 className="text-xl font-semibold text-foreground">What we collect</h2>
             <p className="mt-2">
               Only what you tell the assistant (situation, ZIP, household basics) and, if you sign in, your email address. We use this to personalize the programs we surface - nothing more.
