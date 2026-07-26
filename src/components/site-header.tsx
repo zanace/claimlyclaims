@@ -1,7 +1,7 @@
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
 import { useEffect, useRef, useState } from "react";
-import { Menu, X, ChevronDown, Compass, LayoutDashboard, Building2, Settings as SettingsIcon } from "lucide-react";
+import { Menu, X, ChevronDown, Compass, LayoutDashboard, Building2, MessagesSquare, Settings as SettingsIcon } from "lucide-react";
 import logo from "@/assets/logo.png";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { useAuth } from "@/lib/use-auth";
@@ -19,7 +19,6 @@ const GROUPS: NavGroup[] = [
       { to: "/", label: "Home", hint: "Find benefits by ZIP" },
       { to: "/how-it-works", label: "How it works", hint: "The 3-step process" },
       { to: "/programs", label: "Programs", hint: "150+ program directory" },
-      { to: "/chat", label: "Assistant", hint: "Ask the AI anything" },
     ],
   },
   {
@@ -99,6 +98,13 @@ export function SiteHeader() {
           <span className="font-display text-xl leading-none tracking-tight text-black dark:text-white">Claimly</span>
         </Link>
         <div ref={navRef} className="hidden items-center justify-center gap-2 lg:flex">
+          <Link
+            to="/chat"
+            className="flex items-center gap-1.5 rounded-full border border-transparent px-3.5 py-2 text-[13px] whitespace-nowrap text-muted-foreground transition-colors hover:text-foreground dark:text-white [&.active]:border-border [&.active]:bg-secondary [&.active]:text-foreground"
+          >
+            <MessagesSquare className="size-4 text-primary" />
+            Assistant
+          </Link>
           {groups.map((group) => {
             const Icon = group.icon;
             const isOpen = menu === group.id;
@@ -214,6 +220,19 @@ export function SiteHeader() {
       {open && (
         <nav className="animate-mobile-nav origin-top overflow-hidden border-t border-border/70 bg-background/95 px-5 py-3 lg:hidden">
           <div className="grid gap-2">
+            <Link
+              to="/chat"
+              onClick={() => {
+                setOpen(false);
+                setMenu(null);
+                setMobileGroup(null);
+              }}
+              className="animate-mobile-nav-item flex items-center gap-2 rounded-2xl border border-border/70 px-3 py-3 text-sm text-foreground opacity-0 transition-colors hover:bg-secondary [&.active]:bg-secondary [&.active]:font-semibold [&.active]:text-primary"
+              style={{ animationDelay: "30ms" }}
+            >
+              <MessagesSquare className="size-4 text-primary" />
+              <span className="font-medium">Assistant</span>
+            </Link>
             {groups.map((group, gi) => {
               const Icon = group.icon;
               const isOpen = mobileGroup === group.id;
