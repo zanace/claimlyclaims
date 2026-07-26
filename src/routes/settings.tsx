@@ -327,6 +327,7 @@ function SettingsPage() {
           )}
         </section>
       </main>
+
       <SiteFooter />
     </div>
   );
