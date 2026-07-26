@@ -63,6 +63,21 @@ const HEADLINES: Array<{ pre: string; accent: string; post: string }> = [
   { pre: "Match with programs ", accent: "made", post: " for you." },
   { pre: "Access the help ", accent: "designed", post: " for you." },
   { pre: "Find what you're ", accent: "owed", post: "." },
+  { pre: "Uncover benefits you ", accent: "never knew", post: " existed." },
+  { pre: "See what support is ", accent: "yours", post: " to claim." },
+  { pre: "Get matched to help in ", accent: "seconds", post: "." },
+  { pre: "Your benefits, ", accent: "finally", post: " within reach." },
+  { pre: "Stop leaving money on the ", accent: "table", post: "." },
+  { pre: "Claim what's ", accent: "rightfully", post: " yours." },
+  { pre: "Real help, ", accent: "no", post: " runaround." },
+  { pre: "Support you qualify for, ", accent: "made simple", post: "." },
+  { pre: "The help you need is ", accent: "closer", post: " than you think." },
+  { pre: "Find every program you ", accent: "deserve", post: "." },
+  { pre: "Turn your situation into ", accent: "support", post: "." },
+  { pre: "Benefits made ", accent: "effortless", post: "." },
+  { pre: "Discover the aid you've been ", accent: "missing", post: "." },
+  { pre: "One sentence away from ", accent: "real help", post: "." },
+  { pre: "Help that's ", accent: "already", post: " yours." },
 ];
 
 type Result = { id: string; why: string; fit: "strong" | "possible" | "worth_checking" };
@@ -78,7 +93,7 @@ function Index() {
   const [headlineIdx, setHeadlineIdx] = useState(0);
 
   useEffect(() => {
-    const t = setInterval(() => setHeadlineIdx((i) => (i + 1) % HEADLINES.length), 8400);
+    const t = setInterval(() => setHeadlineIdx((i) => (i + 1) % HEADLINES.length), 4000);
     return () => clearInterval(t);
   }, []);
 
