@@ -52,12 +52,14 @@ function Admin() {
   const [apps, setApps] = useState<Application[]>([]);
   const [emails, setEmails] = useState<Record<string, string>>({});
   const [fetching, setFetching] = useState(false);
+  const [busyId, setBusyId] = useState<string | null>(null);
+  const [celebrate, setCelebrate] = useState<string | null>(null);
 
   const load = useCallback(async () => {
     setFetching(true);
     const { data, error } = await supabase
       .from("applications")
-      .select("id, user_id, program_name, state, created_at")
+      .select("id, user_id, program_name, state, created_at, status, reviewed_at")
       .order("created_at", { ascending: false });
     if (error) toast.error(error.message);
     setApps((data as Application[]) ?? []);
@@ -72,6 +74,37 @@ function Admin() {
   useEffect(() => {
     if (isAdmin && gate === "open") void load();
   }, [isAdmin, gate, load]);
+
+  const decide = useCallback(
+    async (app: Application, status: "Approved" | "Declined") => {
+      setBusyId(app.id);
+      const { error } = await supabase
+        .from("applications")
+        .update({
+          status,
+          reviewed_by: user?.id ?? null,
+          reviewed_at: new Date().toISOString(),
+        })
+        .eq("id", app.id);
+      setBusyId(null);
+      if (error) {
+        toast.error(error.message);
+        return;
+      }
+      setApps((prev) =>
+        prev.map((a) =>
+          a.id === app.id ? { ...a, status, reviewed_at: new Date().toISOString() } : a,
+        ),
+      );
+      if (status === "Approved") {
+        setCelebrate(app.program_name);
+        setTimeout(() => setCelebrate(null), 2200);
+      } else {
+        toast.success("Application declined.");
+      }
+    },
+    [user?.id],
+  );
 
   if (loading || gate === "checking") {
     return <Shell><p className="text-muted-foreground">Loading…</p></Shell>;
