@@ -3,9 +3,16 @@ import { useMemo, useState } from "react";
 import { PROGRAMS } from "@/lib/programs";
 import { officialSourceFor } from "@/lib/official-links";
 import { OfficialGuide } from "@/components/official-guide";
+import { screenProgram, type Signals } from "@/lib/eligibility";
 
 export type Confidence = "strong" | "maybe" | "not_fit";
-export type ApplyTarget = { id: string; name: string; estimate?: string; confidence: Confidence };
+export type ApplyTarget = {
+  id: string;
+  name: string;
+  estimate?: string;
+  confidence: Confidence;
+  reason?: string;
+};
 
 const escapeRe = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
@@ -46,7 +53,7 @@ function phraseFor(name: string) {
     .trim();
 }
 
-/** Classifies a chunk of text into a confidence bucket based on wording the AI used. */
+/** Classifies a window of text near a program mention. */
 function classifyConfidence(chunk: string): Confidence {
   const s = chunk.toLowerCase();
   // Explicit "not a fit" signals take priority.
@@ -74,35 +81,42 @@ function classifyConfidence(chunk: string): Confidence {
   return "strong";
 }
 
-/** Finds programs the assistant actually named in a message, tagged with confidence based on nearby wording. */
+/** Finds programs the assistant actually named in a message, tagged with confidence
+ *  based on nearby wording. Uses a per-mention window instead of a whole paragraph
+ *  so a "not a fit" verdict about one program can't taint siblings in the same chunk. */
 export function programsMentioned(text: string): ApplyTarget[] {
   if (!text) return [];
-  // Split into paragraphs / bullet lines so we can localize the confidence signal.
-  const chunks = text
-    .split(/\n{1,}|(?<=[.!?])\s+(?=[A-Z(*"-])/)
-    .map((c) => c.trim())
-    .filter(Boolean);
   const found = new Map<string, ApplyTarget>();
   const tryAdd = (t: Omit<ApplyTarget, "confidence">, conf: Confidence) => {
     const existing = found.get(t.id);
-    // Priority: strong > not_fit > maybe (a program that is actively marked not-a-fit should stay marked).
-    const rank = { strong: 3, not_fit: 2, maybe: 1 } as const;
+    // Priority: not_fit > strong > maybe (an explicit not-a-fit verdict wins).
+    const rank = { not_fit: 3, strong: 2, maybe: 1 } as const;
     if (!existing || rank[conf] > rank[existing.confidence]) {
       found.set(t.id, { ...t, confidence: conf });
     }
   };
+  const hay = text.toLowerCase();
+  const WINDOW = 160; // chars either side of the mention
+  const localWindow = (idx: number, len: number) =>
+    text.slice(Math.max(0, idx - WINDOW), Math.min(text.length, idx + len + WINDOW));
 
-  for (const chunk of chunks) {
-    const hay = chunk.toLowerCase();
-    const conf = classifyConfidence(chunk);
-    for (const [key, target] of ACRONYMS) {
-      if (new RegExp(`\\b${escapeRe(key)}\\b`, "i").test(hay)) tryAdd(target, conf);
+  for (const [key, target] of ACRONYMS) {
+    const re = new RegExp(`\\b${escapeRe(key)}\\b`, "gi");
+    let m: RegExpExecArray | null;
+    while ((m = re.exec(hay)) !== null) {
+      tryAdd(target, classifyConfidence(localWindow(m.index, m[0].length)));
     }
-    for (const p of PROGRAMS) {
-      const phrase = phraseFor(p.name);
-      if (phrase.length > 6 && !STOP.has(phrase) && hay.includes(phrase)) {
-        tryAdd({ id: p.id, name: p.name, estimate: p.estimate }, conf);
-      }
+  }
+  for (const p of PROGRAMS) {
+    const phrase = phraseFor(p.name);
+    if (phrase.length <= 6 || STOP.has(phrase)) continue;
+    let idx = hay.indexOf(phrase);
+    while (idx !== -1) {
+      tryAdd(
+        { id: p.id, name: p.name, estimate: p.estimate },
+        classifyConfidence(localWindow(idx, phrase.length)),
+      );
+      idx = hay.indexOf(phrase, idx + phrase.length);
     }
   }
   return [...found.values()].slice(0, 6);
@@ -112,12 +126,25 @@ export function ChatApplyActions({
   text,
   onApply,
   compact,
+  signals,
 }: {
   text: string;
   onApply?: (program: ApplyTarget) => void;
   compact?: boolean;
+  signals?: Signals;
 }) {
-  const targets = useMemo(() => programsMentioned(text), [text]);
+  const targets = useMemo(() => {
+    const raw = programsMentioned(text);
+    if (!signals) return raw;
+    // Deterministic screen: override AI confidence when hard rules are broken.
+    return raw.map((t) => {
+      const verdict = screenProgram(t.id, signals);
+      if (verdict.fit === "not_fit") {
+        return { ...t, confidence: "not_fit" as Confidence, reason: verdict.reason };
+      }
+      return t;
+    });
+  }, [text, signals]);
   const [guide, setGuide] = useState<ApplyTarget | null>(null);
   if (!targets.length) return null;
 
@@ -141,6 +168,11 @@ export function ChatApplyActions({
           {p.name.replace(/\s*\([^)]*\)\s*/g, " ").trim()}
           {p.estimate ? <span className="ml-1 font-normal text-muted-foreground">· {p.estimate}</span> : null}
         </p>
+        {dim && p.reason ? (
+          <p className="mt-1 text-[11px] leading-relaxed text-amber-700 dark:text-amber-400">
+            {p.reason}
+          </p>
+        ) : null}
         <div className="mt-2 flex flex-wrap gap-2">
           {p.confidence !== "not_fit" ? (
             <button

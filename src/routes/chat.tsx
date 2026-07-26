@@ -23,6 +23,8 @@ import { SiteHeader } from "@/components/site-header";
 import { ApplyWizard } from "@/components/apply-wizard";
 import { ChatApplyActions, type ApplyTarget } from "@/components/chat-apply-actions";
 import { supabase } from "@/integrations/supabase/client";
+import { extractSignals, signalsFromInfo } from "@/lib/eligibility";
+import { useMemo } from "react";
 
 const title = "Benefits assistant | Claimly";
 const description =
@@ -72,6 +74,17 @@ function ChatPage() {
   });
 
   const busy = status === "submitted" || status === "streaming";
+
+  // Combine structured info-panel data with anything the user typed
+  // in the conversation so we can hard-screen program cards.
+  const signals = useMemo(() => {
+    const base = signalsFromInfo(info);
+    const userText = messages
+      .filter((m) => m.role === "user")
+      .map((m) => m.parts.map((p) => (p.type === "text" ? p.text : "")).join(" "))
+      .join(" \n ");
+    return extractSignals(userText, base);
+  }, [info, messages]);
 
   useEffect(() => {
     if (!busy) textareaRef.current?.focus();
@@ -133,7 +146,7 @@ function ChatPage() {
                         ) : null,
                       )}
                       {message.role === "assistant" && (
-                        <ChatApplyActions text={text} onApply={setWizard} />
+                        <ChatApplyActions text={text} onApply={setWizard} signals={signals} />
                       )}
                     </MessageContent>
                   </Message>
