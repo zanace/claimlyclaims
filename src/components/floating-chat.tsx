@@ -2,9 +2,11 @@ import { useChat } from "@ai-sdk/react";
 import { memorySummary } from "@/lib/smart-profile";
 import { DefaultChatTransport } from "ai";
 import { MessageCircle, X, Send } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { ApplyWizard } from "@/components/apply-wizard";
 import { ChatApplyActions, type ApplyTarget } from "@/components/chat-apply-actions";
+import { extractSignals, signalsFromInfo } from "@/lib/eligibility";
+import { loadStoredInfo } from "@/components/info-panel";
 
 export function FloatingChat() {
   const [open, setOpen] = useState(false);
@@ -15,6 +17,15 @@ export function FloatingChat() {
   const { messages, sendMessage, status } = useChat({
     transport: new DefaultChatTransport({ api: "/api/chat" }),
   });
+
+  const signals = useMemo(() => {
+    const base = signalsFromInfo(loadStoredInfo());
+    const userText = messages
+      .filter((m) => m.role === "user")
+      .map((m) => m.parts.map((p) => (p.type === "text" ? p.text : "")).join(" "))
+      .join(" \n ");
+    return extractSignals(userText, base);
+  }, [messages]);
 
   const busy = status === "submitted" || status === "streaming";
 
@@ -84,7 +95,7 @@ export function FloatingChat() {
                 >
                   {text}
                   {m.role === "assistant" && (
-                    <ChatApplyActions text={text} onApply={setWizard} compact />
+                    <ChatApplyActions text={text} onApply={setWizard} compact signals={signals} />
                   )}
                 </div>
               );
