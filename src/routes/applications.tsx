@@ -98,10 +98,18 @@ function Applications() {
     });
   }
 
-  function remove(id: string) {
+  async function remove(id: string) {
     const next = apps.filter((a) => a.id !== id);
     setApps(next);
     saveApplications(next);
+    if (user?.id) {
+      const uuidRe = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+      const query = supabase.from("applications").delete().eq("user_id", user.id);
+      const { error } = await (uuidRe.test(id)
+        ? query.eq("id", id)
+        : query.ilike("notes", `%"${id}"%`));
+      if (error) toast.error("Removed here, but couldn't sync deletion to your account.");
+    }
   }
 
   const cards = [
