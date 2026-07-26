@@ -89,6 +89,23 @@ function Admin() {
     [apps, filter],
   );
 
+  const reviewerPoll = useMemo(() => {
+    const map = new Map<string, { label: string; count: number; last: string | null }>();
+    for (const a of apps) {
+      if (!a.reviewed_by) continue;
+      const label = emails[a.reviewed_by] ?? a.reviewed_by.slice(0, 8);
+      const cur = map.get(a.reviewed_by) ?? { label, count: 0, last: a.reviewed_at };
+      cur.count += 1;
+      if (a.reviewed_at && (!cur.last || new Date(a.reviewed_at) > new Date(cur.last))) {
+        cur.last = a.reviewed_at;
+      }
+      map.set(a.reviewed_by, cur);
+    }
+    const entries = [...map.values()].sort((a, b) => b.count - a.count);
+    const total = entries.reduce((s, e) => s + e.count, 0);
+    return { entries, total, unreviewed: apps.filter((a) => !a.reviewed_by).length };
+  }, [apps, emails]);
+
   async function update(id: string, patch: Partial<Application>) {
     const stamped = { ...patch, reviewed_by: user?.id ?? null, reviewed_at: new Date().toISOString() };
     const { error } = await supabase.from("applications").update(stamped).eq("id", id);
@@ -217,6 +234,62 @@ function Admin() {
       </div>
 
       <div className="mt-10 space-y-4">
+        {reviewerPoll.entries.length > 0 && (
+          <div className="rounded-2xl border border-border bg-card p-6 shadow-[var(--shadow-soft)]">
+            <div className="flex flex-wrap items-end justify-between gap-4">
+              <div>
+                <h2 className="font-display text-2xl">Reviewer activity</h2>
+                <p className="mt-1 text-sm text-muted-foreground">
+                  Which admins are handling the most (and least) applications. {reviewerPoll.unreviewed} still unreviewed.
+                </p>
+              </div>
+              <span className="rounded-full bg-secondary px-3 py-1 text-xs font-semibold">
+                {reviewerPoll.total} reviews
+              </span>
+            </div>
+            <ul className="mt-4 space-y-2">
+              {reviewerPoll.entries.map((e, i) => {
+                const pct = reviewerPoll.total ? (e.count / reviewerPoll.total) * 100 : 0;
+                const isTop = i === 0;
+                const isBottom = i === reviewerPoll.entries.length - 1 && reviewerPoll.entries.length > 1;
+                return (
+                  <li key={e.label} className="rounded-xl border border-border/60 p-3">
+                    <div className="flex items-start justify-between gap-4">
+                      <div className="flex items-center gap-2">
+                        <p className="text-sm font-medium">{e.label}</p>
+                        {isTop && (
+                          <span className="rounded-full bg-primary/10 px-2 py-0.5 text-[10px] font-semibold uppercase text-primary">
+                            Most active
+                          </span>
+                        )}
+                        {isBottom && (
+                          <span className="rounded-full bg-muted px-2 py-0.5 text-[10px] font-semibold uppercase text-muted-foreground">
+                            Least active
+                          </span>
+                        )}
+                      </div>
+                      <span className="shrink-0 rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-semibold text-primary">
+                        {e.count}× · {pct.toFixed(0)}%
+                      </span>
+                    </div>
+                    <div className="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-secondary">
+                      <div
+                        className="h-full rounded-full bg-primary"
+                        style={{ width: `${Math.max(4, pct)}%` }}
+                      />
+                    </div>
+                    {e.last && (
+                      <p className="mt-1 text-[10px] uppercase tracking-wide text-muted-foreground">
+                        Last review: {new Date(e.last).toLocaleString()}
+                      </p>
+                    )}
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+        )}
+
         {visible.length === 0 ? (
           <div className="rounded-3xl border border-dashed border-border p-12 text-center text-muted-foreground">
             Nothing in this queue yet.
