@@ -53,6 +53,7 @@ const SEARCH_STEPS = [
 ];
 
 const HEADLINES: Array<{ pre: string; accent: string; post: string }> = [
+  { pre: "Helping Americans claim the money they ", accent: "don't know about", post: "." },
   { pre: "Find the help you're ", accent: "entitled", post: " to." },
   { pre: "Claim the benefits you've ", accent: "already earned", post: "." },
   { pre: "Unlock support that's ", accent: "waiting", post: " for you." },
@@ -334,6 +335,9 @@ function Index() {
         {status === "idle" && (
           <section className="mt-8 rounded-3xl border border-border/70 bg-gradient-to-br from-primary/10 to-indigo-500/5 p-10 backdrop-blur animate-fade-in-up">
             <h2 className="text-3xl font-semibold tracking-tight text-foreground">Our mission</h2>
+            <p className="mt-3 max-w-2xl text-lg font-medium text-foreground">
+              Helping Americans claim the money they don't know about.
+            </p>
             <p className="mt-4 max-w-2xl leading-relaxed text-muted-foreground">
               We believe every American should know exactly what help they're entitled to, and be able to claim it in
               minutes - not months. Claimly is built by a small team who's tired of watching families miss out on the
