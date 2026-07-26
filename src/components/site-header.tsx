@@ -31,6 +31,7 @@ const GROUPS: NavGroup[] = [
       { to: "/applications", label: "Applications", hint: "Status and history" },
       { to: "/vault", label: "Vault", hint: "Secure documents" },
       { to: "/saved", label: "Saved", hint: "Bookmarked programs" },
+      { to: "/admin", label: "Admin", hint: "Review queue" },
     ],
   },
   {
