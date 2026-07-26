@@ -47,7 +47,7 @@ const GROUPS: NavGroup[] = [
 ];
 
 export function SiteHeader() {
-  const { user, isAdmin } = useAuth();
+  const { user } = useAuth();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [open, setOpen] = useState(false);
@@ -65,13 +65,7 @@ export function SiteHeader() {
     closeTimer.current = setTimeout(() => setMenu(null), 160);
   }
 
-  const groups: NavGroup[] = isAdmin
-    ? GROUPS.map((g) =>
-        g.id === "account"
-          ? { ...g, items: [...g.items, { to: "/admin", label: "Admin", hint: "Review applications" }] }
-          : g,
-      )
-    : GROUPS;
+  const groups: NavGroup[] = GROUPS;
 
   useEffect(() => {
     function onDown(e: MouseEvent) {

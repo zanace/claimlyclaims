@@ -1,4 +1,4 @@
-import { ArrowRight, ListChecks, FileText } from "lucide-react";
+import { ListChecks, FileText } from "lucide-react";
 import { useMemo, useState } from "react";
 import { PROGRAMS } from "@/lib/programs";
 import { officialSourceFor } from "@/lib/official-links";
@@ -71,11 +71,11 @@ export function programsMentioned(text: string): ApplyTarget[] {
 
 export function ChatApplyActions({
   text,
-  onApply,
+  onApply: _onApply,
   compact,
 }: {
   text: string;
-  onApply: (program: ApplyTarget) => void;
+  onApply?: (program: ApplyTarget) => void;
   compact?: boolean;
 }) {
   const targets = useMemo(() => programsMentioned(text), [text]);
@@ -98,16 +98,8 @@ export function ChatApplyActions({
             <div className="mt-2 flex flex-wrap gap-2">
               <button
                 type="button"
-                onClick={() => onApply(p)}
-                className="inline-flex items-center gap-1.5 rounded-full bg-primary px-3.5 py-2 text-xs font-semibold text-primary-foreground shadow-sm transition hover:brightness-110"
-              >
-                Apply here
-                <ArrowRight className="size-3.5" />
-              </button>
-              <button
-                type="button"
                 onClick={() => setGuide(p)}
-                className="inline-flex items-center gap-1.5 rounded-full border border-border px-3.5 py-2 text-xs font-semibold transition hover:border-primary"
+                className="inline-flex items-center gap-1.5 rounded-full bg-primary px-3.5 py-2 text-xs font-semibold text-primary-foreground shadow-sm transition hover:brightness-110"
               >
                 <ListChecks className="size-3.5" />
                 Official steps for my state
