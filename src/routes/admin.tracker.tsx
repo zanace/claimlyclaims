@@ -31,6 +31,13 @@ type ChatAnswer = {
   route: string | null;
 };
 
+type AppRow = {
+  id: string;
+  program_name: string;
+  status: string;
+  created_at: string;
+};
+
 const title = "Assistant tracker | Claimly admin";
 const description = "Internal admin view of chat answers and eligibility contradictions.";
 
@@ -55,6 +62,7 @@ function Tracker() {
   const [tab, setTab] = useState<"contradictions" | "answers">("contradictions");
   const [contradictions, setContradictions] = useState<Contradiction[]>([]);
   const [answers, setAnswers] = useState<ChatAnswer[]>([]);
+  const [applications, setApplications] = useState<AppRow[]>([]);
   const [fetching, setFetching] = useState(false);
 
   useEffect(() => {
@@ -65,7 +73,7 @@ function Tracker() {
 
   const load = useCallback(async () => {
     setFetching(true);
-    const [c, a] = await Promise.all([
+    const [c, a, ap] = await Promise.all([
       supabase
         .from("assistant_events" as never)
         .select("*")
@@ -76,9 +84,15 @@ function Tracker() {
         .select("*")
         .order("created_at", { ascending: false })
         .limit(200),
+      supabase
+        .from("applications")
+        .select("id, program_name, status, created_at")
+        .order("created_at", { ascending: false })
+        .limit(500),
     ]);
     setContradictions(((c.data as unknown) as Contradiction[]) ?? []);
     setAnswers(((a.data as unknown) as ChatAnswer[]) ?? []);
+    setApplications(((ap.data as unknown) as AppRow[]) ?? []);
     setFetching(false);
   }, []);
 
@@ -99,6 +113,21 @@ function Tracker() {
       .map(([id, v]) => ({ id, ...v }))
       .sort((a, b) => b.count - a.count)
       .slice(0, 10);
+  })();
+
+  // Applications poll: which programs get applied to most.
+  const applicationsPoll = (() => {
+    const map = new Map<string, { label: string; count: number; last: string }>();
+    for (const a of applications) {
+      const key = a.program_name.trim();
+      if (!key) continue;
+      const cur = map.get(key) ?? { label: key, count: 0, last: a.created_at };
+      cur.count += 1;
+      if (new Date(a.created_at) > new Date(cur.last)) cur.last = a.created_at;
+      map.set(key, cur);
+    }
+    const entries = [...map.values()].sort((a, b) => b.count - a.count);
+    return { entries: entries.slice(0, 15), total: applications.length };
   })();
 
   // Homescreen prompt poll: what people are typing into the AI on "/".
@@ -207,7 +236,49 @@ function Tracker() {
       <div className="mt-8 grid gap-4 sm:grid-cols-3">
         <Stat label="Contradictions logged" value={contradictions.length} />
         <Stat label="Chat messages logged" value={answers.length} />
-        <Stat label="Unique users" value={new Set(answers.map((a) => a.user_id ?? "anon")).size} />
+        <Stat label="Applications submitted" value={applications.length} />
+      </div>
+
+      <div className="mt-10 rounded-2xl border border-border bg-card p-6 shadow-[var(--shadow-soft)]">
+        <div className="flex items-end justify-between gap-4">
+          <div>
+            <h2 className="font-display text-2xl">Most-applied programs</h2>
+            <p className="mt-1 text-sm text-muted-foreground">
+              What people are actually submitting applications for.
+            </p>
+          </div>
+          <span className="rounded-full bg-secondary px-3 py-1 text-xs font-semibold">
+            {applicationsPoll.total} total
+          </span>
+        </div>
+        {applicationsPoll.entries.length === 0 ? (
+          <p className="mt-4 text-sm text-muted-foreground">No applications yet.</p>
+        ) : (
+          <ul className="mt-4 space-y-2">
+            {applicationsPoll.entries.map((e) => {
+              const pct = applicationsPoll.total ? (e.count / applicationsPoll.total) * 100 : 0;
+              return (
+                <li key={e.label} className="rounded-xl border border-border/60 p-3">
+                  <div className="flex items-start justify-between gap-4">
+                    <p className="text-sm font-medium">{e.label}</p>
+                    <span className="shrink-0 rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-semibold text-primary">
+                      {e.count}× · {pct.toFixed(0)}%
+                    </span>
+                  </div>
+                  <div className="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-secondary">
+                    <div
+                      className="h-full rounded-full bg-primary"
+                      style={{ width: `${Math.max(4, pct)}%` }}
+                    />
+                  </div>
+                  <p className="mt-1 text-[10px] uppercase tracking-wide text-muted-foreground">
+                    Last: {new Date(e.last).toLocaleString()}
+                  </p>
+                </li>
+              );
+            })}
+          </ul>
+        )}
       </div>
 
       {patterns.length > 0 && (
