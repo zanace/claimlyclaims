@@ -168,7 +168,18 @@ function ChatPage() {
         </div>
 
         <div className="py-4 lg:self-start">
-          <InfoPanel info={info} onChange={setInfo} />
+          <InfoPanel
+            info={info}
+            onChange={setInfo}
+            onSubmit={(next) => {
+              const details = [infoToPrompt(next), memorySummary()].filter(Boolean).join("\n\n");
+              if (!details || busy) return;
+              void sendMessage(
+                { text: "Here's my info - use it for everything from now on. What do I likely qualify for?" },
+                { body: { userInfo: details } },
+              );
+            }}
+          />
         </div>
       </main>
       <ApplyWizard program={wizard} open={!!wizard} onClose={() => setWizard(null)} />
