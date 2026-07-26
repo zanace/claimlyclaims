@@ -205,25 +205,91 @@ function Admin() {
             No submissions yet.
           </div>
         ) : (
-          apps.map((a) => (
-            <article
-              key={a.id}
-              className="flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-border bg-card p-5 shadow-[var(--shadow-soft)]"
-            >
-              <div>
-                <p className="font-display text-lg">{a.program_name}</p>
-                <p className="mt-1 text-sm text-muted-foreground">
-                  {emails[a.user_id] ?? "Unknown applicant"}
-                  {a.state ? ` · ${a.state}` : ""}
-                </p>
-              </div>
-              <p className="text-xs uppercase tracking-wide text-muted-foreground">
-                {new Date(a.created_at).toLocaleDateString()}
-              </p>
-            </article>
-          ))
+          apps.map((a) => {
+            const approved = a.status === "Approved";
+            const declined = a.status === "Declined";
+            return (
+              <article
+                key={a.id}
+                className="flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-border bg-card p-5 shadow-[var(--shadow-soft)]"
+              >
+                <div>
+                  <p className="flex items-center gap-2 font-display text-lg">
+                    {a.program_name}
+                    {approved && (
+                      <span className="inline-flex items-center gap-1 rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-medium text-primary">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="size-3">
+                          <path d="M4 12.5l5 5L20 6.5" />
+                        </svg>
+                        Accepted
+                      </span>
+                    )}
+                    {declined && (
+                      <span className="rounded-full bg-destructive/10 px-2.5 py-0.5 text-xs font-medium text-destructive">
+                        Declined
+                      </span>
+                    )}
+                  </p>
+                  <p className="mt-1 text-sm text-muted-foreground">
+                    {emails[a.user_id] ?? "Unknown applicant"}
+                    {a.state ? ` · ${a.state}` : ""}
+                  </p>
+                </div>
+                <div className="flex items-center gap-3">
+                  <p className="text-xs uppercase tracking-wide text-muted-foreground">
+                    {new Date(a.created_at).toLocaleDateString()}
+                  </p>
+                  {!approved && (
+                    <Button
+                      size="sm"
+                      className="rounded-full"
+                      disabled={busyId === a.id}
+                      onClick={() => void decide(a, "Approved")}
+                    >
+                      {busyId === a.id ? "Saving…" : "Accept"}
+                    </Button>
+                  )}
+                  {!declined && (
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      className="rounded-full"
+                      disabled={busyId === a.id}
+                      onClick={() => void decide(a, "Declined")}
+                    >
+                      Decline
+                    </Button>
+                  )}
+                </div>
+              </article>
+            );
+          })
         )}
       </div>
+
+      {celebrate && (
+        <div className="fixed inset-0 z-[80] flex items-center justify-center bg-black/50 p-6 animate-overlay-in">
+          <div className="flex flex-col items-center gap-5 rounded-3xl border border-border bg-card px-12 py-10 text-center shadow-2xl animate-modal-in">
+            <div className="flex size-24 items-center justify-center rounded-full bg-primary/10 animate-check-pop">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="size-12 text-primary"
+              >
+                <path d="M4 12.5l5 5L20 6.5" className="animate-check-draw" />
+              </svg>
+            </div>
+            <div>
+              <p className="font-display text-3xl">Application accepted</p>
+              <p className="mt-2 text-sm text-muted-foreground">{celebrate}</p>
+            </div>
+          </div>
+        </div>
+      )}
     </Shell>
   );
 }
