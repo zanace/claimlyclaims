@@ -1,11 +1,10 @@
 import { ListChecks, FileText, ArrowRight, AlertTriangle } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { PROGRAMS } from "@/lib/programs";
 import { officialSourceFor } from "@/lib/official-links";
 import { OfficialGuide } from "@/components/official-guide";
 import { screenProgram, type Signals } from "@/lib/eligibility";
 import { logContradiction } from "@/lib/tracker";
-import { useEffect } from "react";
 
 export type Confidence = "strong" | "maybe" | "not_fit";
 export type ApplyTarget = {
