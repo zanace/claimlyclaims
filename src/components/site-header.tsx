@@ -12,6 +12,8 @@ const NAV = [
   { to: "/dashboard", label: "Dashboard" },
   { to: "/how-it-works", label: "How it works" },
   { to: "/programs", label: "Programs" },
+  { to: "/applications", label: "Applications" },
+  { to: "/vault", label: "Vault" },
   { to: "/saved", label: "Saved" },
   { to: "/chat", label: "Assistant" },
   { to: "/blog", label: "Resources" },

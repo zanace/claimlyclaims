@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as VaultRouteImport } from './routes/vault'
 import { Route as TeamRouteImport } from './routes/team'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as SettingsRouteImport } from './routes/settings'
@@ -25,6 +26,7 @@ import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as ClaimsRouteImport } from './routes/claims'
 import { Route as ChatRouteImport } from './routes/chat'
 import { Route as AuthRouteImport } from './routes/auth'
+import { Route as ApplicationsRouteImport } from './routes/applications'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
@@ -34,6 +36,11 @@ import { Route as ApiMatchRouteImport } from './routes/api/match'
 import { Route as ApiChatRouteImport } from './routes/api/chat'
 import { Route as ApiApplyRouteImport } from './routes/api/apply'
 
+const VaultRoute = VaultRouteImport.update({
+  id: '/vault',
+  path: '/vault',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const TeamRoute = TeamRouteImport.update({
   id: '/team',
   path: '/team',
@@ -114,6 +121,11 @@ const AuthRoute = AuthRouteImport.update({
   path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApplicationsRoute = ApplicationsRouteImport.update({
+  id: '/applications',
+  path: '/applications',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminRoute = AdminRouteImport.update({
   id: '/admin',
   path: '/admin',
@@ -159,6 +171,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/admin': typeof AdminRoute
+  '/applications': typeof ApplicationsRoute
   '/auth': typeof AuthRoute
   '/chat': typeof ChatRoute
   '/claims': typeof ClaimsRoute
@@ -175,6 +188,7 @@ export interface FileRoutesByFullPath {
   '/settings': typeof SettingsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/team': typeof TeamRoute
+  '/vault': typeof VaultRoute
   '/api/apply': typeof ApiApplyRoute
   '/api/chat': typeof ApiChatRoute
   '/api/match': typeof ApiMatchRoute
@@ -185,6 +199,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/admin': typeof AdminRoute
+  '/applications': typeof ApplicationsRoute
   '/auth': typeof AuthRoute
   '/chat': typeof ChatRoute
   '/claims': typeof ClaimsRoute
@@ -201,6 +216,7 @@ export interface FileRoutesByTo {
   '/settings': typeof SettingsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/team': typeof TeamRoute
+  '/vault': typeof VaultRoute
   '/api/apply': typeof ApiApplyRoute
   '/api/chat': typeof ApiChatRoute
   '/api/match': typeof ApiMatchRoute
@@ -212,6 +228,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/admin': typeof AdminRoute
+  '/applications': typeof ApplicationsRoute
   '/auth': typeof AuthRoute
   '/chat': typeof ChatRoute
   '/claims': typeof ClaimsRoute
@@ -228,6 +245,7 @@ export interface FileRoutesById {
   '/settings': typeof SettingsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/team': typeof TeamRoute
+  '/vault': typeof VaultRoute
   '/api/apply': typeof ApiApplyRoute
   '/api/chat': typeof ApiChatRoute
   '/api/match': typeof ApiMatchRoute
@@ -240,6 +258,7 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/admin'
+    | '/applications'
     | '/auth'
     | '/chat'
     | '/claims'
@@ -256,6 +275,7 @@ export interface FileRouteTypes {
     | '/settings'
     | '/sitemap.xml'
     | '/team'
+    | '/vault'
     | '/api/apply'
     | '/api/chat'
     | '/api/match'
@@ -266,6 +286,7 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/admin'
+    | '/applications'
     | '/auth'
     | '/chat'
     | '/claims'
@@ -282,6 +303,7 @@ export interface FileRouteTypes {
     | '/settings'
     | '/sitemap.xml'
     | '/team'
+    | '/vault'
     | '/api/apply'
     | '/api/chat'
     | '/api/match'
@@ -292,6 +314,7 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/admin'
+    | '/applications'
     | '/auth'
     | '/chat'
     | '/claims'
@@ -308,6 +331,7 @@ export interface FileRouteTypes {
     | '/settings'
     | '/sitemap.xml'
     | '/team'
+    | '/vault'
     | '/api/apply'
     | '/api/chat'
     | '/api/match'
@@ -319,6 +343,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
   AdminRoute: typeof AdminRoute
+  ApplicationsRoute: typeof ApplicationsRoute
   AuthRoute: typeof AuthRoute
   ChatRoute: typeof ChatRoute
   ClaimsRoute: typeof ClaimsRoute
@@ -335,6 +360,7 @@ export interface RootRouteChildren {
   SettingsRoute: typeof SettingsRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   TeamRoute: typeof TeamRoute
+  VaultRoute: typeof VaultRoute
   ApiApplyRoute: typeof ApiApplyRoute
   ApiChatRoute: typeof ApiChatRoute
   ApiMatchRoute: typeof ApiMatchRoute
@@ -344,6 +370,13 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/vault': {
+      id: '/vault'
+      path: '/vault'
+      fullPath: '/vault'
+      preLoaderRoute: typeof VaultRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/team': {
       id: '/team'
       path: '/team'
@@ -456,6 +489,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/applications': {
+      id: '/applications'
+      path: '/applications'
+      fullPath: '/applications'
+      preLoaderRoute: typeof ApplicationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin': {
       id: '/admin'
       path: '/admin'
@@ -519,6 +559,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
   AdminRoute: AdminRoute,
+  ApplicationsRoute: ApplicationsRoute,
   AuthRoute: AuthRoute,
   ChatRoute: ChatRoute,
   ClaimsRoute: ClaimsRoute,
@@ -535,6 +576,7 @@ const rootRouteChildren: RootRouteChildren = {
   SettingsRoute: SettingsRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   TeamRoute: TeamRoute,
+  VaultRoute: VaultRoute,
   ApiApplyRoute: ApiApplyRoute,
   ApiChatRoute: ApiChatRoute,
   ApiMatchRoute: ApiMatchRoute,
