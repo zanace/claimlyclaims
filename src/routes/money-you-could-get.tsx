@@ -85,7 +85,6 @@ function MoneyPage() {
             <p className="text-sm uppercase tracking-widest text-muted-foreground">
               Average unclaimed amount found
             </p>
-            <p className="mt-3 font-display text-4xl tracking-tight">[INSERT REAL STAT OR REMOVE]</p>
             <p className="mt-3 text-sm text-muted-foreground">
               We don't publish a number until we can stand behind it. Amounts depend entirely on
               your household, income, and state.

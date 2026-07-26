@@ -132,7 +132,7 @@ function ChatPage() {
                 <h1 className="mt-6 font-display text-4xl">What's going on in your household?</h1>
                 <p className="mx-auto mt-3 max-w-md text-sm text-muted-foreground">
                   Tell me your state, roughly what you earn, and who lives with you. I'll work out
-                  what you're likely owed. No SSN, no account.
+                  what you're likely owed. No SSN needed.
                 </p>
                 <div className="mt-8 flex flex-wrap justify-center gap-2">
                   {SUGGESTIONS.map((s) => (
