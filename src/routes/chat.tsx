@@ -1,4 +1,5 @@
 import { useChat } from "@ai-sdk/react";
+import { memorySummary } from "@/lib/smart-profile";
 import { createFileRoute } from "@tanstack/react-router";
 import { DefaultChatTransport } from "ai";
 import { useEffect, useRef, useState } from "react";
@@ -76,7 +77,7 @@ function ChatPage() {
   const send = (text: string) => {
     const value = text.trim();
     if (!value || busy) return;
-    const details = infoToPrompt(info);
+    const details = [infoToPrompt(info), memorySummary()].filter(Boolean).join("\n\n");
     void sendMessage({ text: value }, details ? { body: { userInfo: details } } : undefined);
     setInput("");
   };

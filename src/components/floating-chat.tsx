@@ -1,4 +1,5 @@
 import { useChat } from "@ai-sdk/react";
+import { memorySummary } from "@/lib/smart-profile";
 import { DefaultChatTransport } from "ai";
 import { MessageCircle, X, Send } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
@@ -24,7 +25,8 @@ export function FloatingChat() {
     e.preventDefault();
     const value = input.trim();
     if (!value || busy) return;
-    void sendMessage({ text: value });
+    const memory = memorySummary();
+    void sendMessage({ text: value }, memory ? { body: { userInfo: memory } } : undefined);
     setInput("");
   };
 
