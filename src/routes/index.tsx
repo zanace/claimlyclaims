@@ -156,6 +156,9 @@ function Index() {
         {/* Hero + search */}
         <section className="pt-16 md:pt-24">
           <div className="mx-auto max-w-3xl text-center">
+            <p className="mb-5 text-xs font-semibold tracking-[0.18em] text-primary uppercase animate-fade-in">
+              AI consultant and financial assistant
+            </p>
             <h1
               className="text-5xl font-semibold tracking-tight text-foreground md:text-7xl animate-blur-in"
               style={{ letterSpacing: "-0.03em" }}
