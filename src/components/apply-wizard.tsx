@@ -768,10 +768,10 @@ function PreviewStage({
         onClick={onSubmit}
         className="mt-7 inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-primary px-5 py-5 text-lg font-semibold text-primary-foreground shadow-sm transition hover:brightness-110"
       >
-        Submit Demo Application
+        Finish my application
       </button>
       <p className="mt-3 text-center text-xs text-muted-foreground">
-        Estimates are approximate. Nothing is sent to any agency in this demo.
+        Claimly builds your completed application and shows you exactly how to hand it in. Estimates are approximate.
       </p>
     </div>
   );
