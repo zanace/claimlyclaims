@@ -64,6 +64,9 @@ function Admin() {
   const [emails, setEmails] = useState<Record<string, string>>({});
   const [filter, setFilter] = useState<string>("All");
   const [fetching, setFetching] = useState(false);
+  const [contradictions, setContradictions] = useState<ContradictionRow[]>([]);
+  const [chatAnswers, setChatAnswers] = useState<ChatAnswerRow[]>([]);
+  const [trackerTab, setTrackerTab] = useState<"contradictions" | "answers">("contradictions");
 
   const load = useCallback(async () => {
     setFetching(true);
@@ -77,6 +80,12 @@ function Admin() {
     const map: Record<string, string> = {};
     for (const p of profiles ?? []) map[p.id] = p.full_name ? `${p.full_name} · ${p.email}` : (p.email ?? p.id);
     setEmails(map);
+    const [c, a] = await Promise.all([
+      supabase.from("assistant_events" as never).select("*").order("created_at", { ascending: false }).limit(200),
+      supabase.from("chat_answers" as never).select("*").order("created_at", { ascending: false }).limit(200),
+    ]);
+    setContradictions(((c.data as unknown) as ContradictionRow[]) ?? []);
+    setChatAnswers(((a.data as unknown) as ChatAnswerRow[]) ?? []);
     setFetching(false);
   }, []);
 
@@ -105,6 +114,44 @@ function Admin() {
     const total = entries.reduce((s, e) => s + e.count, 0);
     return { entries, total, unreviewed: apps.filter((a) => !a.reviewed_by).length };
   }, [apps, emails]);
+
+  const applicationsPoll = useMemo(() => {
+    const map = new Map<string, { label: string; count: number }>();
+    for (const a of apps) {
+      const key = a.program_name.trim();
+      if (!key) continue;
+      const cur = map.get(key) ?? { label: key, count: 0 };
+      cur.count += 1;
+      map.set(key, cur);
+    }
+    const entries = [...map.values()].sort((a, b) => b.count - a.count).slice(0, 15);
+    return { entries, total: apps.length };
+  }, [apps]);
+
+  const patterns = useMemo(() => {
+    const map = new Map<string, { name: string; count: number; lastReason?: string }>();
+    for (const c of contradictions) {
+      const cur = map.get(c.program_id) ?? { name: c.program_name, count: 0 };
+      cur.count += 1;
+      cur.lastReason = c.reason ?? cur.lastReason;
+      map.set(c.program_id, cur);
+    }
+    return [...map.entries()].map(([id, v]) => ({ id, ...v })).sort((a, b) => b.count - a.count).slice(0, 10);
+  }, [contradictions]);
+
+  const homescreenPoll = useMemo(() => {
+    const homeMsgs = chatAnswers.filter((a) => a.role === "user" && (a.route === "/" || a.route === null));
+    const map = new Map<string, { label: string; count: number }>();
+    for (const a of homeMsgs) {
+      const key = a.content.trim().toLowerCase().replace(/\s+/g, " ").slice(0, 140);
+      if (!key) continue;
+      const cur = map.get(key) ?? { label: a.content.trim(), count: 0 };
+      cur.count += 1;
+      map.set(key, cur);
+    }
+    const entries = [...map.values()].sort((a, b) => b.count - a.count).slice(0, 15);
+    return { entries, total: homeMsgs.length };
+  }, [chatAnswers]);
 
   async function update(id: string, patch: Partial<Application>) {
     const stamped = { ...patch, reviewed_by: user?.id ?? null, reviewed_at: new Date().toISOString() };
