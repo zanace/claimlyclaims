@@ -1,7 +1,7 @@
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
 import { useEffect, useRef, useState } from "react";
-import { Menu, X, ChevronDown, Compass, LayoutDashboard, Building2 } from "lucide-react";
+import { Menu, X, ChevronDown, Compass, LayoutDashboard, Building2, Settings as SettingsIcon } from "lucide-react";
 import logo from "@/assets/logo.png";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { useAuth } from "@/lib/use-auth";
@@ -31,7 +31,6 @@ const GROUPS: NavGroup[] = [
       { to: "/applications", label: "Applications", hint: "Status and history" },
       { to: "/vault", label: "Vault", hint: "Secure documents" },
       { to: "/saved", label: "Saved", hint: "Bookmarked programs" },
-      { to: "/settings", label: "Settings", hint: "Smart Profile info" },
     ],
   },
   {
