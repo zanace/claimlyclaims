@@ -101,6 +101,24 @@ function Tracker() {
       .slice(0, 10);
   })();
 
+  // Homescreen prompt poll: what people are typing into the AI on "/".
+  const homescreenPoll = (() => {
+    const homeMsgs = answers.filter(
+      (a) => a.role === "user" && (a.route === "/" || a.route === null),
+    );
+    const map = new Map<string, { label: string; count: number; last: string }>();
+    for (const a of homeMsgs) {
+      const key = a.content.trim().toLowerCase().replace(/\s+/g, " ").slice(0, 140);
+      if (!key) continue;
+      const cur = map.get(key) ?? { label: a.content.trim(), count: 0, last: a.created_at };
+      cur.count += 1;
+      if (new Date(a.created_at) > new Date(cur.last)) cur.last = a.created_at;
+      map.set(key, cur);
+    }
+    const entries = [...map.values()].sort((a, b) => b.count - a.count);
+    return { entries: entries.slice(0, 15), total: homeMsgs.length };
+  })();
+
   if (loading || gate === "checking") {
     return <Shell><p className="text-muted-foreground">Loading…</p></Shell>;
   }
@@ -215,6 +233,48 @@ function Tracker() {
           </ul>
         </div>
       )}
+
+      <div className="mt-10 rounded-2xl border border-border bg-card p-6 shadow-[var(--shadow-soft)]">
+        <div className="flex items-end justify-between gap-4">
+          <div>
+            <h2 className="font-display text-2xl">Homescreen prompt poll</h2>
+            <p className="mt-1 text-sm text-muted-foreground">
+              What visitors are typing into the AI search on the homepage. Great for demos.
+            </p>
+          </div>
+          <span className="rounded-full bg-secondary px-3 py-1 text-xs font-semibold">
+            {homescreenPoll.total} total
+          </span>
+        </div>
+        {homescreenPoll.entries.length === 0 ? (
+          <p className="mt-4 text-sm text-muted-foreground">No homepage prompts yet.</p>
+        ) : (
+          <ul className="mt-4 space-y-2">
+            {homescreenPoll.entries.map((e) => {
+              const pct = homescreenPoll.total ? (e.count / homescreenPoll.total) * 100 : 0;
+              return (
+                <li key={e.label} className="rounded-xl border border-border/60 p-3">
+                  <div className="flex items-start justify-between gap-4">
+                    <p className="text-sm">{e.label}</p>
+                    <span className="shrink-0 rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-semibold text-primary">
+                      {e.count}× · {pct.toFixed(0)}%
+                    </span>
+                  </div>
+                  <div className="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-secondary">
+                    <div
+                      className="h-full rounded-full bg-primary"
+                      style={{ width: `${Math.max(4, pct)}%` }}
+                    />
+                  </div>
+                  <p className="mt-1 text-[10px] uppercase tracking-wide text-muted-foreground">
+                    Last: {new Date(e.last).toLocaleString()}
+                  </p>
+                </li>
+              );
+            })}
+          </ul>
+        )}
+      </div>
 
       <div className="mt-10 flex gap-2">
         {(["contradictions", "answers"] as const).map((t) => (
