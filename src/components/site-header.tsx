@@ -210,33 +210,52 @@ export function SiteHeader() {
       </div>
       {open && (
         <nav className="animate-mobile-nav origin-top overflow-hidden border-t border-border/70 bg-background/95 px-5 py-3 lg:hidden">
-          <div className="grid gap-4 sm:grid-cols-3">
+          <div className="grid gap-2">
             {groups.map((group, gi) => {
               const Icon = group.icon;
+              const isOpen = menu === group.id;
               return (
-                <div key={group.id}>
-                  <p className="mb-1.5 flex items-center gap-1.5 text-xs font-semibold tracking-wide text-muted-foreground uppercase">
-                    <Icon className="size-3.5 text-primary" />
-                    {group.label}
-                  </p>
-                  <ul className="text-sm text-muted-foreground dark:text-white">
-                    {group.items.map((item, i) => (
-                      <li
-                        key={item.to}
-                        className="animate-mobile-nav-item opacity-0"
-                        style={{ animationDelay: `${60 + (gi * 5 + i) * 30}ms` }}
-                      >
-                        <Link
-                          to={item.to}
-                          onClick={() => setOpen(false)}
-                          activeOptions={{ exact: item.to === "/" }}
-                          className="block py-1 transition-colors hover:text-foreground [&.active]:font-semibold [&.active]:text-primary dark:[&.active]:text-primary"
+                <div
+                  key={group.id}
+                  className="animate-mobile-nav-item overflow-hidden rounded-2xl border border-border/70 opacity-0"
+                  style={{ animationDelay: `${60 + gi * 70}ms` }}
+                >
+                  <button
+                    type="button"
+                    aria-expanded={isOpen}
+                    onClick={() => setMenu(isOpen ? null : group.id)}
+                    className="flex w-full items-center gap-2 px-3 py-3 text-sm text-foreground"
+                  >
+                    <Icon className="size-4 text-primary" />
+                    <span className="font-medium">{group.label}</span>
+                    <ChevronDown
+                      className={`ml-auto size-4 text-muted-foreground transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`}
+                    />
+                  </button>
+                  {isOpen && (
+                    <ul className="animate-mobile-nav origin-top border-t border-border/70 p-1.5">
+                      {group.items.map((item, i) => (
+                        <li
+                          key={item.to}
+                          className="animate-mobile-nav-item opacity-0"
+                          style={{ animationDelay: `${40 + i * 35}ms` }}
                         >
-                          {item.label}
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
+                          <Link
+                            to={item.to}
+                            onClick={() => {
+                              setOpen(false);
+                              setMenu(null);
+                            }}
+                            activeOptions={{ exact: item.to === "/" }}
+                            className="block rounded-xl px-3 py-2 transition-colors hover:bg-secondary [&.active]:bg-secondary [&.active_.lbl]:font-semibold [&.active_.lbl]:text-primary"
+                          >
+                            <span className="lbl block text-sm text-foreground">{item.label}</span>
+                            {item.hint && <span className="block text-xs text-muted-foreground">{item.hint}</span>}
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
                 </div>
               );
             })}
