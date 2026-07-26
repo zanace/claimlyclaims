@@ -103,13 +103,11 @@ function Applications() {
     setApps(next);
     saveApplications(next);
     if (user?.id) {
-      // Best-effort: match on either the record id (uuid rows created before we stored the CLM id)
-      // or on the CLM id embedded in the notes payload.
-      const { error } = await supabase
-        .from("applications")
-        .delete()
-        .eq("user_id", user.id)
-        .or(`id.eq.${id},notes.ilike.%"${id}"%`);
+      const uuidRe = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+      const query = supabase.from("applications").delete().eq("user_id", user.id);
+      const { error } = await (uuidRe.test(id)
+        ? query.eq("id", id)
+        : query.ilike("notes", `%"${id}"%`));
       if (error) toast.error("Removed here, but couldn't sync deletion to your account.");
     }
   }
