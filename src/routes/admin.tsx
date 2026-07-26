@@ -28,6 +28,28 @@ type Application = {
   reviewed_at: string | null;
 };
 
+type ContradictionRow = {
+  id: string;
+  created_at: string;
+  user_id: string | null;
+  program_id: string;
+  program_name: string;
+  ai_confidence: string;
+  engine_verdict: string;
+  reason: string | null;
+  message_excerpt: string | null;
+  route: string | null;
+};
+
+type ChatAnswerRow = {
+  id: string;
+  created_at: string;
+  user_id: string | null;
+  role: string;
+  content: string;
+  route: string | null;
+};
+
 const title = "Admin review queue | Claimly";
 const description = "Internal Claimly console for reviewing submitted benefit applications.";
 
