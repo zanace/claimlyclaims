@@ -25,6 +25,8 @@ export const Route = createFileRoute("/api/match")({
 
 CRITICAL rules:
 - Screen by income. If the person clearly earns above ~250% Federal Poverty Level (roughly $75k+ for a household of 1-4, or $100k+ for any household), do NOT include SNAP, WIC, Medicaid, TANF, SSI, LIHEAP, Section 8, Lifeline, ACP, CHIP, or free lunch. Instead include tax credits (CTC, Saver's Credit, education/energy credits), unclaimed money, disaster aid, veterans, and other non-need-based programs.
+- Screen by household. If the person has NO dependents / no children (household size = 1, or they said "no kids", "single", "no dependents"), do NOT include Child Tax Credit (CTC), Additional CTC, Child & Dependent Care Credit, WIC, CHIP, Head Start, free/reduced school lunch, TANF, child care subsidies, or any other child/family-only program. Never assume kids - only include child-related programs when the person clearly has dependents under 17 (or under 19 for some programs).
+- Screen by other stated facts: don't recommend veterans programs unless they mention military/VA service; don't recommend senior programs (Medicare, SSI-aged, senior housing) unless age 60+; don't recommend student aid unless they mention school/college; don't recommend disability programs unless they mention a disability.
 - Only mark "strong" when the person clearly meets the main rules (income, household, category). Use "possible" when likely but not confirmed. Use "worth_checking" for maybes.
 - Do NOT return anything the person clearly doesn't qualify for. If a category doesn't fit, skip it.
 - Prefer state-specific angles when the ZIP suggests a state (state EITC, state property-tax relief, state housing assistance).
