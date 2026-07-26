@@ -34,6 +34,7 @@ import { Route as BlogIndexRouteImport } from './routes/blog.index'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 import { Route as ApiMatchRouteImport } from './routes/api/match'
 import { Route as ApiGuideRouteImport } from './routes/api/guide'
+import { Route as ApiDocReviewRouteImport } from './routes/api/doc-review'
 import { Route as ApiChatRouteImport } from './routes/api/chat'
 import { Route as ApiApplyRouteImport } from './routes/api/apply'
 import { Route as LovableEmailTransactionalPreviewRouteImport } from './routes/lovable/email/transactional/preview'
@@ -163,6 +164,11 @@ const ApiGuideRoute = ApiGuideRouteImport.update({
   path: '/api/guide',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiDocReviewRoute = ApiDocReviewRouteImport.update({
+  id: '/api/doc-review',
+  path: '/api/doc-review',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiChatRoute = ApiChatRouteImport.update({
   id: '/api/chat',
   path: '/api/chat',
@@ -204,6 +210,7 @@ export interface FileRoutesByFullPath {
   '/vault': typeof VaultRoute
   '/api/apply': typeof ApiApplyRoute
   '/api/chat': typeof ApiChatRoute
+  '/api/doc-review': typeof ApiDocReviewRoute
   '/api/guide': typeof ApiGuideRoute
   '/api/match': typeof ApiMatchRoute
   '/blog/$slug': typeof BlogSlugRoute
@@ -234,6 +241,7 @@ export interface FileRoutesByTo {
   '/vault': typeof VaultRoute
   '/api/apply': typeof ApiApplyRoute
   '/api/chat': typeof ApiChatRoute
+  '/api/doc-review': typeof ApiDocReviewRoute
   '/api/guide': typeof ApiGuideRoute
   '/api/match': typeof ApiMatchRoute
   '/blog/$slug': typeof BlogSlugRoute
@@ -265,6 +273,7 @@ export interface FileRoutesById {
   '/vault': typeof VaultRoute
   '/api/apply': typeof ApiApplyRoute
   '/api/chat': typeof ApiChatRoute
+  '/api/doc-review': typeof ApiDocReviewRoute
   '/api/guide': typeof ApiGuideRoute
   '/api/match': typeof ApiMatchRoute
   '/blog/$slug': typeof BlogSlugRoute
@@ -297,6 +306,7 @@ export interface FileRouteTypes {
     | '/vault'
     | '/api/apply'
     | '/api/chat'
+    | '/api/doc-review'
     | '/api/guide'
     | '/api/match'
     | '/blog/$slug'
@@ -327,6 +337,7 @@ export interface FileRouteTypes {
     | '/vault'
     | '/api/apply'
     | '/api/chat'
+    | '/api/doc-review'
     | '/api/guide'
     | '/api/match'
     | '/blog/$slug'
@@ -357,6 +368,7 @@ export interface FileRouteTypes {
     | '/vault'
     | '/api/apply'
     | '/api/chat'
+    | '/api/doc-review'
     | '/api/guide'
     | '/api/match'
     | '/blog/$slug'
@@ -388,6 +400,7 @@ export interface RootRouteChildren {
   VaultRoute: typeof VaultRoute
   ApiApplyRoute: typeof ApiApplyRoute
   ApiChatRoute: typeof ApiChatRoute
+  ApiDocReviewRoute: typeof ApiDocReviewRoute
   ApiGuideRoute: typeof ApiGuideRoute
   ApiMatchRoute: typeof ApiMatchRoute
   BlogSlugRoute: typeof BlogSlugRoute
@@ -572,6 +585,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiGuideRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/doc-review': {
+      id: '/api/doc-review'
+      path: '/api/doc-review'
+      fullPath: '/api/doc-review'
+      preLoaderRoute: typeof ApiDocReviewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/chat': {
       id: '/api/chat'
       path: '/api/chat'
@@ -620,6 +640,7 @@ const rootRouteChildren: RootRouteChildren = {
   VaultRoute: VaultRoute,
   ApiApplyRoute: ApiApplyRoute,
   ApiChatRoute: ApiChatRoute,
+  ApiDocReviewRoute: ApiDocReviewRoute,
   ApiGuideRoute: ApiGuideRoute,
   ApiMatchRoute: ApiMatchRoute,
   BlogSlugRoute: BlogSlugRoute,

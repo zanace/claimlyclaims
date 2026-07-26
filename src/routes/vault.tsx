@@ -2,11 +2,13 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { toast } from "sonner";
 import {
-  FileText, Loader2, RefreshCw, ShieldCheck, Trash2, Upload,
+  CheckCircle2, FileText, Lightbulb, Loader2, RefreshCw, ShieldCheck, Trash2, Upload,
 } from "lucide-react";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { supabase } from "@/integrations/supabase/client";
+import { authFetch } from "@/lib/api-client";
+import type { DocReview } from "@/routes/api/doc-review";
 import { useAuth } from "@/lib/use-auth";
 
 const title = "Document library - Claimly Smart Profile";
@@ -59,6 +61,8 @@ function Vault() {
   const [rows, setRows] = useState<Row[]>([]);
   const [urls, setUrls] = useState<Record<string, string>>({});
   const [busy, setBusy] = useState<string | null>(null);
+  const [reviews, setReviews] = useState<Record<string, DocReview>>({});
+  const [reviewing, setReviewing] = useState<string | null>(null);
   const inputs = useRef<Record<string, HTMLInputElement | null>>({});
 
   const load = useCallback(async () => {
@@ -121,6 +125,44 @@ function Vault() {
     if (error) return toast.error("Could not save", { description: error.message });
     toast.success(`${type} saved to your library`);
     void load();
+    void review(type, file);
+  }
+
+  async function review(type: string, file: File) {
+    setReviewing(type);
+    setReviews((r) => {
+      const next = { ...r };
+      delete next[type];
+      return next;
+    });
+    let imageUrl: string | undefined;
+    if (file.type.startsWith("image/") && file.size <= 4 * 1024 * 1024) {
+      imageUrl = await new Promise<string | undefined>((resolve) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(String(reader.result));
+        reader.onerror = () => resolve(undefined);
+        reader.readAsDataURL(file);
+      });
+    }
+    try {
+      const res = await authFetch("/api/doc-review", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({
+          docType: type,
+          fileName: file.name,
+          mimeType: file.type,
+          imageUrl,
+        }),
+      });
+      if (res.ok) {
+        const data = (await res.json()) as DocReview;
+        setReviews((r) => ({ ...r, [type]: data }));
+      }
+    } catch {
+      /* review is optional */
+    }
+    setReviewing(null);
   }
 
   async function remove(row: Row) {
@@ -245,6 +287,48 @@ function Vault() {
                     <p className="mt-3 text-xs text-muted-foreground">
                       {mine.length} versions stored. The newest is used first.
                     </p>
+                  )}
+                  {reviewing === t.key && (
+                    <p className="mt-4 flex items-center gap-2 text-xs text-muted-foreground">
+                      <Loader2 className="size-3.5 animate-spin" />
+                      Checking your {t.key.toLowerCase()} for anything that could hold it up...
+                    </p>
+                  )}
+                  {reviews[t.key] && (
+                    <div className="mt-4 rounded-2xl border border-primary/20 bg-primary/5 p-4 animate-fade-in-up">
+                      <div className="flex items-center gap-2">
+                        {reviews[t.key].quality === "good" ? (
+                          <CheckCircle2 className="size-4 text-primary" />
+                        ) : (
+                          <Lightbulb className="size-4 text-primary" />
+                        )}
+                        <p className="text-sm font-semibold text-foreground">
+                          {reviews[t.key].quality === "good"
+                            ? "Looks good"
+                            : "How to make this stronger"}
+                        </p>
+                      </div>
+                      <p className="mt-2 text-sm text-foreground/85">{reviews[t.key].summary}</p>
+                      {reviews[t.key].fixes?.length > 0 && (
+                        <ul className="mt-3 list-disc space-y-1 pl-5 text-sm text-foreground/80">
+                          {reviews[t.key].fixes.map((f) => (
+                            <li key={f}>{f}</li>
+                          ))}
+                        </ul>
+                      )}
+                      {reviews[t.key].checklist?.length > 0 && (
+                        <>
+                          <p className="mt-3 text-xs font-semibold tracking-wide text-muted-foreground uppercase">
+                            Must show
+                          </p>
+                          <ul className="mt-1 list-disc space-y-1 pl-5 text-sm text-foreground/80">
+                            {reviews[t.key].checklist.map((c) => (
+                              <li key={c}>{c}</li>
+                            ))}
+                          </ul>
+                        </>
+                      )}
+                    </div>
                   )}
                 </section>
               );
