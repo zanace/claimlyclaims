@@ -31,6 +31,9 @@ const description =
   "Chat with Claimly's AI benefits guide about your household and get matched to tax credits, food, healthcare, and housing programs in minutes.";
 
 export const Route = createFileRoute("/chat")({
+  validateSearch: (search: Record<string, unknown>) => ({
+    q: typeof search.q === "string" ? search.q : undefined,
+  }),
   head: () => ({
     meta: [
       { title },
@@ -50,6 +53,7 @@ const SUGGESTIONS = [
 ];
 
 function ChatPage() {
+  const { q } = Route.useSearch();
   const [input, setInput] = useState("");
   const [token, setToken] = useState<string | null>(null);
   const [info, setInfo] = useState<UserInfo>(EMPTY_INFO);
@@ -98,6 +102,17 @@ function ChatPage() {
     void sendMessage({ text: value }, details ? { body: { userInfo: details } } : undefined);
     setInput("");
   };
+
+  // Auto-start the conversation when arriving from the homepage search.
+  const autoSent = useRef(false);
+  useEffect(() => {
+    if (autoSent.current || !q?.trim() || busy) return;
+    autoSent.current = true;
+    const details = [infoToPrompt(info), memorySummary()].filter(Boolean).join("\n\n");
+    logChatMessage({ role: "user", content: q.trim(), signals });
+    void sendMessage({ text: q.trim() }, details ? { body: { userInfo: details } } : undefined);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [q]);
 
   return (
     <div className="flex min-h-screen flex-col font-sans">
