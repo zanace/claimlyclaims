@@ -1,7 +1,7 @@
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
 import { useEffect, useRef, useState } from "react";
-import { Menu, X, ChevronDown, Compass, LayoutDashboard, Building2, Shield } from "lucide-react";
+import { Menu, X, ChevronDown, Compass, LayoutDashboard, Building2 } from "lucide-react";
 import logo from "@/assets/logo.png";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { useAuth } from "@/lib/use-auth";
