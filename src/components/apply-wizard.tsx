@@ -17,6 +17,7 @@ import { openApplicationPdf } from "@/lib/application-pdf";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/use-auth";
+import { useRouter } from "@tanstack/react-router";
 
 type Program = { id: string; name: string; estimate?: string };
 
@@ -58,6 +59,7 @@ export function ApplyWizard({
   onClose: () => void;
 }) {
   const { user } = useAuth();
+  const router = useRouter();
   const [stage, setStage] = useState<Stage>("intro");
   const [answers, setAnswers] = useState<Answers>({});
   const [profileSnapshot, setProfileSnapshot] = useState<Answers>({});
@@ -202,7 +204,15 @@ export function ApplyWizard({
   const completion = Math.round((autoFilled / SMART_FIELDS.length) * 100);
   const saved = minutesSaved(autoFilled);
 
-  const submit = () => {
+  const submit = async () => {
+    if (!user) {
+      toast("Sign in to submit your application", {
+        description: "Your answers stay saved so you can pick up on any device.",
+      });
+      onClose();
+      router.navigate({ to: "/auth", search: { redirect: "/applications" } as never });
+      return;
+    }
     const record: SavedApplication = {
       id: newApplicationId(),
       programId: program.id,
@@ -218,6 +228,23 @@ export function ApplyWizard({
     recordApplication(record);
     setSubmitted(record);
     setStage("success");
+    // Persist to the cloud so the user can see this application from any device.
+    const { error } = await supabase.from("applications").insert({
+      user_id: user.id,
+      program_id: record.programId,
+      program_name: record.programName,
+      estimated_amount: record.estimate ?? null,
+      status: record.status,
+      state: (answers.state as string) ?? null,
+      monthly_income: Number(answers.monthly_income) || null,
+      household_size: Number(answers.household_size) || null,
+      notes: JSON.stringify(record),
+    });
+    if (error) {
+      toast.error("Saved on this device, but couldn't sync to your account.", {
+        description: error.message,
+      });
+    }
   };
 
   return createPortal(

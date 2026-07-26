@@ -12,6 +12,8 @@ import {
   loadApplications, mergeIntoProfile, saveApplications, smartMetrics,
   type SavedApplication,
 } from "@/lib/smart-profile";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/lib/use-auth";
 
 const title = "My Applications - Claimly";
 const description =
@@ -34,10 +36,54 @@ export const Route = createFileRoute("/applications")({
 function Applications() {
   const [apps, setApps] = useState<SavedApplication[]>([]);
   const [wizard, setWizard] = useState<{ id: string; name: string } | null>(null);
+  const { user } = useAuth();
 
   useEffect(() => {
     setApps(loadApplications());
   }, []);
+
+  // Pull any applications saved from other devices, merge with local, keep both in sync.
+  useEffect(() => {
+    if (!user?.id) return;
+    let active = true;
+    void supabase
+      .from("applications")
+      .select("id, program_id, program_name, estimated_amount, status, created_at, notes")
+      .eq("user_id", user.id)
+      .order("created_at", { ascending: false })
+      .then(({ data }) => {
+        if (!active || !data) return;
+        const remote: SavedApplication[] = data.map((r) => {
+          let parsed: Partial<SavedApplication> = {};
+          try {
+            if (r.notes) parsed = JSON.parse(r.notes) as Partial<SavedApplication>;
+          } catch {}
+          return {
+            id: parsed.id ?? r.id,
+            programId: parsed.programId ?? r.program_id,
+            programName: parsed.programName ?? r.program_name,
+            submittedAt: parsed.submittedAt ?? r.created_at,
+            status: parsed.status ?? r.status ?? "Submitted",
+            estimate: parsed.estimate ?? r.estimated_amount ?? undefined,
+            answers: parsed.answers ?? {},
+            autoFilled: parsed.autoFilled ?? 0,
+            asked: parsed.asked ?? 0,
+            documentsReused: parsed.documentsReused ?? 0,
+          };
+        });
+        const local = loadApplications();
+        const byId = new Map<string, SavedApplication>();
+        for (const a of [...remote, ...local]) byId.set(a.id, a);
+        const merged = Array.from(byId.values()).sort(
+          (a, b) => new Date(b.submittedAt).getTime() - new Date(a.submittedAt).getTime(),
+        );
+        saveApplications(merged);
+        setApps(merged);
+      });
+    return () => {
+      active = false;
+    };
+  }, [user?.id]);
 
   const metrics = useMemo(() => smartMetrics(apps), [apps]);
 
